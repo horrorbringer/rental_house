@@ -4,7 +4,7 @@
 
 @php
     // Calculate total monthly revenue
-    $totalRevenue = \App\Models\Room::whereHas('rental', function($query) {
+    $totalRevenue = \App\Models\Room::whereHas('rentals', function($query) {
         $query->where('status', 'active');
     })->sum('monthly_rent');
 

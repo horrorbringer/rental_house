@@ -52,7 +52,7 @@
                     <label for="building_id" class="block text-sm font-medium text-gray-300 mb-1">Building</label>
                     <div class="relative">
                         <select name="building_id" id="building_id" required
-                            class="block w-full rounded-lg bg-gray-700 border-gray-600 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 text-white transition-all duration-200">
+                            class="block w-full h-10 rounded-lg bg-gray-700 border-gray-600 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 text-white transition-all duration-200">
                             <option value="">Select a building</option>
                             @foreach($buildings as $building)
                                 <option value="{{ $building->id }}" {{ (old('building_id', $room->building_id ?? '') == $building->id) ? 'selected' : '' }}>
@@ -72,7 +72,7 @@
                     <div class="relative">
                         <input type="text" name="room_number" id="room_number" required
                             value="{{ old('room_number', $room->room_number ?? '') }}"
-                            class="block w-full rounded-lg bg-gray-700 border-gray-600 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 text-white transition-all duration-200"
+                            class="block w-full h-10 rounded-lg bg-gray-700 border-gray-600 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 text-white transition-all duration-200"
                             placeholder="e.g., 101">
                     </div>
                     @error('room_number')
@@ -89,7 +89,7 @@
                         </div>
                         <input type="number" name="monthly_rent" id="monthly_rent" required step="0.01"
                             value="{{ old('monthly_rent', $room->monthly_rent ?? '') }}"
-                            class="pl-8 block w-full rounded-lg bg-gray-700 border-gray-600 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 text-white transition-all duration-200"
+                            class="pl-8 block w-full h-10 rounded-lg bg-gray-700 border-gray-600 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 text-white transition-all duration-200"
                             placeholder="0.00">
                     </div>
                     @error('monthly_rent')
@@ -106,7 +106,7 @@
                         </div>
                         <input type="number" name="water_fee" id="water_fee" required step="0.01"
                             value="{{ old('water_fee', $room->water_fee ?? '') }}"
-                            class="pl-8 block w-full rounded-lg bg-gray-700 border-gray-600 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 text-white transition-all duration-200"
+                            class="pl-8 block w-full h-10 rounded-lg bg-gray-700 border-gray-600 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 text-white transition-all duration-200"
                             placeholder="0.00">
                     </div>
                     @error('water_fee')
@@ -123,7 +123,7 @@
                         </div>
                         <input type="number" name="electric_fee" id="electric_fee" required step="0.01"
                             value="{{ old('electric_fee', $room->electric_fee ?? '') }}"
-                            class="pl-8 block w-full rounded-lg bg-gray-700 border-gray-600 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 text-white transition-all duration-200"
+                            class="pl-8 block w-full h-10 rounded-lg bg-gray-700 border-gray-600 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 text-white transition-all duration-200"
                             placeholder="0.00">
                     </div>
                     @error('electric_fee')
@@ -136,7 +136,7 @@
                     <label for="status" class="block text-sm font-medium text-gray-300 mb-1">Status</label>
                     <div class="relative">
                         <select name="status" id="status" required
-                            class="block w-full rounded-lg bg-gray-700 border-gray-600 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 text-white transition-all duration-200">
+                            class="block w-full h-10 rounded-lg bg-gray-700 border-gray-600 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 text-white transition-all duration-200">
                             <option value="{{ App\Models\Room::STATUS_VACANT }}"
                                 {{ (old('status', $room->status ?? '') == App\Models\Room::STATUS_VACANT) ? 'selected' : '' }}>
                                 Vacant
