@@ -1,0 +1,267 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>{{ config('app.name', 'Property Management App') }}</title>
+
+    <!-- Styles -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        [x-cloak] { display: none !important; }
+        :root { color-scheme: dark; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            background-color: rgb(17, 24, 39);
+            color: rgb(229, 231, 235);
+        }
+        .scrollbar-custom::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        .scrollbar-custom::-webkit-scrollbar-track {
+            background: rgba(75, 85, 99, 0.1);
+            border-radius: 10px;
+        }
+        .scrollbar-custom::-webkit-scrollbar-thumb {
+            background: rgba(75, 85, 99, 0.5);
+            border-radius: 10px;
+        }
+        .scrollbar-custom::-webkit-scrollbar-thumb:hover {
+            background: rgba(75, 85, 99, 0.7);
+        }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            100% { transform: scale(1.2); opacity: 0; }
+        }
+        .animate-notification::before {
+            content: '';
+            position: absolute;
+            border: 4px solid rgb(99, 102, 241);
+            border-radius: 9999px;
+            animation: pulse-ring 1.5s linear infinite;
+            inset: -4px;
+        }
+    </style>
+    @stack('styles')
+</head>
+<body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 flex h-screen overflow-hidden" x-data="{ sidebarOpen: false }">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-gray-50 dark:bg-gray-800 p-6 flex flex-col justify-between overflow-y-auto transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out fixed inset-y-0 left-0 z-50 border-r border-gray-200 dark:border-gray-700"
+           :class="{ '-translate-x-full': !sidebarOpen }"
+           id="sidebar">
+        <div>
+            <div class="flex items-center justify-between mb-8">
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 rounded-lg bg-indigo-500 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                        </svg>
+                    </div>
+                    <span class="text-xl font-bold">ManagePro</span>
+                </div>
+            </div>
+            <nav class="space-y-1">
+                <a href="{{ route('dashboard') }}"
+                   class="nav-link group flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition duration-200 ease-in-out
+                          {{ request()->routeIs('dashboard')
+                             ? 'bg-indigo-50 text-indigo-600 dark:bg-indigo-500/10 dark:text-indigo-400 font-semibold'
+                             : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700/50' }}"
+                   data-module="dashboard">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         class="h-5 w-5 mr-3 flex-shrink-0 {{ request()->routeIs('dashboard') ? 'text-indigo-600 dark:text-indigo-400' : 'text-gray-400 group-hover:text-gray-500 dark:group-hover:text-gray-300' }}"
+                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                    </svg>
+                    <span>Dashboard ----</span>
+                </a>
+                <a href="{{ route('buildings.index') }}" class="nav-link flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 {{ request()->routeIs('buildings.*') ? 'text-indigo-400 bg-gray-700' : '' }}" data-module="buildings">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                    </svg>
+                    <span>Buildings</span>
+                </a>
+                <a href="{{ route('rooms.index') }}" class="nav-link flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 {{ request()->routeIs('rooms.*') ? 'text-indigo-400 bg-gray-700' : '' }}" data-module="rooms">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16"/>
+                        <path d="M3 21h18"/>
+                        <path d="M9 7h1"/>
+                        <path d="M9 11h1"/>
+                        <path d="M9 15h1"/>
+                        <path d="M14 7h1"/>
+                        <path d="M14 11h1"/>
+                        <path d="M14 15h1"/>
+                    </svg>
+                    <span>Rooms</span>
+                </a>
+                <a href="{{ route('tenants.index') }}" class="nav-link flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 {{ request()->routeIs('tenants.*') ? 'text-indigo-400 bg-gray-700' : '' }}" data-module="tenants">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                    <span>Tenants</span>
+                </a>
+                <a href="#" class="nav-link flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200" data-module="water">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 12c0 1.5-1 3-3 3s-3-1.5-3-3 1-3 3-3 3 1.5 3 3z"></path>
+                        <path d="M18 12c0 1.5-1 3-3 3s-3-1.5-3-3 1-3 3-3 3 1.5 3 3z"></path>
+                        <path d="M14 12c0 1.5-1 3-3 3s-3-1.5-3-3 1-3 3-3 3 1.5 3 3z"></path>
+                        <path d="M10 12c0 1.5-1 3-3 3s-3-1.5-3-3 1-3 3-3 3 1.5 3 3z"></path>
+                    </svg>
+                    <span>Water</span>
+                </a>
+                <a href="#" class="nav-link flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200" data-module="electric">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M13 2L3 14h9l-2 8 10-12h-9l2-8z"></path>
+                    </svg>
+                    <span>Electric</span>
+                </a>
+            </nav>
+        </div>
+        <div>
+            <div x-data="{ open: false }" class="relative">
+                <button @click="open = !open"
+                        class="flex items-center w-full px-3 py-2.5 text-sm rounded-lg transition duration-200
+                               text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700/50">
+                    <div class="w-8 h-8 rounded-full bg-indigo-500 dark:bg-indigo-600 flex items-center justify-center text-white font-medium shadow-sm">
+                        {{ substr(Auth::user()->name, 0, 2) }}
+                    </div>
+                    <div class="ml-3 flex-grow text-left">
+                        <span class="block text-sm font-medium">{{ Auth::user()->name }} ---</span>
+                        <span class="block text-xs text-gray-500 dark:text-gray-400">{{ Auth::user()->email }}</span>
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         class="h-5 w-5 text-gray-400"
+                         :class="{ 'rotate-180': open }"
+                         viewBox="0 0 20 20"
+                         fill="currentColor">
+                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                </button>
+
+                <div x-show="open"
+                     @click.away="open = false"
+                     x-transition:enter="transition ease-out duration-100"
+                     x-transition:enter-start="transform opacity-0 scale-95"
+                     x-transition:enter-end="transform opacity-100 scale-100"
+                     x-transition:leave="transition ease-in duration-75"
+                     x-transition:leave-start="transform opacity-100 scale-100"
+                     x-transition:leave-end="transform opacity-0 scale-95"
+                     class="absolute bottom-full left-0 w-full mb-1 bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+
+                    <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 transition-colors duration-200">
+                        Profile Settings
+                    </a>
+
+                    <form method="POST" action="{{ route('logout') }}" class="block">
+                        @csrf
+                        <button type="submit" onclick="return confirm('Are you sure you want to log out?')"
+                            class="w-full px-4 py-2 text-left text-sm text-red-400 hover:bg-gray-700 transition-colors duration-200">
+                            Sign Out
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+        <!-- Main Content Area -->
+        <div class="flex-1">
+            <!-- Top Navigation -->
+            <header class="sticky top-0 z-10 border-b border-gray-800 bg-gray-900/95 backdrop-blur supports-[backdrop-filter]:bg-gray-900/80">
+                <div class="flex h-16 items-center gap-4 px-4 sm:px-6 lg:px-8">
+                    <!-- Left Section -->
+                    <div class="flex flex-1 items-center gap-4">
+                        <button id="sidebarToggle"
+                                class="lg:hidden -ml-2 inline-flex h-10 w-10 items-center justify-center rounded-lg text-gray-400 hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+                            <span class="sr-only">Open sidebar</span>
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                            </svg>
+                        </button>
+
+                        <h1 class="text-xl font-semibold text-white sm:text-2xl" id="main-title">
+                            @yield('title', 'Dashboard')
+                        </h1>
+                    </div>                                        <!-- Right Side Actions -->
+                    <div class="flex items-center gap-4">
+                    <!-- Search -->
+                    <div class="hidden lg:block flex-1 max-w-2xl">
+                        <div class="relative">
+                            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <input type="search" id="globalSearch"
+                                   placeholder="Search... something"
+                                   class="w-full rounded-lg border-0 bg-gray-800 pl-10 pr-4 py-2 text-sm text-gray-300 placeholder:text-gray-400 focus:bg-gray-700 focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+                                />
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Section -->
+                    <div class="flex items-center gap-3">
+                        <!-- Notifications -->
+                        <button class="group relative rounded-lg p-2 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <span class="absolute right-1.5 top-1.5 flex h-2.5 w-2.5">
+                                <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-indigo-400 opacity-75"></span>
+                                <span class="relative inline-flex h-2.5 w-2.5 rounded-full bg-indigo-500"></span>
+                            </span>
+                            <svg class="h-6 w-6 text-gray-400 group-hover:text-gray-300" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
+                            </svg>
+                        </button>                        <!-- Profile Dropdown -->
+                        <div x-data="{ open: false }" class="relative">
+                            <button @click="open = !open" @click.away="open = false"
+                                    class="relative flex items-center gap-2 rounded-full bg-gray-800 p-1 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800">
+                                <span class="sr-only">Open user menu</span>
+                                <div class="h-8 w-8 rounded-full bg-indigo-600 flex items-center justify-center">
+                                    <span class="text-sm font-medium leading-none text-white">
+                                        {{ substr(Auth::user()->name ?? 'U', 0, 2) }}
+                                    </span>
+                                </div>
+                            </button>
+
+                            <!-- Dropdown Menu -->
+                            <div x-show="open" x-cloak
+                                 class="absolute right-0 z-50 mt-2 w-48 origin-top-right rounded-md bg-gray-700 py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                                 role="menu">
+                                <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600/50">
+                                    Profile Settings
+                                </a>
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-gray-600/50">
+                                        Sign Out
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Page Content -->
+        <div class="flex-1 px-4 py-8 sm:px-6 lg:px-8">
+            @yield('content')
+        </div>
+
+    @stack('scripts')
+</body>
+</html>
