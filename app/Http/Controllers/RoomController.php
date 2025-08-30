@@ -16,7 +16,7 @@ class RoomController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Room::with(['building', 'rental.tenant'])
+        $query = Room::with(['building', 'rentals.tenant'])
             ->whereHas('building', function ($query) {
                 $query->where('user_id', Auth::id());
             });
