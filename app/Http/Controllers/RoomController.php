@@ -8,6 +8,7 @@ use App\Models\Building;
 use App\Models\Room;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class RoomController extends Controller
 {
@@ -55,19 +56,21 @@ class RoomController extends Controller
         $building = Building::where('user_id', Auth::id())
             ->findOrFail($validated['building_id']);
 
+        // Create new room instance
+        $room = new Room($validated);
+
         // Handle main image upload
-        if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('rooms', 'public');
-            $validated['image'] = $path;
+        if ($image = $request->validated()['image'] ?? null) {
+            $path = Storage::disk('public')->put('rooms', $image);
+            $room->image = $path;
         }
 
-        $room = new Room($validated);
         $room->save();
 
         // Handle additional images
-        if ($request->hasFile('additional_images')) {
-            foreach ($request->file('additional_images') as $image) {
-                $path = $image->store('rooms', 'public');
+        if ($additionalImages = $request->validated()['additional_images'] ?? null) {
+            foreach ($additionalImages as $image) {
+                $path = Storage::disk('public')->put('rooms', $image);
                 $room->images()->create(['path' => $path]);
             }
         }
@@ -81,7 +84,7 @@ class RoomController extends Controller
      */
     public function show(Room $room)
     {
-        $room->load(['building', 'rental.tenant', 'rental.utilityUsage']);
+        $room->load(['building', 'rental.tenant', 'rental.utilityUsages']);
         return view('rooms.show', compact('room'));
     }
 
@@ -99,7 +102,6 @@ class RoomController extends Controller
      */
     public function update(UpdateRoomRequest $request, Room $room)
     {
-
         $validated = $request->validated();
 
         if (isset($validated['building_id'])) {
@@ -108,7 +110,25 @@ class RoomController extends Controller
                 ->findOrFail($validated['building_id']);
         }
 
+        // Handle main image upload
+        if ($image = $request->validated()['image'] ?? null) {
+            // Delete old image if exists
+            if ($room->image && Storage::disk('public')->exists($room->image)) {
+                Storage::disk('public')->delete($room->image);
+            }
+            $path = Storage::disk('public')->put('rooms', $image);
+            $validated['image'] = $path;
+        }
+
         $room->update($validated);
+
+        // Handle additional images
+        if ($additionalImages = $request->validated()['additional_images'] ?? null) {
+            foreach ($additionalImages as $image) {
+                $path = Storage::disk('public')->put('rooms', $image);
+                $room->images()->create(['path' => $path]);
+            }
+        }
 
         return redirect()->route('rooms.index')
             ->with('success', 'Room updated successfully.');

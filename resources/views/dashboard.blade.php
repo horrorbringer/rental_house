@@ -230,7 +230,7 @@
                     </a>
 
                     <!-- Find Rooms Card -->
-                    <a href="{{ route('rooms.search') }}" class="group bg-gray-800 rounded-xl p-6 border border-gray-700/50 shadow-lg hover:border-gray-700 transition-all duration-200">
+                    <a href="{{ route('rooms.index') }}" class="group bg-gray-800 rounded-xl p-6 border border-gray-700/50 shadow-lg hover:border-gray-700 transition-all duration-200">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center space-x-4">
                                 <div class="p-3 rounded-full bg-blue-600/10 text-blue-400">

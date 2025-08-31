@@ -59,7 +59,15 @@ class Room extends Model
     }
 
     /**
-     * Get the rental associated with the room.
+     * Get the latest rental for the room.
+     */
+    public function rental(): HasOne
+    {
+        return $this->hasOne(Rental::class)->latest();
+    }
+
+    /**
+     * Get all rentals associated with the room.
      */
     public function rentals(): HasMany
     {

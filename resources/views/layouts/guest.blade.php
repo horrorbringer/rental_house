@@ -21,6 +21,7 @@
             }
         </style>
     @endif
+    <script src="https://cdn.tailwindcss.com"></script>
 
     @yield('scripts')
 </head>
@@ -43,7 +44,7 @@
 
                 <!-- Navigation Links -->
                 <nav class="hidden md:flex space-x-8">
-                    <a href="{{ route('rooms.search') }}" class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 px-3 py-2 text-sm font-medium transition-colors duration-200">
+                    <a href="{{ route('tenant.rooms.index') }}" class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 px-3 py-2 text-sm font-medium transition-colors duration-200">
                         Browse Rooms
                     </a>
                     <a href="#about" class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 px-3 py-2 text-sm font-medium transition-colors duration-200">
@@ -133,7 +134,7 @@
                     <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Quick Links</h3>
                     <ul class="mt-4 space-y-4">
                         <li>
-                            <a href="{{ route('rooms.search') }}" class="text-base text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400">
+                            <a href="{{ route('tenant.rooms.index') }}" class="text-base text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400">
                                 Browse Rooms
                             </a>
                         </li>

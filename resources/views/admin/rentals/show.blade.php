@@ -36,7 +36,7 @@
                                     {{ $rental->end_date ? 'Ended' : 'Active' }}
                                 </span>
                                 <span>•</span>
-                                <span>Room {{ $rental->room->number }}</span>
+                                <span>Room {{ $rental->room->room_number }}</span>
                                 <span>•</span>
                                 <span>{{ $rental->start_date->format('M d, Y') }} - {{ $rental->end_date ? $rental->end_date->format('M d, Y') : 'Present' }}</span>
                             </div>

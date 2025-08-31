@@ -126,45 +126,62 @@
                 </div>
             @endif
 
-            <div class="mb-6">
-                @if($room->image)
-                    <img src="{{ asset('storage/' . $room->image) }}" alt="Room {{ $room->room_number }}" class="w-full max-w-2xl rounded-lg shadow-md mb-4">
-                @endif
+            <!-- Room Images -->
+            <div class="mt-8">
+                <h3 class="text-lg font-medium text-white mb-4">Room Images</h3>
+                <div class="space-y-6">
+                    @if($room->image)
+                        <div class="relative aspect-video rounded-xl overflow-hidden bg-gray-700">
+                            <img src="{{ asset('storage/' . $room->image) }}" 
+                                 alt="Room {{ $room->room_number }}" 
+                                 class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-gray-900/50 to-transparent"></div>
+                            <div class="absolute bottom-4 left-4">
+                                <span class="text-white text-sm font-medium bg-gray-900/60 px-3 py-1 rounded-full">Main Image</span>
+                            </div>
+                        </div>
+                    @endif
 
-                @if($room->images->count() > 0)
-                    <div class="grid grid-cols-3 gap-4">
-                        @foreach($room->images as $image)
-                            <img src="{{ asset('storage/' . $image->path) }}" alt="Room {{ $room->room_number }}" class="w-full rounded-lg shadow-md">
-                        @endforeach
-                    </div>
-                @endif
+                    @if($room->images->count() > 0)
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                            @foreach($room->images as $image)
+                                <div class="relative aspect-video rounded-xl overflow-hidden bg-gray-700 group">
+                                    <img src="{{ asset('storage/' . $image->path) }}" 
+                                         alt="Room {{ $room->room_number }}" 
+                                         class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-gray-900/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                </div>
+                            @endforeach
+                        </div>
+                    @endif
+                </div>
             </div>
         </div>
 
-        <div class="bg-gray-850 px-6 py-4 border-t border-gray-700">
-            <div class="flex justify-between items-center">
+        <div class="bg-gray-750 px-6 py-4 border-t border-gray-700">
+            <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
                 <a href="{{ route('rooms.index') }}"
-                    class="inline-flex items-center px-4 py-2 border border-gray-600 rounded-lg text-sm font-medium text-gray-300 bg-transparent hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-indigo-500 transition-colors duration-200">
+                    class="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 border border-gray-600 rounded-lg text-sm font-medium text-gray-300 bg-transparent hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-indigo-500 transition-all duration-200">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M19 12H5M12 19l-7-7 7-7"/>
                     </svg>
                     Back to Rooms
                 </a>
-                <div class="flex space-x-3">
+                <div class="flex flex-col sm:flex-row w-full sm:w-auto gap-3">
                     <a href="{{ route('rooms.edit', $room) }}"
-                        class="inline-flex items-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-indigo-500 transition-colors duration-200">
+                        class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-2 rounded-lg text-sm font-medium text-white bg-indigo-500 hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-indigo-500 transition-all duration-200">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
                             <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
                         </svg>
                         Edit Room
                     </a>
-                    <form action="{{ route('rooms.destroy', $room) }}" method="POST" class="inline"
+                    <form action="{{ route('rooms.destroy', $room) }}" method="POST" class="w-full sm:w-auto"
                         onsubmit="return confirm('Are you sure you want to delete this room? This action cannot be undone.')">
                         @csrf
                         @method('DELETE')
                         <button type="submit"
-                            class="inline-flex items-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-red-500 transition-colors duration-200">
+                            class="w-full inline-flex items-center justify-center px-6 py-2 rounded-lg text-sm font-medium text-red-500 bg-red-500/10 hover:bg-red-500/20 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-red-500 transition-all duration-200">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                             </svg>

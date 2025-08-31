@@ -15,14 +15,12 @@ use Illuminate\Support\Facades\Route;
 // Public Routes
 Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
 
-Route::get('/rooms', [RoomPublicController::class, 'index'])->name('tenant.rooms.index');
-Route::get('/rooms/search', [RoomPublicController::class, 'search'])->name('tenant.rooms.search');
-Route::get('/rooms/{room}', [RoomPublicController::class, 'show'])->name('tenant.rooms.show');
-
-Route::prefix('rooms')->group(function () {
-    Route::get('/search', [TenantController::class, 'search'])->name('rooms.search');
+// Public Room Routes (must be defined before the admin routes to prevent conflicts)
+Route::prefix('public/rooms')->group(function () {
+    Route::get('/', [RoomPublicController::class, 'index'])->name('tenant.rooms.index');
+    Route::get('/search', [RoomPublicController::class, 'search'])->name('tenant.rooms.search');
+    Route::get('/{room}', [RoomPublicController::class, 'show'])->name('tenant.rooms.show');
     Route::post('/register', [TenantController::class, 'register'])->name('tenants.register');
-    Route::get('/{room}/public', [TenantController::class, 'showPublic'])->name('rooms.public.show');
 });
 
 // Admin Routes

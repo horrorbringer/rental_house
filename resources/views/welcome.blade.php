@@ -21,7 +21,7 @@
                     <a href="#search-section" class="inline-flex items-center px-8 py-4 border border-transparent text-base font-medium rounded-full text-indigo-700 bg-white hover:bg-gray-200 transition duration-200 shadow-xl">
                         Search Rooms
                     </a>
-                    <a href="{{ route('rooms.search') }}" class="inline-flex items-center px-8 py-4 border border-white text-base font-medium rounded-full text-white hover:bg-white/10 transition duration-200">
+                    <a href="{{ route('tenant.rooms.index') }}" class="inline-flex items-center px-8 py-4 border border-white text-base font-medium rounded-full text-white hover:bg-white/10 transition duration-200">
                         View All Rooms
                     </a>
                 </div>
@@ -31,7 +31,7 @@
         <!-- Search Section -->
         <div id="search-section" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl shadow-xl rounded-2xl p-6 border border-gray-200 dark:border-gray-700 transition-all duration-300 hover:shadow-2xl hover:scale-[1.02]">
-                <form action="{{ route('rooms.search') }}" method="GET" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <form action="{{ route('tenant.rooms.index') }}" method="GET" class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div class="group">
                         <label for="building" class="block text-sm font-medium text-gray-700 dark:text-gray-300 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors duration-200">Location</label>
                         <select id="building" name="building" class="mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200">
@@ -119,7 +119,7 @@
                                     {{ $room->size ?? '20' }} m²
                                 </span>
                             </div>
-                            <a href="{{ route('rooms.public.show', $room->id ?? 1) }}"
+                            <a href="{{ route('welcome', $room->id ?? 1) }}"
                                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                 View Details
                             </a>
@@ -183,7 +183,7 @@
                                     {{ $room->size ?? '20' }} m²
                                 </span>
                             </div>
-                            <a href="{{ route('rooms.public.show', $room->id ?? 1) }}"
+                            <a href="{{ route('rooms.show', $room->id ?? 1) }}"
                                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                 View Details
                             </a>

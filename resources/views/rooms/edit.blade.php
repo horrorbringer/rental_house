@@ -3,34 +3,51 @@
 @section('title', 'Edit Room')
 
 @section('content')
-<div class="max-w-2xl mx-auto">
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- Breadcrumb -->
-    <nav class="mb-6 text-gray-400 text-sm" aria-label="Breadcrumb">
-        <ol class="list-none p-0 inline-flex">
-            <li class="flex items-center">
-                <a href="{{ route('dashboard') }}" class="hover:text-white transition-colors duration-200">Dashboard</a>
-                <svg class="w-4 h-4 mx-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+    <nav class="mb-6 flex" aria-label="Breadcrumb">
+        <ol class="inline-flex items-center space-x-1 md:space-x-3">
+            <li class="inline-flex items-center">
+                <a href="{{ route('dashboard') }}" class="text-gray-400 hover:text-white inline-flex items-center">
+                    <svg class="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
+                    </svg>
+                    Dashboard
+                </a>
             </li>
-            <li class="flex items-center">
-                <a href="{{ route('rooms.index') }}" class="hover:text-white transition-colors duration-200">Rooms</a>
-                <svg class="w-4 h-4 mx-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            <li>
+                <div class="flex items-center">
+                    <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+                    <a href="{{ route('rooms.index') }}" class="text-gray-400 hover:text-white ml-1 md:ml-2">Rooms</a>
+                </div>
             </li>
-            <li><span class="text-gray-300">Edit Room {{ $room->room_number }}</span></li>
+            <li aria-current="page">
+                <div class="flex items-center">
+                    <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+                    <span class="text-gray-500 ml-1 md:ml-2">Edit Room {{ $room->room_number }}</span>
+                </div>
+            </li>
         </ol>
     </nav>
 
-    <div class="bg-gray-800 rounded-2xl shadow-xl p-8">
-        <div class="flex items-center mb-6">
-            <div class="w-10 h-10 rounded-lg bg-indigo-500 flex items-center justify-center mr-4">
+    <!-- Header -->
+    <div class="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl shadow-lg p-6 mb-6">
+        <div class="flex items-center gap-4">
+            <div class="flex-shrink-0 w-12 h-12 rounded-lg bg-indigo-500 flex items-center justify-center">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                 </svg>
             </div>
-            <h2 class="text-2xl font-semibold text-gray-100">Edit Room {{ $room->room_number }}</h2>
+            <div>
+                <h1 class="text-2xl font-bold text-white">Edit Room {{ $room->room_number }}</h1>
+                <p class="text-gray-400 mt-1">Update the room's information and settings</p>
+            </div>
         </div>
+    </div>
 
+    <div class="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl shadow-lg p-8">
         @if ($errors->any())
-            <div class="mb-6 bg-red-500 bg-opacity-10 border border-red-500 text-red-500 px-4 py-3 rounded-lg">
+            <div class="mb-6 bg-red-500/10 border border-red-500 text-red-500 px-4 py-3 rounded-lg">
                 <div class="font-medium">Please fix the following errors:</div>
                 <ul class="mt-2 list-disc list-inside text-sm">
                     @foreach ($errors->all() as $error)
@@ -40,9 +57,36 @@
             </div>
         @endif
 
-        <form method="POST" action="{{ route('rooms.update', $room) }}" class="space-y-6">
+        <form method="POST" action="{{ route('rooms.update', $room) }}" enctype="multipart/form-data" class="space-y-6">
             @csrf
             @method('PUT')
+
+            <!-- Current Room Images -->
+            @if($room->image || $room->images->count() > 0)
+                <div class="bg-gray-750 rounded-lg p-6">
+                    <h3 class="text-lg font-medium text-white mb-4">Current Images</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                        @if($room->image)
+                            <div class="relative aspect-video rounded-lg overflow-hidden bg-gray-700">
+                                <img src="{{ asset('storage/' . $room->image) }}" 
+                                     alt="Main room image" 
+                                     class="w-full h-full object-cover">
+                                <div class="absolute inset-0 bg-gradient-to-t from-gray-900/50 to-transparent"></div>
+                                <div class="absolute bottom-2 left-2">
+                                    <span class="text-white text-xs font-medium bg-gray-900/60 px-2 py-1 rounded-full">Main Image</span>
+                                </div>
+                            </div>
+                        @endif
+                        @foreach($room->images as $image)
+                            <div class="relative aspect-video rounded-lg overflow-hidden bg-gray-700">
+                                <img src="{{ asset('storage/' . $image->path) }}" 
+                                     alt="Additional room image" 
+                                     class="w-full h-full object-cover">
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
 
             <div class="grid grid-cols-1 gap-6">
                 <!-- Building Selection -->
@@ -146,6 +190,69 @@
                         </select>
                     </div>
                     @error('status')
+                        <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Capacity -->
+                <div>
+                    <label for="capacity" class="block text-sm font-medium text-gray-300 mb-1">Room Capacity</label>
+                    <div class="relative">
+                        <input type="number" name="capacity" id="capacity" min="1"
+                            value="{{ old('capacity', $room->capacity) }}"
+                            class="block w-full rounded-lg bg-gray-700 border-gray-600 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 text-white transition-all duration-200"
+                            placeholder="Maximum number of occupants">
+                    </div>
+                    @error('capacity')
+                        <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Main Image -->
+                <div>
+                    <label for="image" class="block text-sm font-medium text-gray-300 mb-1">Main Room Image</label>
+                    <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-600 border-dashed rounded-lg hover:border-indigo-500 transition-colors duration-200">
+                        <div class="space-y-1 text-center">
+                            <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            <div class="flex text-sm text-gray-400">
+                                <label for="image" class="relative cursor-pointer rounded-md font-medium text-indigo-500 hover:text-indigo-400 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                    <span>Upload a file</span>
+                                    <input id="image" name="image" type="file" class="sr-only" accept="image/*">
+                                </label>
+                                <p class="pl-1">or drag and drop</p>
+                            </div>
+                            <p class="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+                        </div>
+                    </div>
+                    @error('image')
+                        <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Additional Images -->
+                <div>
+                    <label for="additional_images" class="block text-sm font-medium text-gray-300 mb-1">Additional Images</label>
+                    <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-600 border-dashed rounded-lg hover:border-indigo-500 transition-colors duration-200">
+                        <div class="space-y-1 text-center">
+                            <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            <div class="flex text-sm text-gray-400">
+                                <label for="additional_images" class="relative cursor-pointer rounded-md font-medium text-indigo-500 hover:text-indigo-400 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                    <span>Upload files</span>
+                                    <input id="additional_images" name="additional_images[]" type="file" class="sr-only" accept="image/*" multiple>
+                                </label>
+                                <p class="pl-1">or drag and drop</p>
+                            </div>
+                            <p class="text-xs text-gray-500">PNG, JPG, GIF up to 10MB each</p>
+                        </div>
+                    </div>
+                    @error('additional_images')
+                        <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
+                    @enderror
+                    @error('additional_images.*')
                         <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
                     @enderror
                 </div>
