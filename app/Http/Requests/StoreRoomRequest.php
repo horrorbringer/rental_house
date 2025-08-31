@@ -28,6 +28,10 @@ class StoreRoomRequest extends FormRequest
             'water_fee' => ['required', 'numeric', 'min:0'],
             'electric_fee' => ['required', 'numeric', 'min:0'],
             'status' => ['required', 'in:vacant,occupied'],
+            'capacity' => ['required', 'integer', 'min:1'],
+            'image' => ['nullable', 'image', 'max:2048'],
+            'additional_images.*' => ['nullable', 'image', 'max:2048'],
+            'additional_images' => ['nullable', 'array', 'max:5'],
         ];
     }
 }

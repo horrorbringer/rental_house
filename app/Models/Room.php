@@ -38,6 +38,8 @@ class Room extends Model
         'water_fee',
         'electric_fee',
         'status',
+        'capacity',
+        'image',
     ];
 
     /**
@@ -62,6 +64,14 @@ class Room extends Model
     public function rentals(): HasMany
     {
         return $this->hasMany(Rental::class);
+    }
+
+    /**
+     * Get the images associated with the room.
+     */
+    public function images(): HasMany
+    {
+        return $this->hasMany(RoomImage::class);
     }
 }
 

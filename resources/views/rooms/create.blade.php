@@ -3,11 +3,10 @@
 @section('title', isset($room) ? 'Edit Room' : 'Create Room')
 
 @section('content')
-<div class="max-w-2xl mx-auto">
-    <!-- Breadcrumb -->
-    <nav class="mb-6 text-gray-400 text-sm" aria-label="Breadcrumb">
-        <ol class="list-none p-0 inline-flex">
-            <li class="flex items-center">
+<div class="max-w-2xl mx-auto p-6">
+    <div class="bg-gray-800 shadow-lg rounded-lg overflow-hidden">
+        <div class="p-6">
+            <h2 class="text-2xl font-bold text-white mb-6">{{ isset($room) ? 'Edit Room' : 'Create New Room' }}</h2>
                 <a href="{{ route('dashboard') }}" class="hover:text-white transition-colors duration-200">Dashboard</a>
                 <svg class="w-4 h-4 mx-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
             </li>
@@ -40,7 +39,7 @@
             </div>
         @endif
 
-        <form method="POST" action="{{ isset($room) ? route('rooms.update', $room) : route('rooms.store') }}" class="space-y-6">
+        <form method="POST" action="{{ isset($room) ? route('rooms.update', $room) : route('rooms.store') }}" class="space-y-6" enctype="multipart/form-data">
             @csrf
             @if(isset($room))
                 @method('PUT')
@@ -148,6 +147,46 @@
                         </select>
                     </div>
                     @error('status')
+                        <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Capacity -->
+                <div>
+                    <label for="capacity" class="block text-sm font-medium text-gray-300 mb-1">Capacity (Maximum Tenants)</label>
+                    <div class="relative">
+                        <input type="number" name="capacity" id="capacity" required min="1"
+                            value="{{ old('capacity', $room->capacity ?? 1) }}"
+                            class="block w-full h-10 rounded-lg bg-gray-700 border-gray-600 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 text-white transition-all duration-200">
+                    </div>
+                    @error('capacity')
+                        <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Main Room Image -->
+                <div>
+                    <label for="image" class="block text-sm font-medium text-gray-300 mb-1">Main Room Image</label>
+                    <div class="relative">
+                        <input type="file" name="image" id="image" accept="image/*"
+                            class="block w-full h-10 rounded-lg bg-gray-700 border-gray-600 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 text-white transition-all duration-200">
+                    </div>
+                    @error('image')
+                        <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Additional Room Images -->
+                <div>
+                    <label for="additional_images" class="block text-sm font-medium text-gray-300 mb-1">Additional Room Images (max 5)</label>
+                    <div class="relative">
+                        <input type="file" name="additional_images[]" id="additional_images" accept="image/*" multiple
+                            class="block w-full h-10 rounded-lg bg-gray-700 border-gray-600 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 text-white transition-all duration-200">
+                    </div>
+                    @error('additional_images')
+                        <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
+                    @enderror
+                    @error('additional_images.*')
                         <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
                     @enderror
                 </div>

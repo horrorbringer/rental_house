@@ -125,6 +125,20 @@
                     </div>
                 </div>
             @endif
+
+            <div class="mb-6">
+                @if($room->image)
+                    <img src="{{ asset('storage/' . $room->image) }}" alt="Room {{ $room->room_number }}" class="w-full max-w-2xl rounded-lg shadow-md mb-4">
+                @endif
+
+                @if($room->images->count() > 0)
+                    <div class="grid grid-cols-3 gap-4">
+                        @foreach($room->images as $image)
+                            <img src="{{ asset('storage/' . $image->path) }}" alt="Room {{ $room->room_number }}" class="w-full rounded-lg shadow-md">
+                        @endforeach
+                    </div>
+                @endif
+            </div>
         </div>
 
         <div class="bg-gray-850 px-6 py-4 border-t border-gray-700">

@@ -55,8 +55,22 @@ class RoomController extends Controller
         $building = Building::where('user_id', Auth::id())
             ->findOrFail($validated['building_id']);
 
+        // Handle main image upload
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('rooms', 'public');
+            $validated['image'] = $path;
+        }
+
         $room = new Room($validated);
         $room->save();
+
+        // Handle additional images
+        if ($request->hasFile('additional_images')) {
+            foreach ($request->file('additional_images') as $image) {
+                $path = $image->store('rooms', 'public');
+                $room->images()->create(['path' => $path]);
+            }
+        }
 
         return redirect()->route('rooms.index')
             ->with('success', 'Room created successfully.');

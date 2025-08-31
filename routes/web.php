@@ -8,28 +8,32 @@ use App\Http\Controllers\RoomPublicController;
 use App\Http\Controllers\RentalController;
 use App\Http\Controllers\TenantController;
 use App\Http\Controllers\UtilityUsageController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 
 // Public Routes
 Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
+
 Route::get('/rooms', [RoomPublicController::class, 'index'])->name('tenant.rooms.index');
 Route::get('/rooms/search', [RoomPublicController::class, 'search'])->name('tenant.rooms.search');
 Route::get('/rooms/{room}', [RoomPublicController::class, 'show'])->name('tenant.rooms.show');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::prefix('rooms')->group(function () {
+    Route::get('/search', [TenantController::class, 'search'])->name('rooms.search');
+    Route::post('/register', [TenantController::class, 'register'])->name('tenants.register');
+    Route::get('/{room}/public', [TenantController::class, 'showPublic'])->name('rooms.public.show');
+});
 
 // Admin Routes
-Route::middleware(['auth'])->group(function () {
-    // Utility Usage Routes
+Route::middleware(['auth','verified'])->group(function () {
+
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
     Route::resource('utility-usages', UtilityUsageController::class);
     Route::post('utility-usages/generate-monthly', [UtilityUsageController::class, 'generateMonthly'])
         ->name('utility-usages.generate-monthly');
-});
 
-Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -49,13 +53,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/tenants/{tenant}/edit', [TenantController::class, 'edit'])->name('tenants.edit');
     Route::put('/tenants/{tenant}', [TenantController::class, 'update'])->name('tenants.update');
     Route::delete('/tenants/{tenant}', [TenantController::class, 'destroy'])->name('tenants.destroy');
-});
-
-// Public routes for tenants
-Route::prefix('rooms')->group(function () {
-    Route::get('/search', [TenantController::class, 'search'])->name('rooms.search');
-    Route::post('/register', [TenantController::class, 'register'])->name('tenants.register');
-    Route::get('/{room}/public', [TenantController::class, 'showPublic'])->name('rooms.public.show');
 });
 
 require __DIR__.'/auth.php';
