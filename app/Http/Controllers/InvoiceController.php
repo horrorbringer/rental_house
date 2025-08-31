@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Invoice;
+use App\Models\Rental;
 use Illuminate\Http\Request;
 
 class InvoiceController extends Controller
@@ -11,7 +13,8 @@ class InvoiceController extends Controller
      */
     public function index()
     {
-        return;
+        $invoices = Invoice::with(['rental.room', 'rental.tenant'])->latest()->paginate(10);
+        return view('invoices.index', compact('invoices'));
     }
 
     /**
@@ -19,7 +22,12 @@ class InvoiceController extends Controller
      */
     public function create()
     {
-        //
+        $rentals = Rental::with(['room', 'tenant'])->whereDoesntHave('invoices', function($query) {
+            $query->whereMonth('billing_month', now()->month)
+                  ->whereYear('billing_month', now()->year);
+        })->get();
+        
+        return view('invoices.create', compact('rentals'));
     }
 
     /**
@@ -27,7 +35,26 @@ class InvoiceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'rental_id' => 'required|exists:rentals,id',
+            'billing_month' => 'required|date',
+            'rent_amount' => 'required|numeric|min:0',
+            'water_fee' => 'required|numeric|min:0',
+            'electric_fee' => 'required|numeric|min:0',
+            'water_usage_amount' => 'required|numeric|min:0',
+            'electric_usage_amount' => 'required|numeric|min:0',
+        ]);
+
+        $validated['total'] = $validated['rent_amount'] + 
+                            $validated['water_fee'] + 
+                            $validated['electric_fee'] +
+                            $validated['water_usage_amount'] + 
+                            $validated['electric_usage_amount'];
+
+        $invoice = Invoice::create($validated);
+
+        return redirect()->route('invoices.show', $invoice)
+                        ->with('success', 'Invoice created successfully.');
     }
 
     /**
@@ -35,7 +62,8 @@ class InvoiceController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $invoice = Invoice::with(['rental.room', 'rental.tenant'])->findOrFail($id);
+        return view('invoices.show', compact('invoice'));
     }
 
     /**
@@ -43,7 +71,8 @@ class InvoiceController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $invoice = Invoice::with(['rental.room', 'rental.tenant'])->findOrFail($id);
+        return view('invoices.edit', compact('invoice'));
     }
 
     /**
@@ -51,7 +80,26 @@ class InvoiceController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $invoice = Invoice::findOrFail($id);
+        
+        $validated = $request->validate([
+            'rent_amount' => 'required|numeric|min:0',
+            'water_fee' => 'required|numeric|min:0',
+            'electric_fee' => 'required|numeric|min:0',
+            'water_usage_amount' => 'required|numeric|min:0',
+            'electric_usage_amount' => 'required|numeric|min:0',
+        ]);
+
+        $validated['total'] = $validated['rent_amount'] + 
+                            $validated['water_fee'] + 
+                            $validated['electric_fee'] +
+                            $validated['water_usage_amount'] + 
+                            $validated['electric_usage_amount'];
+
+        $invoice->update($validated);
+
+        return redirect()->route('invoices.show', $invoice)
+                        ->with('success', 'Invoice updated successfully.');
     }
 
     /**
@@ -59,6 +107,19 @@ class InvoiceController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $invoice = Invoice::findOrFail($id);
+        $invoice->delete();
+
+        return redirect()->route('invoices.index')
+                        ->with('success', 'Invoice deleted successfully.');
+    }
+
+    /**
+     * Print the specified invoice.
+     */
+    public function print(string $id)
+    {
+        $invoice = Invoice::with(['rental.room', 'rental.tenant'])->findOrFail($id);
+        return view('invoices.print', compact('invoice'));
     }
 }

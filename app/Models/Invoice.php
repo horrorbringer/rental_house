@@ -28,6 +28,10 @@ class Invoice extends Model
         'status',
     ];
 
+    protected $casts = [
+        'billing_month' => 'date',
+    ];
+
     /**
      * Get the rental that the invoice belongs to.
      */

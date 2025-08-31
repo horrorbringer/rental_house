@@ -39,6 +39,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('rooms', RoomController::class);
     Route::resource('rentals', RentalController::class);
     Route::resource('invoices', InvoiceController::class);
+    Route::get('/invoices/{invoice}/print', [InvoiceController::class, 'print'])->name('invoices.print');
 
     // Tenant management
     Route::get('/tenants', [TenantController::class, 'index'])->name('tenants.index');
