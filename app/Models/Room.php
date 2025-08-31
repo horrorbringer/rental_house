@@ -49,6 +49,14 @@ class Room extends Model
     }
 
     /**
+     * Get the current active rental for the room.
+     */
+    public function activeRental(): HasOne
+    {
+        return $this->hasOne(Rental::class)->whereNull('end_date');
+    }
+
+    /**
      * Get the rental associated with the room.
      */
     public function rentals(): HasMany

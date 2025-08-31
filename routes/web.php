@@ -5,6 +5,7 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\RoomPublicController;
+use App\Http\Controllers\RentalController;
 use App\Http\Controllers\TenantController;
 use App\Http\Controllers\UtilityUsageController;
 use App\Http\Controllers\WelcomeController;
@@ -36,6 +37,7 @@ Route::middleware('auth')->group(function () {
     // Building and Room management
     Route::resource('buildings', BuildingController::class);
     Route::resource('rooms', RoomController::class);
+    Route::resource('rentals', RentalController::class);
     Route::resource('invoices', InvoiceController::class);
 
     // Tenant management

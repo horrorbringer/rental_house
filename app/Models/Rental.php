@@ -25,6 +25,16 @@ class Rental extends Model
     ];
 
     /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'start_date' => 'date',
+        'end_date' => 'date',
+    ];
+
+    /**
      * Get the room that the rental belongs to.
      */
     public function room(): BelongsTo
@@ -41,11 +51,11 @@ class Rental extends Model
     }
 
     /**
-     * Get the utility usage record associated with the rental.
+     * Get the utility usages for the rental.
      */
-    public function utilityUsage(): HasOne
+    public function utilityUsages(): HasMany
     {
-        return $this->hasOne(UtilityUsage::class);
+        return $this->hasMany(UtilityUsage::class);
     }
 
     /**
