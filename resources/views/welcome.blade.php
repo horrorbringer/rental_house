@@ -67,8 +67,72 @@
             </div>
         </div>
 
+        {{-- Building Section --}}
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="text-center mb-8">
+                <h2 class="text-4xl font-bold tracking-tight bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent inline-block">
+                   Buildings 
+                </h2>
+                <div class="mt-4 flex justify-center">
+                    <span class="h-1 w-20 bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 rounded-full"></span>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                @foreach($featuredRooms ?? [] as $room)
+                <div class="group bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl shadow-lg overflow-hidden transition-all duration-500 hover:shadow-2xl hover:shadow-indigo-500/20 border border-gray-200 dark:border-gray-700">
+                    <div class="relative overflow-hidden">
+                        <img src="{{ $room->image_url ?? 'https://placehold.co/600x400/1E40AF/FFFFFF?text=Room+Photo' }}"
+                             alt="Room Photo"
+                             class="w-full h-48 object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="absolute top-4 right-4">
+                            <span class="px-4 py-2 bg-indigo-600 dark:bg-indigo-500 text-white font-semibold rounded-full text-sm shadow-lg">
+                                Available Now
+                            </span>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors duration-300">
+                                    {{ $room->building->name ?? 'Building' }} - Room {{ $room->number ?? '101' }}
+                                </h3>
+                                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                                    {{ $room->description ?? 'Comfortable room with modern amenities' }}
+                                </p>
+                            </div>
+                            <span class="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">
+                                ${{ number_format($room->price ?? 0) }}
+                            </span>
+                        </div>
+                        <div class="mt-4 flex justify-between items-center">
+                            <div class="flex space-x-4 text-sm text-gray-500 dark:text-gray-400">
+                                <span class="flex items-center">
+                                    <svg class="h-5 w-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                                    </svg>
+                                    Floor {{ $room->floor ?? '1' }}
+                                </span>
+                                <span class="flex items-center">
+                                    <svg class="h-5 w-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path>
+                                    </svg>
+                                    {{ $room->size ?? '20' }} m²
+                                </span>
+                            </div>
+                            <a href="{{ route('rooms.public.show', $room->id ?? 1) }}"
+                               class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                View Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+        </div>
+
+
         <!-- Featured Rooms Section -->
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
             <div class="text-center mb-12">
                 <h2 class="text-4xl font-bold tracking-tight bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent inline-block">
                     Featured Rooms

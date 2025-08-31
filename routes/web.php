@@ -4,23 +4,29 @@ use App\Http\Controllers\BuildingController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoomController;
+use App\Http\Controllers\RoomPublicController;
 use App\Http\Controllers\TenantController;
+use App\Http\Controllers\UtilityUsageController;
+use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    // Get featured rooms (vacant rooms with images)
-    $featuredRooms = \App\Models\Room::with('building')
-        ->where('status', 'vacant')
-        ->latest()
-        ->take(6)
-        ->get();
-
-    return view('welcome', compact('featuredRooms'));
-});
+// Public Routes
+Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
+Route::get('/rooms', [RoomPublicController::class, 'index'])->name('tenant.rooms.index');
+Route::get('/rooms/search', [RoomPublicController::class, 'search'])->name('tenant.rooms.search');
+Route::get('/rooms/{room}', [RoomPublicController::class, 'show'])->name('tenant.rooms.show');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+// Admin Routes
+Route::middleware(['auth'])->group(function () {
+    // Utility Usage Routes
+    Route::resource('utility-usages', UtilityUsageController::class);
+    Route::post('utility-usages/generate-monthly', [UtilityUsageController::class, 'generateMonthly'])
+        ->name('utility-usages.generate-monthly');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
