@@ -205,7 +205,26 @@ document.addEventListener('DOMContentLoaded', function() {
     const formMessages = document.getElementById('formMessages');
     const imageInput = document.querySelector('input[type="file"]');
     const previewContainer = document.getElementById('newImagePreview');
-    let deletedImages = [];
+    
+    // Initialize or reset hidden inputs
+    const deletedInput = document.getElementById('deleted_image_ids') || document.createElement('input');
+    deletedInput.type = 'hidden';
+    deletedInput.name = 'deleted_image_ids';
+    deletedInput.id = 'deleted_image_ids';
+    deletedInput.value = '[]';
+    
+    // Add to form if it doesn't exist
+    if (!document.getElementById('deleted_image_ids')) {
+        form.appendChild(deletedInput);
+    }
+    
+    if (!document.getElementById('primary_image_id')) {
+        const primaryInput = document.createElement('input');
+        primaryInput.type = 'hidden';
+        primaryInput.name = 'primary_image_id';
+        primaryInput.id = 'primary_image_id';
+        form.appendChild(primaryInput);
+    }
 
     // Handle form submission
     form.addEventListener('submit', function(e) {
@@ -254,48 +273,80 @@ document.addEventListener('DOMContentLoaded', function() {
     window.deleteImage = function(imageId) {
         if (!confirm('Are you sure you want to delete this image?')) return;
         
-        deletedImages.push(imageId);
-        
-        // Create or update hidden input for deleted images
         let input = document.getElementById('deleted_image_ids');
-        if (!input) {
-            input = document.createElement('input');
-            input.type = 'hidden';
-            input.name = 'deleted_image_ids';
-            input.id = 'deleted_image_ids';
-            form.appendChild(input);
-        }
-        input.value = JSON.stringify(deletedImages);
+        let currentDeleted = [];
         
+        try {
+            currentDeleted = input.value ? JSON.parse(input.value) : [];
+        } catch (e) {
+            console.error('Error parsing deleted_image_ids:', e);
+            currentDeleted = [];
+        }
+        
+        // Make sure currentDeleted is an array
+        if (!Array.isArray(currentDeleted)) {
+            currentDeleted = [];
+        }
+        
+        // Add the new ID to the array if it's not already there
+        if (!currentDeleted.includes(imageId)) {
+            currentDeleted.push(imageId);
+        }
+        
+        // Update the hidden input
+        input.value = JSON.stringify(currentDeleted);
+        
+        // Remove the image element from display
         const imageElement = document.querySelector(`[data-image-id="${imageId}"]`);
         if (imageElement) {
             imageElement.remove();
+        }
+        
+        // If this was the primary image, remove the primary_image_id
+        const primaryInput = document.getElementById('primary_image_id');
+        if (primaryInput && primaryInput.value == imageId) {
+            primaryInput.value = '';
+            // Find first remaining image and make it primary
+            const firstRemainingImage = document.querySelector('[data-image-id]');
+            if (firstRemainingImage) {
+                const firstImageId = firstRemainingImage.dataset.imageId;
+                setPrimaryImage(firstImageId);
+            }
         }
     };
 
     // Handle setting primary image
     window.setPrimaryImage = function(imageId) {
-        // Create or update hidden input for primary image
+        // Update the hidden input for primary image
         let input = document.getElementById('primary_image_id');
-        if (!input) {
-            input = document.createElement('input');
-            input.type = 'hidden';
-            input.name = 'primary_image_id';
-            input.id = 'primary_image_id';
-            form.appendChild(input);
-        }
         input.value = imageId;
         
         // Update UI to show which image is primary
+        // First, remove all primary badges
+        document.querySelectorAll('.primary-badge').forEach(badge => {
+            badge.remove();
+        });
+        
+        // Remove green background from all primary buttons
         document.querySelectorAll('[data-primary-button]').forEach(button => {
             button.classList.remove('bg-green-500');
             button.classList.add('bg-indigo-500');
         });
         
+        // Update the selected image
         const selectedButton = document.querySelector(`[data-primary-button="${imageId}"]`);
         if (selectedButton) {
             selectedButton.classList.remove('bg-indigo-500');
             selectedButton.classList.add('bg-green-500');
+            
+            // Add primary badge to the selected image
+            const imageContainer = document.querySelector(`[data-image-id="${imageId}"]`);
+            if (imageContainer) {
+                const badge = document.createElement('span');
+                badge.className = 'primary-badge absolute top-2 left-2 px-2 py-1 bg-green-500 text-white text-xs rounded-full';
+                badge.textContent = 'Primary';
+                imageContainer.appendChild(badge);
+            }
         }
     };
 });

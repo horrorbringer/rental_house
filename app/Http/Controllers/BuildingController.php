@@ -76,6 +76,11 @@ class BuildingController extends Controller
 
     public function update(Request $request, Building $building)
     {
+        // Parse the JSON string of deleted_image_ids if it exists
+        if ($request->has('deleted_image_ids') && is_string($request->deleted_image_ids)) {
+            $request->merge(['deleted_image_ids' => json_decode($request->deleted_image_ids, true)]);
+        }
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'address' => 'required|string|max:255',
@@ -99,19 +104,27 @@ class BuildingController extends Controller
 
             // 2. Process image deletions in bulk if any
             if (!empty($validated['deleted_image_ids'])) {
-                $imagesToDelete = $building->images()
-                    ->whereIn('id', $validated['deleted_image_ids'])
-                    ->get(['id', 'path']);
+                $deletedIds = is_string($validated['deleted_image_ids']) 
+                    ? json_decode($validated['deleted_image_ids'], true) 
+                    : $validated['deleted_image_ids'];
 
-                // Delete files in bulk
-                Storage::disk('public')->delete(
-                    $imagesToDelete->pluck('path')->toArray()
-                );
+                if (!empty($deletedIds)) {
+                    $imagesToDelete = $building->images()
+                        ->whereIn('id', $deletedIds)
+                        ->get(['id', 'path']);
 
-                // Delete records in bulk
-                $building->images()
-                    ->whereIn('id', $validated['deleted_image_ids'])
-                    ->delete();
+                    if ($imagesToDelete->isNotEmpty()) {
+                        // Delete files from storage
+                        Storage::disk('public')->delete(
+                            $imagesToDelete->pluck('path')->toArray()
+                        );
+
+                        // Delete records from database
+                        $building->images()
+                            ->whereIn('id', $deletedIds)
+                            ->delete();
+                    }
+                }
             }
 
             // 3. Handle new image uploads efficiently
