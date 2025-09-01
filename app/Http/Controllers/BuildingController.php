@@ -116,9 +116,10 @@ class BuildingController extends Controller
 
             // 3. Handle new image uploads efficiently
             if ($request->hasFile('new_images')) {
-                $newImages = collect($request->file('new_images'))->map(function ($file) {
+                $newImages = collect($request->file('new_images'))->map(function ($file) use ($building) {
                     $path = $file->store('buildings', 'public');
                     return [
+                        'building_id' => $building->id,
                         'path' => $path,
                         'is_primary' => false,
                         'created_at' => now(),

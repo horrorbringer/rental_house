@@ -54,6 +54,7 @@
           class="space-y-6">
         @csrf
         @method('PUT')
+        <div id="formMessages"></div>
 
         <!-- Name -->
         <div>
@@ -197,24 +198,15 @@
         </div>
 
         <!-- Actions -->
-        <div class="flex justify-end space-x-3 mt-6">
+                <!-- Actions -->
+        <div class="flex items-center justify-end space-x-3 mt-6 pt-6 border-t border-gray-700">
             <a href="{{ route('buildings.index') }}" 
-               class="px-4 py-2 bg-gray-700 rounded-lg text-gray-300 hover:bg-gray-600 transition-colors">
+               class="px-4 py-2 text-sm font-medium text-gray-400 hover:text-white transition-colors">
                 Cancel
             </a>
             <button type="submit" 
-                    class="inline-flex items-center px-4 py-2 border border-transparent rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-indigo-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                    :disabled="isSubmitting">
-                <!-- Normal state icon -->
-                <svg class="submit-icon w-5 h-5 mr-1.5" :class="{ 'hidden': isSubmitting }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                </svg>
-                <!-- Loading spinner -->
-                <svg class="loading-icon animate-spin h-5 w-5 mr-1.5" :class="{ 'hidden': !isSubmitting }" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
-                </svg>
-                <span x-text="isSubmitting ? 'Saving...' : 'Save Changes'"></span>
+                    class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                Update Building
             </button>
         </div>
     </form>
@@ -226,27 +218,18 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('buildingForm');
-    const submitButton = document.getElementById('submitButton');
-    const buttonText = submitButton.querySelector('.button-text');
-    const submitIcon = submitButton.querySelector('.submit-icon');
-    const loadingIcon = submitButton.querySelector('.loading-icon');
+    const formMessages = document.getElementById('formMessages');
     const imageInput = document.querySelector('input[type="file"]');
     const previewContainer = document.getElementById('newImagePreview');
-    const deletedImagesInput = document.getElementById('deleted_image_ids');
-    const primaryImageInput = document.getElementById('primary_image_id');
-    
     let deletedImages = [];
 
     // Handle form submission
     form.addEventListener('submit', function(e) {
-        if (submitButton.disabled) return;
-
-        // Show loading state
-        submitButton.disabled = true;
-        submitButton.classList.add('opacity-50', 'cursor-not-allowed');
-        submitIcon.classList.add('hidden');
-        loadingIcon.classList.remove('hidden');
-        buttonText.textContent = 'Updating...';
+        const submitButton = form.querySelector('button[type="submit"]');
+        if (submitButton) {
+            submitButton.disabled = true;
+            submitButton.textContent = 'Updating...';
+        }
     });
 
     // Handle new image uploads
@@ -288,7 +271,17 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!confirm('Are you sure you want to delete this image?')) return;
         
         deletedImages.push(imageId);
-        deletedImagesInput.value = JSON.stringify(deletedImages);
+        
+        // Create or update hidden input for deleted images
+        let input = document.getElementById('deleted_image_ids');
+        if (!input) {
+            input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'deleted_image_ids';
+            input.id = 'deleted_image_ids';
+            form.appendChild(input);
+        }
+        input.value = JSON.stringify(deletedImages);
         
         const imageElement = document.querySelector(`[data-image-id="${imageId}"]`);
         if (imageElement) {
@@ -298,7 +291,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Handle setting primary image
     window.setPrimaryImage = function(imageId) {
-        primaryImageInput.value = imageId;
+        // Create or update hidden input for primary image
+        let input = document.getElementById('primary_image_id');
+        if (!input) {
+            input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'primary_image_id';
+            input.id = 'primary_image_id';
+            form.appendChild(input);
+        }
+        input.value = imageId;
         
         // Update UI to show which image is primary
         document.querySelectorAll('[data-primary-button]').forEach(button => {

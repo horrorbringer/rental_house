@@ -21,6 +21,15 @@
     .animate-fade-in {
         animation: fadeIn 0.3s ease-out forwards;
     }
+    .image-gallery img {
+        transition: transform 0.2s ease-in-out;
+    }
+    .image-gallery img:hover {
+        transform: scale(1.05);
+    }
+    .image-gallery .active {
+        border: 2px solid #6366f1;
+    }
 </style>
 @endpush
 
@@ -115,6 +124,48 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <!-- Building Information -->
             <div class="space-y-6">
+                <!-- Building Images -->
+                <div class="bg-gray-700/50 rounded-xl overflow-hidden border border-gray-700/50">
+                    @if($building->images->count() > 0)
+                        <!-- Primary Image -->
+                        <div class="relative aspect-video">
+                            @php
+                                $primaryImage = $building->images->firstWhere('is_primary', true) 
+                                    ?? $building->images->first();
+                            @endphp
+                            <img src="{{ Storage::url($primaryImage->path) }}" 
+                                 alt="{{ $building->name }}"
+                                 class="w-full h-full object-cover">
+                        </div>
+                        <!-- Thumbnail Gallery -->
+                        @if($building->images->count() > 1)
+                            <div class="p-4 border-t border-gray-600/50">
+                                <div class="grid grid-cols-4 gap-2">
+                                    @foreach($building->images as $image)
+                                        <div class="relative aspect-video rounded-lg overflow-hidden 
+                                                    {{ $image->is_primary ? 'ring-2 ring-indigo-500' : '' }}">
+                                            <img src="{{ Storage::url($image->path) }}" 
+                                                 alt="Building image"
+                                                 class="w-full h-full object-cover">
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
+                    @else
+                        <div class="aspect-video bg-gray-800 flex items-center justify-center">
+                            <div class="text-center">
+                                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                          d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                </svg>
+                                <p class="mt-2 text-sm text-gray-400">No images available</p>
+                            </div>
+                        </div>
+                    @endif
+                </div>
+
+                <!-- Building Details -->
                 <div class="bg-gray-700/50 rounded-xl p-6 border border-gray-700/50">
                     <h3 class="text-lg font-medium text-white mb-4">Building Information</h3>
                     <div class="space-y-4">
