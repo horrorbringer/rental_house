@@ -95,49 +95,33 @@
         </div>
 
         <!-- Existing Images -->
-        <div class="mt-4">
-            <label class="block text-sm font-medium text-gray-300">Current Images</label>
-            <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-2" x-show="currentImages.length">
-                <template x-for="image in currentImages" :key="image.id">
-                    <div class="relative group aspect-video">
-                        <img :src="image.path" 
-                             class="w-full h-full object-cover rounded-lg"
-                             alt="Building image">
-                        
-                        <!-- Overlay with Actions -->
-                        <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity 
-                                  flex items-center justify-center gap-2">
-                            <!-- Set Primary -->
-                            <button type="button"
-                                    @click="setPrimaryImage(image.id)"
-                                    class="p-2 rounded-full hover:bg-green-500 transition-colors"
-                                    :class="image.is_primary ? 'bg-green-500' : 'bg-green-500/80'">
-                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                          d="M5 13l4 4L19 7"/>
+        <div class="mt-6">
+            <label class="block text-sm font-medium text-gray-300 mb-2">Current Images</label>
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-4" id="currentImages">
+                @foreach($building->images as $image)
+                    <div class="relative aspect-video bg-gray-700 rounded-lg overflow-hidden group" data-image-id="{{ $image->id }}">
+                        <img src="{{ Storage::url($image->path) }}" alt="Building image" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                            <button type="button" onclick="setPrimaryImage({{ $image->id }})" data-primary-button="{{ $image->id }}" class="p-2 text-white {{ $image->is_primary ? 'bg-green-500' : 'bg-indigo-500' }} rounded-full hover:bg-opacity-80 transition-colors" title="{{ $image->is_primary ? 'Primary Image' : 'Set as Primary' }}">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                 </svg>
                             </button>
-
-                            <!-- Delete -->
-                            <button type="button"
-                                    @click="deleteImage(image.id)"
-                                    class="p-2 rounded-full bg-red-500/80 hover:bg-red-500 transition-colors">
-                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                            <button type="button" onclick="deleteImage({{ $image->id }})" class="p-2 text-white bg-red-500 rounded-full hover:bg-red-600 transition-colors" title="Delete Image">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                                 </svg>
                             </button>
                         </div>
-
-                        <!-- Primary Badge -->
-                        <div x-show="image.is_primary"
-                             class="absolute top-2 left-2 px-2 py-1 bg-green-500 text-white text-xs rounded-full">
-                            Primary
-                        </div>
+                        @if($image->is_primary)
+                            <span class="absolute top-2 left-2 px-2 py-1 bg-green-500 text-white text-xs rounded-full">Primary</span>
+                        @endif
                     </div>
-                </template>
+                @endforeach
             </div>
         </div>
+        <input type="hidden" name="deleted_image_ids" id="deleted_image_ids" value="">
+        <input type="hidden" name="primary_image_id" id="primary_image_id" value="{{ $building->images->where('is_primary', true)->first()?->id }}">
 
         <!-- Upload New Images -->
         <div class="mt-4">
