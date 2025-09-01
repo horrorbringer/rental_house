@@ -27,7 +27,12 @@ class UpdateRoomRequest extends FormRequest
             'monthly_rent' => ['required', 'numeric', 'min:0'],
             'water_fee' => ['required', 'numeric', 'min:0'],
             'electric_fee' => ['required', 'numeric', 'min:0'],
-            'status' => ['required', 'in:vacant,occupied'],
+            'status' => ['required', 'in:vacant,occupied,full'],
+            'width' => ['nullable', 'numeric', 'min:0'],
+            'length' => ['nullable', 'numeric', 'min:0'],
+            'capacity' => ['required', 'integer', 'min:1'],
+            'image' => ['nullable', 'image', 'max:10240'], // 10MB max
+            'additional_images.*' => ['nullable', 'image', 'max:10240'], // 10MB max
         ];
     }
 }

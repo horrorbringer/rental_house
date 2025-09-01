@@ -2,6 +2,59 @@
 
 @section('title', isset($room) ? 'Edit Room' : 'Create Room')
 
+@push('scripts')
+<script>
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('formValidation', () => ({
+            formData: {
+                room_number: '{{ old('room_number', $room->room_number ?? '') }}',
+                monthly_rent: '{{ old('monthly_rent', $room->monthly_rent ?? '') }}',
+                water_fee: '{{ old('water_fee', $room->water_fee ?? '') }}',
+                electric_fee: '{{ old('electric_fee', $room->electric_fee ?? '') }}',
+                width: '{{ old('width', $room->width ?? '') }}',
+                length: '{{ old('length', $room->length ?? '') }}',
+                capacity: '{{ old('capacity', $room->capacity ?? 1) }}'
+            },
+            errors: {},
+            debounceTimer: null,
+
+            init() {
+                // Set up debounced validation
+                Object.keys(this.formData).forEach(field => {
+                    this.$watch(`formData.${field}`, value => {
+                        clearTimeout(this.debounceTimer);
+                        this.debounceTimer = setTimeout(() => {
+                            this.validateField(field, value);
+                        }, 300);
+                    });
+                });
+            },
+
+            validateField(field, value) {
+                // Basic validation rules
+                switch(field) {
+                    case 'room_number':
+                        this.errors[field] = !value ? 'Room number is required' : '';
+                        break;
+                    case 'monthly_rent':
+                    case 'water_fee':
+                    case 'electric_fee':
+                        this.errors[field] = value < 0 ? 'Amount cannot be negative' : '';
+                        break;
+                    case 'width':
+                    case 'length':
+                        this.errors[field] = value < 0 ? 'Measurement cannot be negative' : '';
+                        break;
+                    case 'capacity':
+                        this.errors[field] = value < 1 ? 'Capacity must be at least 1' : '';
+                        break;
+                }
+            }
+        }));
+    });
+</script>
+@endpush
+
 @section('content')
 <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- Breadcrumb -->
@@ -80,7 +133,38 @@
             </div>
         @endif
 
-        <form method="POST" action="{{ isset($room) ? route('rooms.update', $room) : route('rooms.store') }}" class="space-y-6" enctype="multipart/form-data">
+        <form method="POST" action="{{ isset($room) ? route('rooms.update', $room) : route('rooms.store') }}" 
+            class="space-y-6" 
+            enctype="multipart/form-data"
+            x-data="{ 
+                isUploading: false,
+                validateForm() {
+                    const fileInput = this.$refs.mainImage;
+                    const additionalImages = this.$refs.additionalImages;
+                    
+                    if (fileInput && fileInput.files[0] && fileInput.files[0].size > 5 * 1024 * 1024) {
+                        alert('Main image must be less than 5MB');
+                        return false;
+                    }
+                    
+                    if (additionalImages) {
+                        const files = Array.from(additionalImages.files);
+                        if (files.length > 5) {
+                            alert('Maximum 5 additional images allowed');
+                            return false;
+                        }
+                        if (files.some(file => file.size > 5 * 1024 * 1024)) {
+                            alert('Each additional image must be less than 5MB');
+                            return false;
+                        }
+                    }
+                    
+                    this.isUploading = true;
+                    return true;
+                }
+            }"
+            x-on:submit.prevent="if (validateForm()) $el.submit()"
+        >
             @csrf
             @if(isset($room))
                 @method('PUT')
@@ -154,6 +238,10 @@
                                 <option value="{{ App\Models\Room::STATUS_OCCUPIED }}"
                                     {{ (old('status', $room->status ?? '') == App\Models\Room::STATUS_OCCUPIED) ? 'selected' : '' }}>
                                     Occupied
+                                </option>
+                                <option value="{{ App\Models\Room::STATUS_FULL }}"
+                                    {{ (old('status', $room->status ?? '') == App\Models\Room::STATUS_FULL) ? 'selected' : '' }}>
+                                    Full
                                 </option>
                             </select>
                             <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
@@ -231,27 +319,67 @@
                     </div>
                 </div>
 
-                <!-- Status -->
-                <div>
-                    <label for="status" class="block text-sm font-medium text-gray-300 mb-1">Status</label>
-                    <div class="relative">
-                        <select name="status" id="status" required
-                            class="block w-full h-10 rounded-lg bg-gray-700 border-gray-600 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 text-white transition-all duration-200">
-                            <option value="{{ App\Models\Room::STATUS_VACANT }}"
-                                {{ (old('status', $room->status ?? '') == App\Models\Room::STATUS_VACANT) ? 'selected' : '' }}>
-                                Vacant
-                            </option>
-                            <option value="{{ App\Models\Room::STATUS_OCCUPIED }}"
-                                {{ (old('status', $room->status ?? '') == App\Models\Room::STATUS_OCCUPIED) ? 'selected' : '' }}>
-                                Occupied
-                            </option>
-                        </select>
+            </div>
+
+            <!-- Room Size Section -->
+            <div class="mt-8 pt-8 border-t border-gray-700">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
+                    <div class="space-y-2">
+                        <h3 class="text-lg font-semibold text-white flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6z"/>
+                            </svg>
+                            Room Size
+                        </h3>
+                        <p class="text-sm text-gray-400">Set the dimensions of the room</p>
                     </div>
-                    @error('status')
-                        <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
-                    @enderror
                 </div>
 
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                    <!-- Width -->
+                    <div class="relative group">
+                        <label for="width" class="block text-sm font-medium text-gray-300 mb-1">
+                            Width (meters)
+                            <span class="text-red-500">*</span>
+                        </label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16"/>
+                                </svg>
+                            </div>
+                            <input type="number" name="width" id="width" step="0.01" min="0"
+                                value="{{ old('width', $room->width ?? '') }}"
+                                class="pl-10 block w-full h-10 rounded-lg bg-gray-700/50 border border-gray-600 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 text-white transition-all duration-200"
+                                placeholder="e.g., 4.00">
+                        </div>
+                        @error('width')
+                            <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Length -->
+                    <div class="relative group">
+                        <label for="length" class="block text-sm font-medium text-gray-300 mb-1">
+                            Length (meters)
+                            <span class="text-red-500">*</span>
+                        </label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 4v16M16 4v16"/>
+                                </svg>
+                            </div>
+                            <input type="number" name="length" id="length" step="0.01" min="0"
+                                value="{{ old('length', $room->length ?? '') }}"
+                                class="pl-10 block w-full h-10 rounded-lg bg-gray-700/50 border border-gray-600 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 text-white transition-all duration-200"
+                                placeholder="e.g., 6.00">
+                        </div>
+                        @error('length')
+                            <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
             </div>
 
             <!-- Capacity and Images Section -->
@@ -300,13 +428,29 @@
                     </div>
 
                     <!-- Main Room Image -->
-                    <div class="relative group">
+                    <div class="relative group" x-data="{ preview: '{{ isset($room) && $room->image ? asset('storage/' . $room->image) : '' }}' }">
                         <label for="image" class="block text-sm font-medium text-gray-300 mb-1">
                             Main Room Image
                             <span class="text-red-500">*</span>
                         </label>
-                        <div class="relative">
-                            <input type="file" name="image" id="image" accept="image/*"
+                        <div class="relative space-y-4">
+                            <template x-if="preview">
+                                <div class="relative w-full h-40 rounded-lg overflow-hidden bg-gray-700">
+                                    <img :src="preview" class="w-full h-full object-cover" alt="Main room image preview">
+                                    <button type="button" @click="preview = ''; $refs.mainImage.value = ''"
+                                        class="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </template>
+                            <input type="file" 
+                                name="image" 
+                                id="image" 
+                                x-ref="mainImage"
+                                accept="image/jpeg,image/png,image/webp"
+                                @change="const file = $event.target.files[0]; if (file) preview = URL.createObjectURL(file)"
                                 class="block w-full py-2 px-3 rounded-lg bg-gray-700/50 border border-gray-600 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 text-white transition-all duration-200 file:mr-4 file:py-1 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-indigo-600 file:text-white hover:file:bg-indigo-700">
                         </div>
                         @error('image')
@@ -315,13 +459,50 @@
                     </div>
 
                     <!-- Additional Room Images -->
-                    <div class="relative group md:col-span-2">
+                    <div class="relative group md:col-span-2" 
+                        x-data="{ 
+                            previews: [], 
+                            maxFiles: 5,
+                            removePreview(index) {
+                                this.previews.splice(index, 1);
+                                const dt = new DataTransfer();
+                                const input = $refs.additionalImages;
+                                const { files } = input;
+                                
+                                for(let i = 0; i < files.length; i++) {
+                                    if(i !== index) dt.items.add(files[i]);
+                                }
+                                
+                                input.files = dt.files;
+                            }
+                        }">
                         <label for="additional_images" class="block text-sm font-medium text-gray-300 mb-1">
                             Additional Room Images
                             <span class="text-gray-400 text-xs ml-1">(Max 5 images)</span>
                         </label>
-                        <div class="relative">
-                            <input type="file" name="additional_images[]" id="additional_images" accept="image/*" multiple
+                        <div class="relative space-y-4">
+                            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4" x-show="previews.length">
+                                <template x-for="(preview, index) in previews" :key="index">
+                                    <div class="relative aspect-video rounded-lg overflow-hidden bg-gray-700">
+                                        <img :src="preview" class="w-full h-full object-cover" :alt="'Additional image ' + (index + 1)">
+                                        <button type="button" @click="removePreview(index)"
+                                            class="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </template>
+                            </div>
+                            <input type="file" 
+                                name="additional_images[]" 
+                                id="additional_images" 
+                                x-ref="additionalImages"
+                                accept="image/jpeg,image/png,image/webp" 
+                                multiple
+                                @change="const files = Array.from($event.target.files).slice(0, maxFiles); 
+                                        previews = files.map(file => URL.createObjectURL(file));"
+                                :class="{ 'opacity-50 pointer-events-none': previews.length >= maxFiles }"
                                 class="block w-full py-2 px-3 rounded-lg bg-gray-700/50 border border-gray-600 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 text-white transition-all duration-200 file:mr-4 file:py-1 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-indigo-600 file:text-white hover:file:bg-indigo-700">
                         </div>
                         @error('additional_images')
@@ -330,7 +511,12 @@
                         @error('additional_images.*')
                             <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
                         @enderror
-                        <p class="mt-2 text-xs text-gray-400">Supported formats: JPG, PNG, WEBP. Max file size: 5MB each.</p>
+                        <div class="flex items-center gap-2 mt-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <p class="text-xs text-gray-400">Supported formats: JPG, PNG, WEBP. Max file size: 5MB each.</p>
+                        </div>
                     </div>
                 </div>
             </div>

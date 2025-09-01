@@ -2,6 +2,81 @@
 
 @section('title', 'Edit Room')
 
+@push('scripts')
+<script>
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('roomForm', () => ({
+            isUploading: false,
+            formData: {
+                room_number: '{{ old('room_number', $room->room_number) }}',
+                monthly_rent: '{{ old('monthly_rent', $room->monthly_rent) }}',
+                water_fee: '{{ old('water_fee', $room->water_fee) }}',
+                electric_fee: '{{ old('electric_fee', $room->electric_fee) }}',
+                capacity: '{{ old('capacity', $room->capacity) }}'
+            },
+            errors: {},
+            debounceTimer: null,
+
+            init() {
+                this.setupValidation();
+            },
+
+            setupValidation() {
+                Object.keys(this.formData).forEach(field => {
+                    this.$watch(`formData.${field}`, value => {
+                        clearTimeout(this.debounceTimer);
+                        this.debounceTimer = setTimeout(() => {
+                            this.validateField(field, value);
+                        }, 300);
+                    });
+                });
+            },
+
+            validateField(field, value) {
+                switch(field) {
+                    case 'room_number':
+                        this.errors[field] = !value ? 'Room number is required' : '';
+                        break;
+                    case 'monthly_rent':
+                    case 'water_fee':
+                    case 'electric_fee':
+                        this.errors[field] = value < 0 ? 'Amount cannot be negative' : '';
+                        break;
+                    case 'capacity':
+                        this.errors[field] = value < 1 ? 'Capacity must be at least 1' : '';
+                        break;
+                }
+            },
+
+            validateForm() {
+                const fileInput = this.$refs.mainImage;
+                const additionalImages = this.$refs.additionalImages;
+                
+                if (fileInput && fileInput.files[0] && fileInput.files[0].size > 5 * 1024 * 1024) {
+                    alert('Main image must be less than 5MB');
+                    return false;
+                }
+                
+                if (additionalImages && additionalImages.files.length > 0) {
+                    const files = Array.from(additionalImages.files);
+                    if (files.length > 5) {
+                        alert('Maximum 5 additional images allowed');
+                        return false;
+                    }
+                    if (files.some(file => file.size > 5 * 1024 * 1024)) {
+                        alert('Each additional image must be less than 5MB');
+                        return false;
+                    }
+                }
+                
+                this.isUploading = true;
+                return true;
+            }
+        }));
+    });
+</script>
+@endpush
+
 @section('content')
 <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- Breadcrumb -->
@@ -57,7 +132,13 @@
             </div>
         @endif
 
-        <form method="POST" action="{{ route('rooms.update', $room) }}" enctype="multipart/form-data" class="space-y-6">
+        <form method="POST" 
+              action="{{ route('rooms.update', $room) }}" 
+              enctype="multipart/form-data" 
+              class="space-y-6"
+              x-data="roomForm"
+              x-on:submit.prevent="if (validateForm()) $el.submit()"
+              :class="{ 'opacity-75 pointer-events-none': isUploading }">
             @csrf
             @method('PUT')
 
@@ -70,18 +151,22 @@
                             <div class="relative aspect-video rounded-lg overflow-hidden bg-gray-700">
                                 <img src="{{ asset('storage/' . $room->image) }}" 
                                      alt="Main room image" 
-                                     class="w-full h-full object-cover">
+                                     class="w-full h-full object-cover"
+                                     loading="eager"
+                                     decoding="async">
                                 <div class="absolute inset-0 bg-gradient-to-t from-gray-900/50 to-transparent"></div>
                                 <div class="absolute bottom-2 left-2">
                                     <span class="text-white text-xs font-medium bg-gray-900/60 px-2 py-1 rounded-full">Main Image</span>
                                 </div>
                             </div>
                         @endif
-                        @foreach($room->images as $image)
+                        @foreach($room->images as $index => $image)
                             <div class="relative aspect-video rounded-lg overflow-hidden bg-gray-700">
                                 <img src="{{ asset('storage/' . $image->path) }}" 
-                                     alt="Additional room image" 
-                                     class="w-full h-full object-cover">
+                                     alt="Additional room image {{ $index + 1 }}" 
+                                     class="w-full h-full object-cover"
+                                     loading="lazy"
+                                     decoding="async">
                             </div>
                         @endforeach
                     </div>
@@ -187,6 +272,10 @@
                                 {{ (old('status', $room->status) == App\Models\Room::STATUS_OCCUPIED) ? 'selected' : '' }}>
                                 Occupied
                             </option>
+                            <option value="{{ App\Models\Room::STATUS_FULL }}"
+                                {{ (old('status', $room->status) == App\Models\Room::STATUS_FULL) ? 'selected' : '' }}>
+                                Full
+                            </option>
                         </select>
                     </div>
                     @error('status')
@@ -194,13 +283,69 @@
                     @enderror
                 </div>
 
+                <!-- Room Size -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6">
+                    <!-- Width -->
+                    <div>
+                        <label for="width" class="block text-sm font-medium text-gray-300 mb-1">
+                            Width (meters)
+                            <span class="text-gray-400 text-xs ml-1">(Optional)</span>
+                        </label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16"/>
+                                </svg>
+                            </div>
+                            <input type="number" 
+                                   name="width" 
+                                   id="width" 
+                                   step="0.01" 
+                                   min="0"
+                                   value="{{ old('width', $room->width) }}"
+                                   class="pl-10 block w-full rounded-lg bg-gray-700 border-gray-600 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 text-white transition-all duration-200"
+                                   placeholder="e.g., 4.00">
+                        </div>
+                        @error('width')
+                            <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Length -->
+                    <div>
+                        <label for="length" class="block text-sm font-medium text-gray-300 mb-1">
+                            Length (meters)
+                            <span class="text-gray-400 text-xs ml-1">(Optional)</span>
+                        </label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 4v16M16 4v16"/>
+                                </svg>
+                            </div>
+                            <input type="number" 
+                                   name="length" 
+                                   id="length" 
+                                   step="0.01" 
+                                   min="0"
+                                   value="{{ old('length', $room->length) }}"
+                                   class="pl-10 block w-full rounded-lg bg-gray-700 border-gray-600 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 text-white transition-all duration-200"
+                                   placeholder="e.g., 6.00">
+                        </div>
+                        @error('length')
+                            <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+
                 <!-- Capacity -->
                 <div>
                     <label for="capacity" class="block text-sm font-medium text-gray-300 mb-1">Room Capacity</label>
                     <div class="relative">
-                        <input type="number" name="capacity" id="capacity" min="1"
+                        <input type="number" name="capacity" id="capacity" min="1" required
                             value="{{ old('capacity', $room->capacity) }}"
                             class="block w-full rounded-lg bg-gray-700 border-gray-600 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 text-white transition-all duration-200"
+                            placeholder="Enter room capacity">
                             placeholder="Maximum number of occupants">
                     </div>
                     @error('capacity')
@@ -209,9 +354,41 @@
                 </div>
 
                 <!-- Main Image -->
-                <div>
-                    <label for="image" class="block text-sm font-medium text-gray-300 mb-1">Main Room Image</label>
-                    <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-600 border-dashed rounded-lg hover:border-indigo-500 transition-colors duration-200">
+                <div x-data="{ 
+                    preview: null,
+                    showPreview(event) {
+                        const file = event.target.files[0];
+                        if (file) {
+                            if (file.size > 5 * 1024 * 1024) {
+                                alert('Image must be less than 5MB');
+                                event.target.value = '';
+                                return;
+                            }
+                            this.preview = URL.createObjectURL(file);
+                        }
+                    }
+                }">
+                    <label for="image" class="block text-sm font-medium text-gray-300 mb-1">
+                        Main Room Image
+                        <span class="text-gray-400 text-xs ml-1">(Max 5MB)</span>
+                    </label>
+                    
+                    <template x-if="preview">
+                        <div class="relative w-full h-40 mb-4 rounded-lg overflow-hidden bg-gray-700">
+                            <img :src="preview" class="w-full h-full object-cover" alt="New main image preview">
+                            <button type="button" @click="preview = null; $refs.mainImage.value = ''"
+                                class="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </template>
+
+                    <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-600 border-dashed rounded-lg hover:border-indigo-500 transition-colors duration-200"
+                         @dragover.prevent="$el.classList.add('border-indigo-500')"
+                         @dragleave.prevent="$el.classList.remove('border-indigo-500')"
+                         @drop.prevent="$el.classList.remove('border-indigo-500')">
                         <div class="space-y-1 text-center">
                             <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
                                 <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
@@ -219,11 +396,17 @@
                             <div class="flex text-sm text-gray-400">
                                 <label for="image" class="relative cursor-pointer rounded-md font-medium text-indigo-500 hover:text-indigo-400 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
                                     <span>Upload a file</span>
-                                    <input id="image" name="image" type="file" class="sr-only" accept="image/*">
+                                    <input id="image" 
+                                           name="image" 
+                                           type="file" 
+                                           class="sr-only" 
+                                           x-ref="mainImage"
+                                           accept="image/jpeg,image/png,image/webp"
+                                           @change="showPreview($event)">
                                 </label>
                                 <p class="pl-1">or drag and drop</p>
                             </div>
-                            <p class="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+                            <p class="text-xs text-gray-500">JPG, PNG, or WEBP up to 5MB</p>
                         </div>
                     </div>
                     @error('image')
@@ -232,9 +415,55 @@
                 </div>
 
                 <!-- Additional Images -->
-                <div>
-                    <label for="additional_images" class="block text-sm font-medium text-gray-300 mb-1">Additional Images</label>
-                    <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-600 border-dashed rounded-lg hover:border-indigo-500 transition-colors duration-200">
+                <div x-data="{ 
+                    previews: [],
+                    maxFiles: 5,
+                    showPreviews(event) {
+                        const files = Array.from(event.target.files).slice(0, this.maxFiles);
+                        if (files.some(file => file.size > 5 * 1024 * 1024)) {
+                            alert('Each image must be less than 5MB');
+                            event.target.value = '';
+                            return;
+                        }
+                        this.previews = files.map(file => URL.createObjectURL(file));
+                    },
+                    removePreview(index) {
+                        this.previews.splice(index, 1);
+                        const dt = new DataTransfer();
+                        const input = this.$refs.additionalImages;
+                        const { files } = input;
+                        
+                        for(let i = 0; i < files.length; i++) {
+                            if(i !== index) dt.items.add(files[i]);
+                        }
+                        
+                        input.files = dt.files;
+                    }
+                }">
+                    <label for="additional_images" class="block text-sm font-medium text-gray-300 mb-1">
+                        Additional Images
+                        <span class="text-gray-400 text-xs ml-1">(Max 5 images, 5MB each)</span>
+                    </label>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-4" x-show="previews.length">
+                        <template x-for="(preview, index) in previews" :key="index">
+                            <div class="relative aspect-video rounded-lg overflow-hidden bg-gray-700">
+                                <img :src="preview" class="w-full h-full object-cover" :alt="'Additional image preview ' + (index + 1)">
+                                <button type="button" @click="removePreview(index)"
+                                    class="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </template>
+                    </div>
+
+                    <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-600 border-dashed rounded-lg hover:border-indigo-500 transition-colors duration-200"
+                         @dragover.prevent="$el.classList.add('border-indigo-500')"
+                         @dragleave.prevent="$el.classList.remove('border-indigo-500')"
+                         @drop.prevent="$el.classList.remove('border-indigo-500')"
+                         :class="{ 'opacity-50 pointer-events-none': previews.length >= maxFiles }">
                         <div class="space-y-1 text-center">
                             <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
                                 <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
@@ -242,11 +471,18 @@
                             <div class="flex text-sm text-gray-400">
                                 <label for="additional_images" class="relative cursor-pointer rounded-md font-medium text-indigo-500 hover:text-indigo-400 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
                                     <span>Upload files</span>
-                                    <input id="additional_images" name="additional_images[]" type="file" class="sr-only" accept="image/*" multiple>
+                                    <input id="additional_images" 
+                                           name="additional_images[]" 
+                                           type="file" 
+                                           class="sr-only" 
+                                           x-ref="additionalImages"
+                                           accept="image/jpeg,image/png,image/webp" 
+                                           multiple
+                                           @change="showPreviews($event)">
                                 </label>
                                 <p class="pl-1">or drag and drop</p>
                             </div>
-                            <p class="text-xs text-gray-500">PNG, JPG, GIF up to 10MB each</p>
+                            <p class="text-xs text-gray-500" x-text="previews.length >= maxFiles ? 'Maximum images reached' : 'JPG, PNG, or WEBP up to 5MB each'"></p>
                         </div>
                     </div>
                     @error('additional_images')

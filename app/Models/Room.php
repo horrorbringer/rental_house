@@ -13,10 +13,25 @@ class Room extends Model
     use HasFactory;
 
     /**
+     * The relationships that should be eager loaded.
+     *
+     * @var array
+     */
+    protected $with = ['building','latestRental'];
+
+    /**
+     * The cache tags for the model.
+     *
+     * @var array
+     */
+    protected static $cacheTags = ['rooms'];
+
+    /**
      * Room status constants
      */
     public const STATUS_VACANT = 'vacant';
     public const STATUS_OCCUPIED = 'occupied';
+    public const STATUS_FULL = 'full';
 
     /**
      * Available room statuses
@@ -24,6 +39,7 @@ class Room extends Model
     public static $statuses = [
         self::STATUS_VACANT,
         self::STATUS_OCCUPIED,
+        self::STATUS_FULL,
     ];
 
     /**
@@ -40,6 +56,8 @@ class Room extends Model
         'status',
         'capacity',
         'image',
+        'width',
+        'length',
     ];
 
     /**
@@ -80,6 +98,33 @@ class Room extends Model
     public function images(): HasMany
     {
         return $this->hasMany(RoomImage::class);
+    }
+
+    /**
+     * Active rentals (where end_date is null).
+     * This is used when checking capacity and available slots.
+     */
+    public function activeRentals(): HasMany
+    {
+        return $this->hasMany(Rental::class)->whereNull('end_date');
+    }
+
+    /**
+     * The latest rental (regardless of active or ended).
+     */
+    public function latestRental(): HasOne
+    {
+        return $this->hasOne(Rental::class)->latestOfMany();
+    }
+
+    /**
+     * The latest active rental (only if still ongoing).
+     */
+    public function latestActiveRental(): HasOne
+    {
+        return $this->hasOne(Rental::class)
+            ->whereNull('end_date')
+            ->latestOfMany();
     }
 }
 

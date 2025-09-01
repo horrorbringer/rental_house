@@ -80,6 +80,22 @@
         <div class="bg-gray-800 rounded-lg p-6">
             <div class="flex items-center justify-between">
                 <div>
+                    <p class="text-sm text-gray-400">Full Rooms</p>
+                    <h4 class="text-2xl font-semibold text-yellow-500 mt-1">
+                        {{ $rooms->where('status', App\Models\Room::STATUS_FULL)->count() }}
+                    </h4>
+                </div>
+                <div class="p-3 bg-yellow-500/10 rounded-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2M12 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-gray-800 rounded-lg p-6">
+            <div class="flex items-center justify-between">
+                <div>
                     <p class="text-sm text-gray-400">Total Revenue</p>
                     <h4 class="text-2xl font-semibold text-white mt-1">${{ number_format($rooms->sum('monthly_rent'), 2) }}</h4>
                 </div>
@@ -128,6 +144,10 @@
                             {{ request('status') == App\Models\Room::STATUS_OCCUPIED ? 'selected' : '' }}>
                             Occupied
                         </option>
+                        <option value="{{ App\Models\Room::STATUS_FULL }}"
+                            {{ request('status') == App\Models\Room::STATUS_FULL ? 'selected' : '' }}>
+                            Full
+                        </option>
                     </select>
                 </div>
 
@@ -175,6 +195,7 @@
                             'px-3 py-1 text-xs font-medium rounded-full shadow-lg',
                             'bg-green-500 text-white' => $room->status === App\Models\Room::STATUS_VACANT,
                             'bg-red-500 text-white' => $room->status === App\Models\Room::STATUS_OCCUPIED,
+                            'bg-yellow-500 text-white' => $room->status === App\Models\Room::STATUS_FULL,
                         ])>
                             {{ ucfirst($room->status) }}
                         </span>
@@ -208,6 +229,18 @@
                                 <span class="text-sm text-gray-400">Monthly Rent</span>
                             </div>
                             <span class="text-white font-medium">₱{{ number_format($room->monthly_rent, 2) }}</span>
+                        </div>
+
+                        <div class="flex items-center justify-between p-3 bg-gray-700/50 rounded-lg">
+                            <div class="flex items-center gap-3">
+                                <div class="p-2 bg-purple-500/10 rounded-lg">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"/>
+                                    </svg>
+                                </div>
+                                <span class="text-sm text-gray-400">Room Size</span>
+                            </div>
+                            <span class="text-white">{{ $room->width && $room->length ? number_format($room->width, 2) . ' × ' . number_format($room->length, 2) . ' m' : 'Not specified' }}</span>
                         </div>
 
                         <div class="flex items-center justify-between p-3 bg-gray-700/50 rounded-lg">

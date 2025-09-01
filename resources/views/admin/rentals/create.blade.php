@@ -23,7 +23,9 @@
                                 <option value="">Select a room</option>
                                 @foreach($rooms as $room)
                                     <option value="{{ $room->id }}" {{ old('room_id') == $room->id ? 'selected' : '' }}>
-                                        Room {{ $room->number }} - Building {{ $room->building->name }} - ฿{{ number_format($room->price) }}
+                                        Room {{ $room->room_number }} - {{ $room->building->name }} 
+                                        ({{ $room->active_tenants_count }}/{{ $room->capacity }} occupied) - 
+                                        ฿{{ number_format($room->monthly_rent) }}
                                     </option>
                                 @endforeach
                             </select>
@@ -112,6 +114,8 @@
                             </p>
                         @enderror
                     </div>
+
+                    @include('admin.buildings._image_section')
                 </div>
 
                 <div class="px-4 py-3 bg-gray-50 dark:bg-gray-700/50 text-right sm:px-6 rounded-b-lg border-t border-gray-200 dark:border-gray-700">

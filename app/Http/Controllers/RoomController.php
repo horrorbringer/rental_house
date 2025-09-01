@@ -84,7 +84,14 @@ class RoomController extends Controller
      */
     public function show(Room $room)
     {
-        $room->load(['building', 'rental.tenant', 'rental.utilityUsages']);
+        // $room->load(['building', 'rental.tenant', 'rental.utilityUsages']);
+
+        $room->load([
+        'building',
+        'activeRentals.tenant',
+        'activeRentals.utilityUsages'
+        ])->loadCount('activeRentals');
+
         return view('rooms.show', compact('room'));
     }
 

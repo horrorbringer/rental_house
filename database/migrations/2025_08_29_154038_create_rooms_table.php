@@ -20,7 +20,9 @@ return new class extends Migration
             $table->decimal('electric_fee', 10, 2)->default(0);
             $table->unsignedInteger('capacity')->default(1); // number of tenants allowed
             $table->string('image')->nullable(); // main image for the room
-            $table->enum('status', ['vacant', 'occupied'])->default('vacant');
+            $table->decimal('width', 5, 2)->nullable(); // room width in meters
+            $table->decimal('length', 5, 2)->nullable(); // room length in meters
+            $table->enum('status', ['vacant', 'occupied', 'full'])->default('vacant');
             $table->timestamps();
         });
     }

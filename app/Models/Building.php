@@ -20,6 +20,8 @@ class Building extends Model
         'name',
         'address',
         'user_id',
+        'description',
+        'contact_info',
     ];
 
     /**
@@ -36,5 +38,13 @@ class Building extends Model
     public function rooms(): HasMany
     {
         return $this->hasMany(Room::class);
+    }
+
+    /**
+     * Get the images for the building.
+     */
+    public function images(): HasMany
+    {
+        return $this->hasMany(BuildingImage::class);
     }
 }

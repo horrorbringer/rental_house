@@ -37,6 +37,7 @@
                     'px-3 py-1 text-sm font-medium rounded-full',
                     'bg-green-500 bg-opacity-10 text-green-500' => $room->status === App\Models\Room::STATUS_VACANT,
                     'bg-red-500 bg-opacity-10 text-red-500' => $room->status === App\Models\Room::STATUS_OCCUPIED,
+                    'bg-yellow-500 bg-opacity-10 text-yellow-500' => $room->status === App\Models\Room::STATUS_FULL,
                 ])>
                     {{ ucfirst($room->status) }}
                 </span>
@@ -50,6 +51,29 @@
                             <span class="text-gray-400">Monthly Rent</span>
                             <span class="text-white font-medium">₱{{ number_format($room->monthly_rent, 2) }}</span>
                         </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Room Size</span>
+                            <span class="text-white">
+                                @if($room->width && $room->length)
+                                    {{ number_format($room->width, 2) . ' × ' . number_format($room->length, 2) . ' m' }}
+                                    <span class="text-gray-400 text-sm ml-1">({{ number_format($room->width * $room->length, 2) }} sq.m)</span>
+                                @else
+                                    Not specified
+                                @endif
+                            </span>
+                        </div>
+
+                        <div class="flex justify-between">
+    <span class="text-gray-400">Capacity</span>
+    <span class="text-white">
+        {{ $room->capacity }} {{ Str::plural('person', $room->capacity) }}
+        <span class="text-gray-400 text-sm ml-1 
+            {{ $room->active_rentals_count >= $room->capacity ? 'text-red-400' : 'text-green-400' }}">
+            ({{ $room->active_rentals_count }}/{{ $room->capacity }})
+        </span>
+    </span>
+</div>
+
                         <div class="flex justify-between">
                             <span class="text-gray-400">Water Fee</span>
                             <span class="text-white">₱{{ number_format($room->water_fee, 2) }}</span>
