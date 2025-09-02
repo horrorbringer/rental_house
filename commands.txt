@@ -1,0 +1,34 @@
+php artisan make:command CreateUtilityViews
+
+# Add these commands in the handle() method of the command:
+
+# Create utility rate views
+php artisan make:view utility-rates.index
+php artisan make:view utility-rates.create
+php artisan make:view utility-rates.edit
+
+# Create utility usage views
+php artisan make:view utility-usages.index
+php artisan make:view utility-usages.create
+php artisan make:view utility-usages.edit
+php artisan make:view utility-usages.show
+
+# Update invoice views
+php artisan make:view invoices.index
+php artisan make:view invoices.create
+php artisan make:view invoices.edit
+php artisan make:view invoices.show
+php artisan make:view invoices.pdf
+
+# Create payment views
+php artisan make:view payments.index
+php artisan make:view payments.create
+php artisan make:view payments.show
+
+# Add required CSS and JS files
+npm install @tailwindcss/forms
+npm install chart.js
+npm install flatpickr
+
+# Build assets
+npm run build

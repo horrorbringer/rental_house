@@ -7,8 +7,10 @@ use App\Http\Controllers\RoomController;
 use App\Http\Controllers\RoomPublicController;
 use App\Http\Controllers\RentalController;
 use App\Http\Controllers\TenantController;
+use App\Http\Controllers\UtilityRateController;
 use App\Http\Controllers\UtilityUsageController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 
@@ -40,8 +42,17 @@ Route::middleware(['auth','verified'])->group(function () {
     Route::resource('buildings', BuildingController::class);
     Route::resource('rooms', RoomController::class);
     Route::resource('rentals', RentalController::class);
+    // Invoice management
+    Route::resource('utility-rates', UtilityRateController::class);
     Route::resource('invoices', InvoiceController::class);
-    Route::get('/invoices/{invoice}/print', [InvoiceController::class, 'print'])->name('invoices.print');
+    Route::get('invoices/{invoice}/pdf', [InvoiceController::class, 'generatePdf'])->name('invoices.pdf');
+    Route::resource('payments', PaymentController::class);
+    Route::get('/invoices/{invoice}/pdf', [InvoiceController::class, 'downloadPdf'])->name('invoices.pdf');
+    Route::post('/invoices/bulk-generate', [InvoiceController::class, 'bulkGenerate'])->name('invoices.bulk-generate');
+    
+    // Payment management
+    Route::resource('payments', PaymentController::class)->except(['edit', 'update']);
+    Route::get('/invoices/{invoice}/payments/create', [PaymentController::class, 'create'])->name('payments.create.invoice');
 
     // Tenant management
     Route::get('/tenants', [TenantController::class, 'index'])->name('tenants.index');

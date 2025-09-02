@@ -16,10 +16,18 @@ class Payment extends Model
      * @var array<string>
      */
     protected $fillable = [
+        'payment_number',
         'invoice_id',
         'amount',
         'payment_date',
-        'method',
+        'payment_method',
+        'reference_number',
+        'payment_proof',
+        'notes',
+    ];
+
+    protected $casts = [
+        'payment_date' => 'date',
     ];
 
     /**

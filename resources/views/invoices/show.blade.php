@@ -17,6 +17,12 @@
                 <a href="{{ route('invoices.print', $invoice) }}" target="_blank" class="inline-flex items-center rounded-md bg-white dark:bg-gray-700 px-3 py-2 text-sm font-semibold text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600">
                     Print
                 </a>
+                <a href="{{ route('invoices.pdf', $invoice) }}" class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                    <svg class="-ml-0.5 mr-1.5 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd" />
+                    </svg>
+                    Download PDF
+                </a>
                 <form action="{{ route('invoices.destroy', $invoice) }}" method="POST" class="inline">
                     @csrf
                     @method('DELETE')
@@ -102,6 +108,84 @@
                     </dl>
                 </div>
             </div>
+
+            <!-- Add Payment Form -->
+            @if($invoice->status !== 'paid')
+            <div class="bg-white dark:bg-gray-700 rounded-lg p-6 sm:col-span-2">
+                <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Record Payment</h3>
+                <form action="{{ route('payments.store') }}" method="POST" class="space-y-4">
+                    @csrf
+                    <input type="hidden" name="invoice_id" value="{{ $invoice->id }}">
+                    
+                    <div>
+                        <label for="amount" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Payment Amount</label>
+                        <div class="mt-1 relative rounded-md shadow-sm">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <span class="text-gray-500 sm:text-sm">$</span>
+                            </div>
+                            <input type="number" step="0.01" name="amount" id="amount" 
+                                   class="block w-full pl-7 pr-12 sm:text-sm border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white rounded-md"
+                                   placeholder="0.00"
+                                   value="{{ $invoice->balance }}"
+                                   max="{{ $invoice->balance }}"
+                                   required>
+                        </div>
+                        @error('amount')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label for="payment_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Payment Date</label>
+                        <div class="mt-1">
+                            <input type="date" name="payment_date" id="payment_date" 
+                                   class="block w-full sm:text-sm border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white rounded-md"
+                                   value="{{ now()->format('Y-m-d') }}"
+                                   required>
+                        </div>
+                        @error('payment_date')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label for="method" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Payment Method</label>
+                        <select name="method" id="method" 
+                                class="mt-1 block w-full sm:text-sm border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white rounded-md"
+                                required>
+                            <option value="cash">Cash</option>
+                            <option value="bank_transfer">Bank Transfer</option>
+                            <option value="credit_card">Credit Card</option>
+                            <option value="debit_card">Debit Card</option>
+                            <option value="check">Check</option>
+                            <option value="other">Other</option>
+                        </select>
+                        @error('method')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label for="notes" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Notes</label>
+                        <div class="mt-1">
+                            <textarea name="notes" id="notes" rows="3" 
+                                      class="block w-full sm:text-sm border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white rounded-md"
+                                      placeholder="Any additional notes about the payment"></textarea>
+                        </div>
+                        @error('notes')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div class="flex justify-end">
+                        <button type="submit" 
+                                class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            Record Payment
+                        </button>
+                    </div>
+                </form>
+            </div>
+            @endif
 
             @if($invoice->payments->isNotEmpty())
             <!-- Payment History -->

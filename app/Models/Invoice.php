@@ -17,20 +17,40 @@ class Invoice extends Model
      * @var array<string>
      */
     protected $fillable = [
+        'invoice_number',
         'rental_id',
-        'billing_month',
+        'utility_usage_id',
+        'billing_date',
+        'due_date',
         'rent_amount',
-        'water_fee',
-        'electric_fee',
-        'water_usage_amount',
-        'electric_usage_amount',
-        'total',
+        'other_charges',
+        'other_charges_notes',
+        'total_amount',
+        'amount_paid',
+        'balance',
         'status',
+        'notes',
     ];
 
     protected $casts = [
-        'billing_month' => 'date',
+        'billing_date' => 'date',
+        'due_date' => 'date',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+        
+        static::creating(function ($invoice) {
+            if (!$invoice->invoice_number) {
+                $invoice->invoice_number = 'INV-' . date('Ym') . '-' . str_pad(static::count() + 1, 4, '0', STR_PAD_LEFT);
+            }
+        });
+
+        static::saving(function ($invoice) {
+            $invoice->updateTotalAndBalance();
+        });
+    }
 
     /**
      * Get the rental that the invoice belongs to.
@@ -40,11 +60,57 @@ class Invoice extends Model
         return $this->belongsTo(Rental::class);
     }
 
-    /**
-     * Get the payments for the invoice.
-     */
+    public function utilityUsage(): BelongsTo
+    {
+        return $this->belongsTo(UtilityUsage::class);
+    }
+
     public function payments(): HasMany
     {
         return $this->hasMany(Payment::class);
+    }
+
+    public function updateTotalAndBalance()
+    {
+        $this->total_amount = $this->calculateTotal();
+        $this->balance = $this->total_amount - $this->amount_paid;
+        
+        // Update status based on balance
+        if ($this->balance <= 0) {
+            $this->status = 'paid';
+        } elseif ($this->due_date < now()) {
+            $this->status = 'overdue';
+        } else {
+            $this->status = 'pending';
+        }
+    }
+
+    protected function calculateTotal()
+    {
+        $total = $this->rent_amount + $this->other_charges;
+        
+        if ($this->utilityUsage) {
+            $total += $this->utilityUsage->water_charge + $this->utilityUsage->electric_charge;
+        }
+        
+        return $total;
+    }
+
+    public function addPayment($amount, $method, $reference = null, $proof = null, $notes = null)
+    {
+        $payment = $this->payments()->create([
+            'payment_number' => 'PAY-' . date('Ym') . '-' . str_pad(Payment::count() + 1, 4, '0', STR_PAD_LEFT),
+            'amount' => $amount,
+            'payment_date' => now(),
+            'payment_method' => $method,
+            'reference_number' => $reference,
+            'payment_proof' => $proof,
+            'notes' => $notes,
+        ]);
+
+        $this->amount_paid += $amount;
+        $this->save();
+
+        return $payment;
     }
 }

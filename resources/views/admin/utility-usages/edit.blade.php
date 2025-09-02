@@ -77,9 +77,18 @@
                     </div>
                 </div>
 
-                <form action="{{ route('utility-usages.update', $utilityUsage) }}" method="POST" class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+                <form action="{{ route('utility-usages.update', $utilityUsage) }}" method="POST" enctype="multipart/form-data" 
+                    class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 relative">
                     @csrf
                     @method('PUT')
+                    <div id="form-overlay" class="hidden absolute inset-0 bg-gray-100/70 dark:bg-gray-900/70 z-10">
+                        <div class="h-full w-full flex items-center justify-center">
+                            <svg class="animate-spin h-8 w-8 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+                            </svg>
+                        </div>
+                    </div>
 
                     <div class="p-6 space-y-6">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -158,29 +167,233 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Meter Images -->
+                        <div class="border-t border-gray-200 dark:border-gray-700 pt-6 mt-6 space-y-4">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Update Meter Images</h3>
+                                <div class="flex items-center space-x-4">
+                                    <span class="text-sm text-gray-600 dark:text-gray-400" id="upload_status">Images disabled</span>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" id="toggle_images" class="sr-only peer">
+                                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-300 dark:peer-focus:ring-indigo-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-indigo-600"></div>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div id="image_section" class="grid grid-cols-1 md:grid-cols-2 gap-6 transition-all duration-300">
+                                <!-- Water Meter Images -->
+                                <div class="space-y-4">
+                                    <h4 class="font-medium text-gray-900 dark:text-gray-100">Water Meter</h4>
+                                    <div class="relative">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <label for="water_meter_image_start" class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                                                Start Reading
+                                                <span class="ml-1 text-xs text-gray-400 dark:text-gray-500" title="Upload a clear photo of the water meter at the start">ⓘ</span>
+                                            </label>
+                                            <button type="button" onclick="clearImage('water_meter_image_start')" class="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                                                Clear
+                                            </button>
+                                        </div>
+                                        @if($utilityUsage->water_meter_image_start)
+                                            <div class="mb-2">
+                                                <img src="{{ Storage::url($utilityUsage->water_meter_image_start) }}" class="w-32 h-20 object-cover rounded shadow" alt="Current water meter start image">
+                                            </div>
+                                        @endif
+                                        <input type="file" name="water_meter_image_start" id="water_meter_image_start" accept="image/*"
+                                            class="mt-1 block w-full text-gray-600 dark:text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-gray-50 file:text-gray-700 dark:file:bg-gray-700 dark:file:text-gray-200 hover:file:bg-gray-100 dark:hover:file:bg-gray-600"
+                                            onchange="previewImage(event, 'water_meter_image_start_preview')">
+                                        <img id="water_meter_image_start_preview" class="mt-2 hidden w-32 h-20 object-cover rounded shadow" alt="New preview">
+                                    </div>
+                                    <div class="relative">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <label for="water_meter_image_end" class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                                                End Reading
+                                                <span class="ml-1 text-xs text-gray-400 dark:text-gray-500" title="Upload a clear photo of the water meter at the end">ⓘ</span>
+                                            </label>
+                                            <button type="button" onclick="clearImage('water_meter_image_end')" class="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                                                Clear
+                                            </button>
+                                        </div>
+                                        @if($utilityUsage->water_meter_image_end)
+                                            <div class="mb-2">
+                                                <img src="{{ Storage::url($utilityUsage->water_meter_image_end) }}" class="w-32 h-20 object-cover rounded shadow" alt="Current water meter end image">
+                                            </div>
+                                        @endif
+                                        <input type="file" name="water_meter_image_end" id="water_meter_image_end" accept="image/*"
+                                            class="mt-1 block w-full text-gray-600 dark:text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-gray-50 file:text-gray-700 dark:file:bg-gray-700 dark:file:text-gray-200 hover:file:bg-gray-100 dark:hover:file:bg-gray-600"
+                                            onchange="previewImage(event, 'water_meter_image_end_preview')">
+                                        <img id="water_meter_image_end_preview" class="mt-2 hidden w-32 h-20 object-cover rounded shadow" alt="New preview">
+                                    </div>
+                                </div>
+
+                                <!-- Electric Meter Images -->
+                                <div class="space-y-4">
+                                    <h4 class="font-medium text-gray-900 dark:text-gray-100">Electric Meter</h4>
+                                    <div class="relative">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <label for="electric_meter_image_start" class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                                                Start Reading
+                                                <span class="ml-1 text-xs text-gray-400 dark:text-gray-500" title="Upload a clear photo of the electric meter at the start">ⓘ</span>
+                                            </label>
+                                            <button type="button" onclick="clearImage('electric_meter_image_start')" class="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                                                Clear
+                                            </button>
+                                        </div>
+                                        @if($utilityUsage->electric_meter_image_start)
+                                            <div class="mb-2">
+                                                <img src="{{ Storage::url($utilityUsage->electric_meter_image_start) }}" class="w-32 h-20 object-cover rounded shadow" alt="Current electric meter start image">
+                                            </div>
+                                        @endif
+                                        <input type="file" name="electric_meter_image_start" id="electric_meter_image_start" accept="image/*"
+                                            class="mt-1 block w-full text-gray-600 dark:text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-gray-50 file:text-gray-700 dark:file:bg-gray-700 dark:file:text-gray-200 hover:file:bg-gray-100 dark:hover:file:bg-gray-600"
+                                            onchange="previewImage(event, 'electric_meter_image_start_preview')">
+                                        <img id="electric_meter_image_start_preview" class="mt-2 hidden w-32 h-20 object-cover rounded shadow" alt="New preview">
+                                    </div>
+                                    <div class="relative">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <label for="electric_meter_image_end" class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                                                End Reading
+                                                <span class="ml-1 text-xs text-gray-400 dark:text-gray-500" title="Upload a clear photo of the electric meter at the end">ⓘ</span>
+                                            </label>
+                                            <button type="button" onclick="clearImage('electric_meter_image_end')" class="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                                                Clear
+                                            </button>
+                                        </div>
+                                        @if($utilityUsage->electric_meter_image_end)
+                                            <div class="mb-2">
+                                                <img src="{{ Storage::url($utilityUsage->electric_meter_image_end) }}" class="w-32 h-20 object-cover rounded shadow" alt="Current electric meter end image">
+                                            </div>
+                                        @endif
+                                        <input type="file" name="electric_meter_image_end" id="electric_meter_image_end" accept="image/*"
+                                            class="mt-1 block w-full text-gray-600 dark:text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-gray-50 file:text-gray-700 dark:file:bg-gray-700 dark:file:text-gray-200 hover:file:bg-gray-100 dark:hover:file:bg-gray-600"
+                                            onchange="previewImage(event, 'electric_meter_image_end_preview')">
+                                        <img id="electric_meter_image_end_preview" class="mt-2 hidden w-32 h-20 object-cover rounded shadow" alt="New preview">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="px-6 py-4 bg-gray-50 dark:bg-gray-700/50 border-t border-gray-200 dark:border-gray-700 rounded-b-lg">
                         <div class="flex flex-col sm:flex-row sm:justify-end gap-3">
-                            <a href="{{ route('utility-usages.index') }}"
-                                class="inline-flex items-center justify-center px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg font-semibold text-xs text-gray-700 dark:text-gray-300 uppercase tracking-widest shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-25 transition ease-in-out duration-150">
-                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                </svg>
-                                Cancel
-                            </a>
-                            <button type="submit"
-                                class="inline-flex items-center justify-center px-4 py-2 bg-indigo-600 border border-transparent rounded-lg font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 focus:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                </svg>
+                            <button type="submit" id="submitBtn"
+                                class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-all disabled:opacity-50">
                                 Update Reading
                             </button>
                         </div>
                     </div>
                 </form>
+                <script>
+                function previewImage(event, previewId) {
+                    const input = event.target;
+                    const preview = document.getElementById(previewId);
+                    if (input.files && input.files[0]) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            preview.src = e.target.result;
+                            preview.classList.remove('hidden');
+                        };
+                        reader.readAsDataURL(input.files[0]);
+                    } else {
+                        preview.src = '';
+                        preview.classList.add('hidden');
+                    }
+                }
+
+                function clearImage(inputId) {
+                    const input = document.getElementById(inputId);
+                    const preview = document.getElementById(inputId + '_preview');
+                    input.value = '';
+                    preview.src = '';
+                    preview.classList.add('hidden');
+                }
+
+                function toggleImageInputs(enabled) {
+                    const imageSection = document.getElementById('image_section');
+                    const inputs = imageSection.querySelectorAll('input[type="file"]');
+                    const clearButtons = imageSection.querySelectorAll('button');
+                    const statusText = document.getElementById('upload_status');
+                    
+                    // Update status text
+                    statusText.textContent = enabled ? 'Images enabled' : 'Images disabled';
+                    statusText.classList.toggle('text-gray-600', enabled);
+                    statusText.classList.toggle('text-gray-400', !enabled);
+                    
+                    // Handle file inputs and previews with smooth transition
+                    inputs.forEach(input => {
+                        input.disabled = !enabled;
+                        if (!enabled) {
+                            input.value = '';
+                            const preview = document.getElementById(input.id + '_preview');
+                            if (preview) {
+                                preview.src = '';
+                                preview.classList.add('hidden');
+                            }
+                        }
+                    });
+
+                    // Handle clear buttons if any
+                    clearButtons.forEach(button => button.disabled = !enabled);
+                    
+                    // Update section visibility with smooth transition
+                    imageSection.style.opacity = enabled ? '1' : '0.5';
+                    imageSection.style.pointerEvents = enabled ? 'auto' : 'none';
+                    imageSection.style.filter = enabled ? 'none' : 'grayscale(100%)';
+                }
+
+                document.addEventListener('DOMContentLoaded', function() {
+                    document.getElementById('image_section').classList.add('hidden');
+                    const toggle = document.getElementById('toggle_images');
+                    const toggle = document.getElementById('toggle_images');
+                    toggle.addEventListener('change', function() {
+                        toggleImageInputs(this.checked);
+                        // Save preference to localStorage
+                        localStorage.setItem('imageUploadEnabled', this.checked);
+                    });
+
+                    // Set initial state (disabled by default)
+                    toggle.checked = false;
+                    toggleImageInputs(false);
+
+                    // Restore previous preference if any
+                    const savedPreference = localStorage.getItem('imageUploadEnabled');
+                    if (savedPreference !== null) {
+                        toggle.checked = savedPreference === 'true';
+                        toggleImageInputs(toggle.checked);
+                    }
+                });
+
+                document.querySelector('form').addEventListener('submit', function(e) {
+                    document.getElementById('form-overlay').classList.remove('hidden');
+                    document.getElementById('submitBtn').disabled = true;
+                });
+                </script>
             </div>
         </div>
     </div>
 </div>
 @endsection
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+    flatpickr('input[type="date"]', {
+        dateFormat: 'Y-m-d',
+        defaultDate: '{{ date("Y-m-d") }}',
+        prevArrow: '<svg class="h-6 w-6 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>',
+        nextArrow: '<svg class="h-6 w-6 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>',
+        locale: {
+            weekdays: {
+                shorthand: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+                longhand: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+            }
+        },
+        onChange: function(selectedDates, dateStr, instance) {
+            // Add animation when date changes
+            instance.element.classList.add('ring-2', 'ring-indigo-500');
+            setTimeout(() => instance.element.classList.remove('ring-2', 'ring-indigo-500'), 200);
+        }
+    });
+</script>
+@endpush
+

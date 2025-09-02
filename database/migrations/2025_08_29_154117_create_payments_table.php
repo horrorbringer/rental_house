@@ -13,10 +13,14 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
+            $table->string('payment_number')->unique();
             $table->foreignId('invoice_id')->constrained()->onDelete('cascade');
             $table->decimal('amount', 10, 2);
             $table->date('payment_date');
-            $table->enum('method', ['cash', 'bank', 'aba_payway', 'other']);
+            $table->enum('payment_method', ['cash', 'bank_transfer', 'qr_code', 'other']);
+            $table->string('reference_number')->nullable();
+            $table->string('payment_proof')->nullable();
+            $table->text('notes')->nullable();
             $table->timestamps();
         });
     }

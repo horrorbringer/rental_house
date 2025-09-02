@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Invoice;
 use App\Models\Rental;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class InvoiceController extends Controller
 {
@@ -60,10 +61,22 @@ class InvoiceController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Invoice $invoice)
     {
-        $invoice = Invoice::with(['rental.room', 'rental.tenant'])->findOrFail($id);
+        $invoice->load(['rental.room', 'rental.tenant', 'utilityUsage.utilityRate', 'payments']);
         return view('invoices.show', compact('invoice'));
+    }
+
+    /**
+     * Generate PDF for the specified invoice.
+     */
+    public function generatePdf(Invoice $invoice)
+    {
+        $invoice->load(['rental.room.building', 'rental.tenant', 'utilityUsage.utilityRate', 'payments']);
+        
+        $pdf = PDF::loadView('invoices.pdf', compact('invoice'));
+        
+        return $pdf->download("invoice-{$invoice->invoice_number}.pdf");
     }
 
     /**
