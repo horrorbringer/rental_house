@@ -65,46 +65,6 @@ class InvoiceController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        $rentals = Rental::with(['room', 'tenant'])->whereDoesntHave('invoices', function($query) {
-            $query->whereMonth('billing_month', now()->month)
-                  ->whereYear('billing_month', now()->year);
-        })->get();
-        
-        return view('invoices.create', compact('rentals'));
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'rental_id' => 'required|exists:rentals,id',
-            'billing_month' => 'required|date',
-            'rent_amount' => 'required|numeric|min:0',
-            'water_fee' => 'required|numeric|min:0',
-            'electric_fee' => 'required|numeric|min:0',
-            'water_usage_amount' => 'required|numeric|min:0',
-            'electric_usage_amount' => 'required|numeric|min:0',
-        ]);
-
-        $validated['total'] = $validated['rent_amount'] + 
-                            $validated['water_fee'] + 
-                            $validated['electric_fee'] +
-                            $validated['water_usage_amount'] + 
-                            $validated['electric_usage_amount'];
-
-        $invoice = Invoice::create($validated);
-
-        return redirect()->route('invoices.show', $invoice)
-                        ->with('success', 'Invoice created successfully.');
-    }
-
-    /**
      * Display the specified resource.
      */
     public function show(Invoice $invoice)
@@ -131,7 +91,7 @@ class InvoiceController extends Controller
     public function edit(string $id)
     {
         $invoice = Invoice::with(['rental.room', 'rental.tenant'])->findOrFail($id);
-        return view('invoices.edit', compact('invoice'));
+        return view('admin.invoices.edit', compact('invoice'));
     }
 
     /**

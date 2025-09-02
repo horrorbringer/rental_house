@@ -24,7 +24,7 @@
                         <div class="col-span-6 sm:col-span-3">
                             <label for="billing_month" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Billing Month</label>
                             <input type="month" name="billing_month" id="billing_month" 
-                                value="{{ old('billing_month', $invoice->billing_month->format('Y-m')) }}" disabled
+                                value="{{ old('billing_month', $invoice->billing_month ? $invoice->billing_month->format('Y-m') : now()->format('Y-m')) }}" disabled
                                 class="mt-1 block w-full rounded-md border-gray-300 bg-gray-100 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white sm:text-sm">
                         </div>
 

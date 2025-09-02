@@ -8,8 +8,6 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('invoices')->group(function () {
         // Basic CRUD routes
         Route::get('/', [InvoiceController::class, 'index'])->name('invoices.index');
-        Route::get('/create', [InvoiceController::class, 'create'])->name('invoices.create');
-        Route::post('/', [InvoiceController::class, 'store'])->name('invoices.store');
         Route::get('/{invoice}', [InvoiceController::class, 'show'])->name('invoices.show');
         Route::get('/{invoice}/edit', [InvoiceController::class, 'edit'])->name('invoices.edit');
         Route::put('/{invoice}', [InvoiceController::class, 'update'])->name('invoices.update');

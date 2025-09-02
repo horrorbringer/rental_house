@@ -7,6 +7,7 @@ use App\Models\Invoice;
 use App\Http\Requests\StorePaymentRequest;
 use App\Http\Requests\UpdatePaymentRequest;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class PaymentController extends Controller
 {
@@ -16,45 +17,60 @@ class PaymentController extends Controller
     public function index()
     {
         $payments = Payment::with(['invoice.rental.tenant'])->latest()->paginate(10);
-        return view('payments.index', compact('payments'));
+        return view('admin.payments.index', compact('payments'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Invoice $invoice)
     {
-        $invoices = Invoice::whereIn('status', ['pending', 'overdue'])
-            ->with(['rental.tenant'])
-            ->get();
-        return view('payments.create', compact('invoices'));
+        $invoice->load(['rental.tenant']);
+        return view('admin.payments.create', compact('invoice'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StorePaymentRequest $request)
+    public function store(StorePaymentRequest $request, Invoice $invoice)
     {
-        $validated = $request->validated();
-        $invoice = Invoice::findOrFail($validated['invoice_id']);
+        try {
+            DB::beginTransaction();
 
-        $payment = DB::transaction(function () use ($validated, $invoice) {
+            // Get validated data with payment number and file handling
+            $validated = $request->validated();
+
             // Create the payment
-            $payment = Payment::create($validated);
+            $payment = $invoice->payments()->create($validated);
 
-            // Update invoice status if fully paid
-            $invoice->fresh();
-            if ($invoice->balance <= 0) {
-                $invoice->update(['status' => 'paid']);
-            } elseif ($invoice->status === 'overdue') {
-                $invoice->update(['status' => 'pending']);
+            // Calculate new balance
+            $totalPaid = $invoice->payments()->sum('amount');
+            $newBalance = $invoice->total_amount - $totalPaid;
+
+            // Update invoice status and balance
+            $invoice->update([
+                'balance' => $newBalance,
+                'status' => $newBalance <= 0 ? 'paid' : 'pending',
+                'amount_paid' => $totalPaid
+            ]);
+
+            DB::commit();
+
+            return redirect()->route('invoices.show', $invoice)
+                ->with('success', 'Payment of ₱' . number_format($validated['amount'], 2) . ' recorded successfully.');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            // Delete uploaded file if exists
+            if (isset($validated['payment_proof'])) {
+                Storage::disk('public')->delete($validated['payment_proof']);
             }
 
-            return $payment;
-        });
-
-        return redirect()->route('invoices.show', $invoice)
-            ->with('success', 'Payment recorded successfully.');
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Failed to record payment. Please try again.');
+        }
     }
 
     /**
