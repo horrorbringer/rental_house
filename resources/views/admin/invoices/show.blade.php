@@ -14,10 +14,10 @@
                 <a href="{{ route('invoices.edit', $invoice) }}" class="inline-flex items-center rounded-md bg-white dark:bg-gray-700 px-3 py-2 text-sm font-semibold text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600">
                     Edit
                 </a>
-                <a href="{{ route('invoices.print', $invoice) }}" target="_blank" class="inline-flex items-center rounded-md bg-white dark:bg-gray-700 px-3 py-2 text-sm font-semibold text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <a href="{{ route('invoices.download-pdf', $invoice) }}" target="_blank" class="inline-flex items-center rounded-md bg-white dark:bg-gray-700 px-3 py-2 text-sm font-semibold text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600">
                     Print
                 </a>
-                <a href="{{ route('invoices.pdf', $invoice) }}" class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                <a href="{{ route('invoices.download-pdf', $invoice) }}" class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
                     <svg class="-ml-0.5 mr-1.5 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd" />
                     </svg>
@@ -48,11 +48,11 @@
                     </div>
                     <div>
                         <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Billing Month</dt>
-                        <dd class="mt-1 text-sm text-gray-900 dark:text-white">{{ $invoice->billing_month->format('F Y') }}</dd>
+                        <dd class="mt-1 text-sm text-gray-900 dark:text-white">{{ $invoice->billing_month ? $invoice->billing_month->format('F Y') : 'N/A' }}</dd>
                     </div>
                     <div>
                         <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Created Date</dt>
-                        <dd class="mt-1 text-sm text-gray-900 dark:text-white">{{ $invoice->created_at->format('M d, Y') }}</dd>
+                        <dd class="mt-1 text-sm text-gray-900 dark:text-white">{{ $invoice->created_at ? $invoice->created_at->format('M d, Y') : 'N/A' }}</dd>
                     </div>
                 </dl>
             </div>
@@ -113,9 +113,8 @@
             @if($invoice->status !== 'paid')
             <div class="bg-white dark:bg-gray-700 rounded-lg p-6 sm:col-span-2">
                 <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Record Payment</h3>
-                <form action="{{ route('payments.store') }}" method="POST" class="space-y-4">
+                <form action="{{ route('payments.store', $invoice) }}" method="POST" class="space-y-4">
                     @csrf
-                    <input type="hidden" name="invoice_id" value="{{ $invoice->id }}">
                     
                     <div>
                         <label for="amount" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Payment Amount</label>
@@ -204,7 +203,7 @@
                             @foreach($invoice->payments as $payment)
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                                    {{ $payment->payment_date->format('M d, Y') }}
+                                    {{ $payment->payment_date ? $payment->payment_date->format('M d, Y') : 'N/A' }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                                     ${{ number_format($payment->amount, 2) }}

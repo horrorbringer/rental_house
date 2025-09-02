@@ -5,8 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Invoice;
 use App\Models\Payment;
 use App\Models\Rental;
+
+
+    /**
+     * Generate a PDF for the specified invoice.ttp\Request;
+     */
 use Barryvdh\DomPDF\Facade\Pdf;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Request;
 
 class InvoiceController extends Controller
 {

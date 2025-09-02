@@ -58,7 +58,7 @@
                                         <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                                             <a href="{{ route('invoices.show', $invoice) }}" class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300">View</a>
                                             <a href="{{ route('invoices.edit', $invoice) }}" class="ml-4 text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300">Edit</a>
-                                            <a href="{{ route('invoices.print', $invoice) }}" class="ml-4 text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300" target="_blank">Print</a>
+                                            <a href="{{ route('invoices.download-pdf', $invoice) }}" class="ml-4 text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300" target="_blank">PDF</a>
                                         </td>
                                     </tr>
                                 @endforeach

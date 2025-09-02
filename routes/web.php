@@ -42,26 +42,15 @@ Route::middleware(['auth','verified'])->group(function () {
     Route::resource('buildings', BuildingController::class);
     Route::resource('rooms', RoomController::class);
     Route::resource('rentals', RentalController::class);
-    // Invoice management
+
+    // Utilities management
     Route::resource('utility-rates', UtilityRateController::class);
-    Route::resource('invoices', InvoiceController::class);
-    Route::get('invoices/{invoice}/pdf', [InvoiceController::class, 'generatePdf'])->name('invoices.pdf');
-    Route::resource('payments', PaymentController::class);
-    Route::get('/invoices/{invoice}/pdf', [InvoiceController::class, 'downloadPdf'])->name('invoices.pdf');
-    Route::post('/invoices/bulk-generate', [InvoiceController::class, 'bulkGenerate'])->name('invoices.bulk-generate');
-    
-    // Payment management
-    Route::resource('payments', PaymentController::class)->except(['edit', 'update']);
-    Route::get('/invoices/{invoice}/payments/create', [PaymentController::class, 'create'])->name('payments.create.invoice');
 
     // Tenant management
-    Route::get('/tenants', [TenantController::class, 'index'])->name('tenants.index');
-    Route::get('/tenants/create', [TenantController::class, 'create'])->name('tenants.create');
-    Route::post('/tenants', [TenantController::class, 'store'])->name('tenants.store');
-    Route::get('/tenants/{tenant}', [TenantController::class, 'show'])->name('tenants.show');
-    Route::get('/tenants/{tenant}/edit', [TenantController::class, 'edit'])->name('tenants.edit');
-    Route::put('/tenants/{tenant}', [TenantController::class, 'update'])->name('tenants.update');
-    Route::delete('/tenants/{tenant}', [TenantController::class, 'destroy'])->name('tenants.destroy');
+    Route::resource('tenants', TenantController::class);
 });
 
+// Include other route files
 require __DIR__.'/auth.php';
+require __DIR__.'/invoices.php';
+require __DIR__.'/payments.php';

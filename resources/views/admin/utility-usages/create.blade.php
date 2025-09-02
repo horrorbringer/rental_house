@@ -31,11 +31,67 @@
                             </svg>
                             <span class="font-semibold">Please correct the following errors:</span>
                         </div>
-                        <ul class="list-disc list-inside pl-4">
-                            @foreach($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
+                        <dl class="space-y-2">
+                            @error('rental_id')
+                            <div>
+                                <dt class="font-medium">Rental Selection</dt>
+                                <dd class="text-sm">{{ $message }}</dd>
+                            </div>
+                            @enderror
+
+                            @error('utility_rate_id')
+                            <div>
+                                <dt class="font-medium">Utility Rate</dt>
+                                <dd class="text-sm">{{ $message }}</dd>
+                            </div>
+                            @enderror
+
+                            @error('water_meter_start')
+                            <div>
+                                <dt class="font-medium">Water Meter Start Reading</dt>
+                                <dd class="text-sm">{{ $message }}</dd>
+                            </div>
+                            @enderror
+
+                            @error('water_meter_end')
+                            <div>
+                                <dt class="font-medium">Water Meter End Reading</dt>
+                                <dd class="text-sm">{{ $message }}</dd>
+                            </div>
+                            @enderror
+
+                            @error('electric_meter_start')
+                            <div>
+                                <dt class="font-medium">Electric Meter Start Reading</dt>
+                                <dd class="text-sm">{{ $message }}</dd>
+                            </div>
+                            @enderror
+
+                            @error('electric_meter_end')
+                            <div>
+                                <dt class="font-medium">Electric Meter End Reading</dt>
+                                <dd class="text-sm">{{ $message }}</dd>
+                            </div>
+                            @enderror
+
+                            @if($errors->has('water_meter_image_start') || $errors->has('water_meter_image_end') || $errors->has('electric_meter_image_start') || $errors->has('electric_meter_image_end'))
+                            <div>
+                                <dt class="font-medium">Image Uploads</dt>
+                                @error('water_meter_image_start')
+                                <dd class="text-sm">Water Start: {{ $message }}</dd>
+                                @enderror
+                                @error('water_meter_image_end')
+                                <dd class="text-sm">Water End: {{ $message }}</dd>
+                                @enderror
+                                @error('electric_meter_image_start')
+                                <dd class="text-sm">Electric Start: {{ $message }}</dd>
+                                @enderror
+                                @error('electric_meter_image_end')
+                                <dd class="text-sm">Electric End: {{ $message }}</dd>
+                                @enderror
+                            </div>
+                            @endif
+                        </dl>
                     </div>
                 @endif
 
@@ -54,7 +110,7 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="relative">
                                 <select name="rental_id" id="rental_id" required autofocus autocomplete="off"
-                                    class="peer mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-gray-900 dark:text-gray-100 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-all">
+                                    class="peer mt-1 block w-full rounded-md @error('rental_id') border-red-300 dark:border-red-600 text-red-900 dark:text-red-100 placeholder-red-300 focus:border-red-500 focus:ring-red-500 @else border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:border-indigo-500 focus:ring-indigo-500 @enderror shadow-sm transition-all">
                                     <option value="">Select a rental</option>
                                     @foreach($rentals as $rental)
                                         <option value="{{ $rental->id }}" {{ old('rental_id') == $rental->id ? 'selected' : '' }}>
@@ -62,7 +118,10 @@
                                         </option>
                                     @endforeach
                                 </select>
-                                <label for="rental_id" class="absolute left-3 top-0 text-xs text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 px-1 transition-all peer-focus:-top-4 peer-focus:text-indigo-600 peer-focus:dark:text-indigo-400">Rental/Tenant</label>
+                                <label for="rental_id" class="absolute left-3 top-0 text-xs @error('rental_id') text-red-500 dark:text-red-400 @else text-gray-500 dark:text-gray-400 @enderror bg-white dark:bg-gray-800 px-1 transition-all peer-focus:-top-4 peer-focus:text-indigo-600 peer-focus:dark:text-indigo-400">Rental/Tenant</label>
+                                @error('rental_id')
+                                    <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                                @enderror
                             </div>
                             <div class="relative">
                                 <input type="date" name="reading_date" id="reading_date" autocomplete="off"
