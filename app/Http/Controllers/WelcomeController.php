@@ -2,29 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Room;
 use App\Models\Building;
+use App\Models\Room;
 use Illuminate\Http\Request;
 
 class WelcomeController extends Controller
 {
     public function index()
     {
-        // Get featured rooms (vacant rooms with images)
-        $featuredRooms = Room::with(['building'])
-            ->where('status', Room::STATUS_VACANT)
+        $buildings = Building::with('images')->get();
+        $availableRooms = Room::with(['building', 'images'])
+            ->where('status', 'vacant')
             ->latest()
             ->take(6)
             ->get();
 
-        // Get some stats
-        $stats = [
-            'buildings' => Building::count(),
-            'rooms' => Room::count(),
-            'available_rooms' => Room::where('status', Room::STATUS_VACANT)->count(),
-        ];
-
-        return view('welcome', compact('featuredRooms', 'stats'));
+        return view('welcome', compact('buildings', 'availableRooms'));
     }
 
     public function search(Request $request)

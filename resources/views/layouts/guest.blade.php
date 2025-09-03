@@ -26,10 +26,10 @@
     @yield('scripts')
 </head>
 
-<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen">
-    <header class="fixed top-0 left-0 right-0 z-50 backdrop-blur-lg bg-white/80 dark:bg-gray-900/80 border-b border-gray-200 dark:border-gray-800">
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen transition-colors duration-300 ease-in-out scroll-smooth">
+    <header class="fixed top-0 left-0 right-0 z-50 backdrop-blur-lg bg-white/80 dark:bg-gray-900/80 border-b border-gray-200 dark:border-gray-800 transition-all duration-300 ease-in-out transform translate-y-0 hover:bg-white dark:hover:bg-gray-900">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
+            <div class="flex justify-between items-center h-16 transition-all duration-300">
                 <!-- Logo -->
                 <div class="flex-shrink-0 flex items-center">
                     <a href="{{ url('/') }}" class="flex items-center space-x-2">
@@ -43,40 +43,43 @@
                 </div>
 
                 <!-- Navigation Links -->
-                <nav class="hidden md:flex space-x-8">
-                    <a href="{{ route('tenant.rooms.index') }}" class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 px-3 py-2 text-sm font-medium transition-colors duration-200">
-                        Browse Rooms
+                <nav class="hidden md:flex space-x-1">
+                    <a href="{{ route('tenant.rooms.index') }}" class="relative px-4 py-2 text-sm font-medium rounded-lg group transition-all duration-300 ease-in-out text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400">
+                        <span class="relative z-10">Browse Rooms</span>
+                        <div class="absolute inset-0 bg-indigo-50 dark:bg-indigo-900/30 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     </a>
-                    <a href="#about" class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 px-3 py-2 text-sm font-medium transition-colors duration-200">
-                        About Us
+                    <a href="#about" class="relative px-4 py-2 text-sm font-medium rounded-lg group transition-all duration-300 ease-in-out text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400">
+                        <span class="relative z-10">About Us</span>
+                        <div class="absolute inset-0 bg-indigo-50 dark:bg-indigo-900/30 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     </a>
-                    <a href="#contact" class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 px-3 py-2 text-sm font-medium transition-colors duration-200">
-                        Contact
+                    <a href="#contact" class="relative px-4 py-2 text-sm font-medium rounded-lg group transition-all duration-300 ease-in-out text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400">
+                        <span class="relative z-10">Contact</span>
+                        <div class="absolute inset-0 bg-indigo-50 dark:bg-indigo-900/30 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     </a>
                 </nav>
 
                 <!-- Right Side Menu -->
                 <div class="flex items-center space-x-4">
                     <!-- Theme Toggle -->
-                    <button id="theme-toggle" type="button" class="p-2 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors duration-200">
+                    <button id="theme-toggle" type="button" class="p-2 text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 rounded-full hover:ring-4 hover:ring-gray-200 dark:hover:ring-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 transition-all duration-300">
                         <span class="sr-only">Toggle theme</span>
-                        <svg id="theme-toggle-dark-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                        <svg id="theme-toggle-dark-icon" class="w-5 h-5 hidden transition-transform duration-300 rotate-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" class="transition-all duration-300"></path>
                         </svg>
-                        <svg id="theme-toggle-light-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 9a1 1 0 100-2h-1a1 1 0 100 2h1zm-4 4a1 1 0 100-2h-1a1 1 0 100 2h1zm4 4a1 1 0 100-2h-1a1 1 0 100 2h1zM5.029 15.171a1 1 0 10-1.414-1.414l-1-1a1 1 0 10-1.414 1.414l1 1a1 1 0 101.414 1.414zM16.486 4.343a1 1 0 10-1.414-1.414l-1-1a1 1 0 10-1.414 1.414l1 1a1 1 0 101.414-1.414zM10 5a5 5 0 100 10 5 5 0 000-10z"></path>
+                        <svg id="theme-toggle-light-icon" class="w-5 h-5 hidden transition-transform duration-300 rotate-90" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 9a1 1 0 100-2h-1a1 1 0 100 2h1zm-4 4a1 1 0 100-2h-1a1 1 0 100 2h1zm4 4a1 1 0 100-2h-1a1 1 0 100 2h1zM5.029 15.171a1 1 0 10-1.414-1.414l-1-1a1 1 0 10-1.414 1.414l1 1a1 1 0 101.414 1.414zM16.486 4.343a1 1 0 10-1.414-1.414l-1-1a1 1 0 10-1.414 1.414l1 1a1 1 0 101.414-1.414zM10 5a5 5 0 100 10 5 5 0 000-10z" class="transition-all duration-300"></path>
                         </svg>
                     </button>
 
                     <!-- Social Links -->
                     <div class="hidden md:flex space-x-2">
-                        <a href="#" class="p-2 text-gray-500 hover:text-gray-900 dark:hover:text-gray-100 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200">
+                        <a href="#" class="group p-2 text-gray-500 hover:text-indigo-600 dark:hover:text-indigo-400 rounded-full bg-gray-100 dark:bg-gray-800 hover:ring-4 hover:ring-indigo-100 dark:hover:ring-indigo-900 transition-all duration-300">
                             <span class="sr-only">Facebook</span>
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33V22C17.343 21.128 22 16.991 22 12z"/></svg>
+                            <svg class="w-5 h-5 transform group-hover:scale-110 transition-transform duration-300" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33V22C17.343 21.128 22 16.991 22 12z"/></svg>
                         </a>
-                        <a href="#" class="p-2 text-gray-500 hover:text-gray-900 dark:hover:text-gray-100 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200">
+                        <a href="#" class="group p-2 text-gray-500 hover:text-indigo-600 dark:hover:text-indigo-400 rounded-full bg-gray-100 dark:bg-gray-800 hover:ring-4 hover:ring-indigo-100 dark:hover:ring-indigo-900 transition-all duration-300">
                             <span class="sr-only">Telegram</span>
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
+                            <svg class="w-5 h-5 transform group-hover:scale-110 transition-transform duration-300" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
                         </a>
                     </div>
 
@@ -90,12 +93,12 @@
                                 Dashboard
                             </a>
                         @else
-                            <a href="{{ route('login') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-700 text-sm font-medium rounded-lg text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200">
+                            {{-- <a href="{{ route('login') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-700 text-sm font-medium rounded-lg text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200">
                                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
                                 </svg>
                                 Log in
-                            </a>
+                            </a> --}}
                         @endauth
                     @endif
                 </div>
@@ -209,36 +212,52 @@
             const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
             const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
 
-            function toggleTheme() {
-                // Check if the HTML element has the 'dark' class
-                if (document.documentElement.classList.contains('dark')) {
-                    // It's currently dark, so switch to light
-                    document.documentElement.classList.remove('dark');
-                    localStorage.setItem('color-theme', 'light');
-                    themeToggleDarkIcon.classList.remove('hidden');
-                    themeToggleLightIcon.classList.add('hidden');
-                } else {
-                    // It's currently light, so switch to dark
+            function setTheme(isDark) {
+                // Add transition class to body for smooth color transitions
+                document.body.classList.add('transition-colors', 'duration-300');
+
+                if (isDark) {
                     document.documentElement.classList.add('dark');
                     localStorage.setItem('color-theme', 'dark');
-                    themeToggleLightIcon.classList.remove('hidden');
+                    
+                    // Animate icons
+                    themeToggleLightIcon.classList.remove('hidden', 'rotate-90');
                     themeToggleDarkIcon.classList.add('hidden');
+                    setTimeout(() => themeToggleLightIcon.classList.add('rotate-0'), 50);
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('color-theme', 'light');
+                    
+                    // Animate icons
+                    themeToggleDarkIcon.classList.remove('hidden', 'rotate-90');
+                    themeToggleLightIcon.classList.add('hidden');
+                    setTimeout(() => themeToggleDarkIcon.classList.add('rotate-0'), 50);
                 }
             }
 
-            // Initial check on page load
-            const currentTheme = localStorage.getItem('color-theme');
-            if (currentTheme === 'dark' || (!currentTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                document.documentElement.classList.add('dark');
-                themeToggleLightIcon.classList.remove('hidden');
-                themeToggleDarkIcon.classList.add('hidden');
-            } else {
-                document.documentElement.classList.remove('dark');
-                themeToggleDarkIcon.classList.remove('hidden');
-                themeToggleLightIcon.classList.add('hidden');
+            function toggleTheme() {
+                const isDark = document.documentElement.classList.contains('dark');
+                
+                // Add press effect
+                themeToggleBtn.classList.add('scale-95');
+                setTimeout(() => themeToggleBtn.classList.remove('scale-95'), 100);
+                
+                setTheme(!isDark);
             }
 
-            // Attach click event listener to the button
+            // Handle system theme changes
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+                if (!localStorage.getItem('color-theme')) {
+                    setTheme(e.matches);
+                }
+            });
+
+            // Initial theme setup
+            const currentTheme = localStorage.getItem('color-theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            setTheme(currentTheme === 'dark' || (!currentTheme && prefersDark));
+
+            // Attach click event with smooth transition
             themeToggleBtn.addEventListener('click', toggleTheme);
         });
     </script>

@@ -10,37 +10,56 @@ class RoomPublicController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Room::with(['building'])
-            ->where('status', Room::STATUS_VACANT);
-
-        // Filter by building
-        if ($request->filled('building')) {
-            $query->whereHas('building', function ($q) use ($request) {
-                $q->where('name', 'like', '%' . $request->building . '%');
+        $query = Room::with(['building', 'images'])
+            ->when($request->building, function ($q) use ($request) {
+                return $q->where('building_id', $request->building);
             });
-        }
-
-        // Filter by price range
-        if ($request->filled('price_min')) {
-            $query->where('monthly_rent', '>=', $request->price_min);
-        }
-        if ($request->filled('price_max')) {
-            $query->where('monthly_rent', '<=', $request->price_max);
-        }
 
         $rooms = $query->latest()->paginate(12);
-        $buildings = Building::select('name')->distinct()->get();
+        $buildings = Building::all();
 
         return view('public.rooms.index', compact('rooms', 'buildings'));
     }
 
-    public function show(Room $room)
+    public function search(Request $request)
     {
-        if ($room->status !== Room::STATUS_VACANT) {
-            abort(404, 'Room is not available');
+        $query = Room::with(['building', 'images']);
+
+        // Filter by building
+        if ($request->building) {
+            $query->where('building_id', $request->building);
         }
 
-        $room->load('building');
-        return view('public.rooms.show', compact('room'));
+        // Filter by price range
+        if ($request->min_price) {
+            $query->where('monthly_rent', '>=', $request->min_price);
+        }
+
+        if ($request->max_price) {
+            $query->where('monthly_rent', '<=', $request->max_price);
+        }
+
+        $rooms = $query->latest()->paginate(12);
+        $buildings = Building::all();
+
+        return view('public.rooms.index', [
+            'rooms' => $rooms,
+            'buildings' => $buildings,
+            'filters' => $request->all()
+        ]);
+    }
+
+    public function show(Room $room)
+    {
+        $room->load(['building', 'images']);
+        
+        // Get similar rooms from the same building
+        $similarRooms = Room::with(['building', 'images'])
+            ->where('building_id', $room->building_id)
+            ->where('id', '!=', $room->id)
+            ->take(3)
+            ->get();
+
+        return view('public.rooms.show', compact('room', 'similarRooms'));
     }
 }

@@ -82,6 +82,10 @@ class InvoiceController extends Controller
         
         $pdf = PDF::loadView('admin.invoices.pdf', compact('invoice'));
         
+        // Configure PDF to use Unicode fonts
+        $pdf->setOption('enable-local-file-access', true);
+        $pdf->setOption('font-family', 'Hanuman');
+        
         return $pdf->download("invoice-{$invoice->invoice_number}.pdf");
     }
 
