@@ -28,6 +28,7 @@ class Invoice extends Model
         'total_amount',
         'amount_paid',
         'balance',
+        'paid_at',
         'status',
         'notes',
     ];
@@ -35,6 +36,12 @@ class Invoice extends Model
     protected $casts = [
         'billing_date' => 'date',
         'due_date' => 'date',
+        'paid_at' => 'datetime',
+        'rent_amount' => 'decimal:2',
+        'other_charges' => 'decimal:2',
+        'total_amount' => 'decimal:2',
+        'amount_paid' => 'decimal:2',
+        'balance' => 'decimal:2',
     ];
 
     protected static function boot()

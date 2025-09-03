@@ -8,6 +8,9 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('payments')->group(function () {
         Route::get('/', [PaymentController::class, 'index'])->name('payments.index');
         Route::get('/{payment}', [PaymentController::class, 'show'])->name('payments.show');
+        Route::get('/{payment}/edit', [PaymentController::class, 'edit'])->name('payments.edit');
+        Route::put('/{payment}', [PaymentController::class, 'update'])->name('payments.update');
+        Route::delete('/{payment}', [PaymentController::class, 'destroy'])->name('payments.destroy');
     });
 
     // Invoice-specific payment routes

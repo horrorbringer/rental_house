@@ -2,12 +2,96 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Building;
+use App\Models\Room;
+use App\Models\Tenant;
+use App\Models\Invoice;
+use App\Models\Payment;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        return view('dashboard');
+        $now = Carbon::now();
+        $currentMonth = $now->format('Y-m');
+
+        // Get total revenue stats
+        $monthlyRevenue = Room::whereHas('rentals', function($query) {
+            $query->where('status', 'active');
+        })->sum('monthly_rent');
+
+        $totalRevenuePaid = Payment::whereYear('created_at', $now->year)
+            ->whereMonth('created_at', $now->month)
+            ->sum('amount');
+
+        // Get building and room stats
+        $buildings = Building::count();
+        $rooms = Room::count();
+        $vacantRooms = Room::where('status', 'vacant')->count();
+        $occupiedRooms = $rooms - $vacantRooms;
+        $occupancyRate = $rooms > 0 ? round(($occupiedRooms / $rooms) * 100) : 0;
+
+        // Get recent activities
+        $recentActivities = collect();
+
+        // Get recent tenants
+        $recentTenants = Tenant::with('rentals.room.building')
+            ->latest()
+            ->take(5)
+            ->get()
+            ->map(function($tenant) {
+                return [
+                    'type' => 'tenant',
+                    'message' => "New tenant registered",
+                    'subject' => $tenant->name,
+                    'date' => $tenant->created_at,
+                    'room' => $tenant->rentals->first()?->room->room_number ?? 'N/A',
+                    'building' => $tenant->rentals->first()?->room->building->name ?? 'N/A',
+                    'color' => 'blue'
+                ];
+            });
+
+        // Get recent payments
+        $recentPayments = Payment::with('invoice.rental.tenant')
+            ->latest()
+            ->take(5)
+            ->get()
+            ->map(function($payment) {
+                return [
+                    'type' => 'payment',
+                    'message' => "Payment received",
+                    'subject' => $payment->invoice->rental->tenant->name,
+                    'amount' => $payment->amount,
+                    'date' => $payment->created_at,
+                    'color' => 'green'
+                ];
+            });
+
+        // Merge and sort activities
+        $recentActivities = $recentTenants->concat($recentPayments)
+            ->sortByDesc('date')
+            ->take(5);
+
+        // Get upcoming rent payments
+        $upcomingPayments = Invoice::with('rental.tenant', 'rental.room')
+            ->whereNull('paid_at')
+            ->where('due_date', '>=', now())
+            ->orderBy('due_date')
+            ->take(5)
+            ->get();
+
+        return view('admin.dashboard', compact(
+            'monthlyRevenue',
+            'totalRevenuePaid',
+            'buildings',
+            'rooms',
+            'vacantRooms',
+            'occupiedRooms',
+            'occupancyRate',
+            'recentActivities',
+            'upcomingPayments'
+        ));
     }
 }

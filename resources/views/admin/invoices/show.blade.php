@@ -44,6 +44,11 @@
                             <span class="inline-flex rounded-full px-2 text-xs font-semibold leading-5 {{ $invoice->status === 'paid' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
                                 {{ ucfirst($invoice->status) }}
                             </span>
+                            @if($invoice->paid_at)
+                                <span class="ml-2 text-sm text-gray-500 dark:text-gray-400">
+                                    Paid on {{ $invoice->paid_at->format('M d, Y g:i A') }}
+                                </span>
+                            @endif
                         </dd>
                     </div>
                     <div>

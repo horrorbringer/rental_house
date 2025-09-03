@@ -16,12 +16,12 @@ class BuildingController extends Controller
             $query->where('status', 'vacant');
         }])->latest()->get();
 
-        return view('buildings.index', compact('buildings'));
+        return view('admin.buildings.index', compact('buildings'));
     }
 
     public function create()
     {
-        return view('buildings.create');
+        return view('admin.buildings.create');
     }
 
     public function store(Request $request)
@@ -66,12 +66,12 @@ class BuildingController extends Controller
     public function show(Building $building)
     {
         $building->load(['owner', 'rooms']);
-        return view('buildings.show', compact('building'));
+        return view('admin.buildings.show', compact('building'));
     }
 
     public function edit(Building $building)
     {
-        return view('buildings.edit', compact('building'));
+        return view('admin.buildings.edit', compact('building'));
     }
 
     public function update(Request $request, Building $building)

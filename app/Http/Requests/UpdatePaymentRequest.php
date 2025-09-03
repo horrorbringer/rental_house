@@ -21,8 +21,10 @@ class UpdatePaymentRequest extends FormRequest
     {
         return [
             'payment_date' => 'required|date|before_or_equal:today',
-            'method' => 'required|in:cash,bank_transfer,credit_card,debit_card,check,other',
-            'notes' => 'nullable|string|max:500',
+            'payment_method' => 'required|in:cash,bank_transfer,gcash,credit_card,debit_card,check,other',
+            'reference_number' => 'required_if:payment_method,bank_transfer,gcash|nullable|string|max:50',
+            'payment_proof' => 'sometimes|required_if:payment_method,bank_transfer,gcash|nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'notes' => 'nullable|string|max:1000',
         ];
     }
 

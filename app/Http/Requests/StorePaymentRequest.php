@@ -17,7 +17,21 @@ class StorePaymentRequest extends FormRequest
     protected function getInvoice(): ?Invoice
     {
         if ($this->invoice === null) {
-            $this->invoice = Invoice::find($this->input('invoice_id'));
+            // For store method, get invoice from route parameter
+            if ($this->route('invoice')) {
+                $this->invoice = $this->route('invoice');
+            } else {
+                $this->invoice = Invoice::find($this->input('invoice_id'));
+            }
+            
+            // Refresh invoice balance
+            if ($this->invoice) {
+                $totalPaid = $this->invoice->payments()->sum('amount');
+                $this->invoice->forceFill([
+                    'amount_paid' => $totalPaid,
+                    'balance' => $this->invoice->total_amount - $totalPaid
+                ]);
+            }
         }
         return $this->invoice;
     }
@@ -35,11 +49,12 @@ class StorePaymentRequest extends FormRequest
      */
     public function rules(): array
     {
-        $maxAmount = $this->getInvoice()?->balance ?? 0;
+        $invoice = $this->route('invoice');
+        $totalPaid = $invoice->payments()->sum('amount');
+        $currentBalance = $invoice->total_amount - $totalPaid;
 
         return [
-            'invoice_id' => 'required|exists:invoices,id',
-            'amount' => "required|numeric|min:0.01|max:{$maxAmount}",
+            'amount' => "required|numeric|min:0.01|max:{$currentBalance}",
             'payment_date' => 'required|date|before_or_equal:today',
             'payment_method' => 'required|in:cash,bank_transfer,gcash,credit_card,debit_card,check,other',
             'reference_number' => 'required_if:payment_method,bank_transfer,gcash|nullable|string|max:50',

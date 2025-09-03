@@ -206,6 +206,11 @@
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100">
                                                 Paid
                                             </span>
+                                            @if($invoice->paid_at)
+                                            <span class="block text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                                on {{ $invoice->paid_at->format('M d, Y') }}
+                                            </span>
+                                            @endif
                                         @elseif($invoice->status === 'overdue')
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100">
                                                 Overdue

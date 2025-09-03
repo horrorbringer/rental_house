@@ -33,7 +33,7 @@ class RoomController extends Controller
         $rooms = $query->latest()->paginate(12);
         $buildings = Building::where('user_id', Auth::id())->get();
 
-        return view('rooms.index', compact('rooms', 'buildings'));
+        return view('admin.rooms.index', compact('rooms', 'buildings'));
     }
 
     /**
@@ -42,7 +42,7 @@ class RoomController extends Controller
     public function create()
     {
         $buildings = Building::where('user_id', Auth::id())->get();
-        return view('rooms.create', compact('buildings'));
+        return view('admin.rooms.create', compact('buildings'));
     }
 
     /**
@@ -92,7 +92,7 @@ class RoomController extends Controller
         'activeRentals.utilityUsages'
         ])->loadCount('activeRentals');
 
-        return view('rooms.show', compact('room'));
+        return view('admin.rooms.show', compact('room'));
     }
 
     /**
@@ -101,7 +101,7 @@ class RoomController extends Controller
     public function edit(Room $room)
     {
         $buildings = Building::where('user_id', Auth::id())->get();
-        return view('rooms.edit', compact('room', 'buildings'));
+        return view('admin.rooms.edit', compact('room', 'buildings'));
     }
 
     /**

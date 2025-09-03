@@ -1,10 +1,11 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="color-scheme" content="light dark">
     @yield('head', '')
     <title>{{ config('app.name', 'Property Management App') }}</title>
 
@@ -13,6 +14,29 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     @else
         <script src="https://cdn.tailwindcss.com"></script>
+        <script>
+            tailwind.config = {
+                darkMode: 'class',
+                theme: {
+                    extend: {
+                        colors: {
+                            primary: {
+                                50: '#f0f9ff',
+                                100: '#e0f2fe',
+                                200: '#bae6fd',
+                                300: '#7dd3fc',
+                                400: '#38bdf8',
+                                500: '#0ea5e9',
+                                600: '#0284c7',
+                                700: '#0369a1',
+                                800: '#075985',
+                                900: '#0c4a6e',
+                            },
+                        },
+                    },
+                },
+            }
+        </script>
         <style>
             @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
             body {
@@ -20,6 +44,31 @@
             }
         </style>
     @endif
+
+    <script>
+        // Initialize Alpine.js theme store
+        document.addEventListener('alpine:init', () => {
+            Alpine.store('theme', {
+                dark: localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches),
+                toggle() {
+                    this.dark = !this.dark;
+                    localStorage.theme = this.dark ? 'dark' : 'light';
+                    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                        document.documentElement.classList.add('dark');
+                    } else {
+                        document.documentElement.classList.remove('dark');
+                    }
+                }
+            });
+        });
+
+        // Initial theme setup
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
 
     {{--  tailwind  --}}
     <script src="https://cdn.tailwindcss.com"></script>
@@ -71,8 +120,8 @@
 
 </head>
 {{-- tailwin --}}
-    <body class="min-h-screen bg-gray-100 dark:bg-gray-900" x-data="{ sidebarOpen: false }">
-        <div class="min-h-screen flex">
+    <body class="h-full antialiased bg-gray-50 dark:bg-gray-900" x-data="{ sidebarOpen: false }">
+        <div class="min-h-screen flex bg-gray-50 dark:bg-gray-900">
             <!-- Sidebar Backdrop -->
             <div x-show="sidebarOpen" 
                  x-transition:enter="transition-opacity ease-linear duration-300"
@@ -105,13 +154,13 @@
                 </div>
 
                 <!-- Navigation -->
-                <nav class="flex-1 px-2 py-4 space-y-1 overflow-y-auto">
+                <nav class="flex-1 px-2 py-4 space-y-1 overflow-y-auto scrollbar-custom">
                     <a href="{{ route('dashboard') }}"
-                       class="{{ request()->routeIs('dashboard') ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700' }} flex items-center px-4 py-2 text-sm font-medium rounded-lg group transition-colors duration-150">
-                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                       class="{{ request()->routeIs('dashboard') ? 'bg-primary-50 dark:bg-primary-900/50 text-primary-700 dark:text-primary-100' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800' }} flex items-center px-4 py-2 text-sm font-medium rounded-lg group transition-colors duration-150">
+                        <svg class="w-5 h-5 mr-3 {{ request()->routeIs('dashboard') ? 'text-primary-500 dark:text-primary-400' : 'text-gray-400 dark:text-gray-500 group-hover:text-gray-500 dark:group-hover:text-gray-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
                         </svg>
-                        Dashboard
+                        <span class="flex-1">Dashboard</span>
                     </a>
 
                     <a href="{{ route('buildings.index') }}"
@@ -146,13 +195,6 @@
                         Rentals
                     </a>
 
-                    <a href="{{ route('invoices.index') }}"
-                       class="{{ request()->routeIs('invoices.*') ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700' }} flex items-center px-4 py-2 text-sm font-medium rounded-lg group transition-colors duration-150">
-                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
-                        </svg>
-                        Invoices
-                    </a>
                     <a href="{{ route('utility-rates.index') }}"
                        class="{{ request()->routeIs('utility-rates.*') ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700' }} flex items-center px-4 py-2 text-sm font-medium rounded-lg group transition-colors duration-150">
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -175,6 +217,13 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>
                         </svg>
                         Payments
+                    </a>
+                    <a href="{{ route('invoices.index') }}"
+                       class="{{ request()->routeIs('invoices.*') ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700' }} flex items-center px-4 py-2 text-sm font-medium rounded-lg group transition-colors duration-150">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
+                        </svg>
+                        Invoices
                     </a>
                 </nav>
 
@@ -222,8 +271,25 @@
 
                             <!-- Right side -->
                             <div class="flex items-center gap-4">
+                                <!-- Theme Toggle -->
+                                <button 
+                                    @click="$store.theme.toggle()"
+                                    class="rounded-full bg-white dark:bg-gray-800 p-2 text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white dark:focus:ring-gray-700"
+                                    aria-label="Toggle theme">
+                                    <template x-if="!$store.theme.dark">
+                                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                                        </svg>
+                                    </template>
+                                    <template x-if="$store.theme.dark">
+                                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"></path>
+                                        </svg>
+                                    </template>
+                                </button>
+
                                 <!-- Notifications -->
-                                <button type="button" class="rounded-full bg-white dark:bg-gray-800 p-2 text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 focus:outline-none">
+                                <button type="button" class="rounded-full bg-white dark:bg-gray-800 p-2 text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white dark:focus:ring-gray-700">
                                     <span class="sr-only">View notifications</span>
                                     <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
