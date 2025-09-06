@@ -23,12 +23,11 @@ class StoreRoomRequest extends FormRequest
     {
         return [
             'building_id' => ['required', 'exists:buildings,id'],
-            'room_number' => ['required', 'string', 'max:10'],
+            'room_number' => ['required', 'string', 'max:50'],
             'monthly_rent' => ['required', 'numeric', 'min:0'],
             'water_fee' => ['required', 'numeric', 'min:0'],
             'electric_fee' => ['required', 'numeric', 'min:0'],
-            'status' => ['required', 'in:vacant,occupied'],
-            'capacity' => ['required', 'integer', 'min:1'],
+            'status' => ['required', 'in:vacant,occupied,full'],
             'image' => ['nullable', 'image', 'max:2048'],
             'additional_images.*' => ['nullable', 'image', 'max:2048'],
             'additional_images' => ['nullable', 'array', 'max:5'],

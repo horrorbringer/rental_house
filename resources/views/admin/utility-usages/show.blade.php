@@ -83,11 +83,11 @@
                                 <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100 sm:mt-0 sm:col-span-2">
                                     {{ number_format($utilityUsage->water_usage, 2) }} units
                                     <span class="text-gray-500 dark:text-gray-400">
-                                        (Rate: ฿{{ number_format($utilityUsage->water_price, 2) }}/unit)
+                                        (Rate: ฿{{ number_format($utilityUsage->rental->room->water_rate, 2) }}/unit)
                                     </span>
                                     <br>
                                     <span class="font-medium">
-                                        Total: ฿{{ number_format($utilityUsage->water_usage * $utilityUsage->water_price, 2) }}
+                                        Total: ฿{{ number_format($utilityUsage->water_usage * $utilityUsage->rental->room->water_rate, 2) }}
                                     </span>
                                 </dd>
                             </div>
@@ -98,11 +98,11 @@
                                 <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100 sm:mt-0 sm:col-span-2">
                                     {{ number_format($utilityUsage->electric_usage, 2) }} units
                                     <span class="text-gray-500 dark:text-gray-400">
-                                        (Rate: ฿{{ number_format($utilityUsage->electric_price, 2) }}/unit)
+                                        (Rate: ฿{{ number_format($utilityUsage->rental->room->electric_rate, 2) }}/unit)
                                     </span>
                                     <br>
                                     <span class="font-medium">
-                                        Total: ฿{{ number_format($utilityUsage->electric_usage * $utilityUsage->electric_price, 2) }}
+                                        Total: ฿{{ number_format($utilityUsage->electric_usage * $utilityUsage->rental->room->electric_rate, 2) }}
                                     </span>
                                 </dd>
                             </div>

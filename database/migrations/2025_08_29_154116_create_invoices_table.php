@@ -19,11 +19,9 @@ return new class extends Migration
             $table->date('billing_date');
             $table->date('due_date');
             $table->decimal('rent_amount', 10, 2);
-            $table->decimal('other_charges', 10, 2)->default(0);
-            $table->text('other_charges_notes')->nullable();
+            $table->decimal('total_water_fee', 10, 2)->default(0);
+            $table->decimal('total_electric_fee', 10, 2)->default(0);
             $table->decimal('total_amount', 10, 2);
-            $table->decimal('amount_paid', 10, 2)->default(0);
-            $table->decimal('balance', 10, 2)->default(0);
             $table->enum('status', ['draft', 'pending', 'paid', 'overdue', 'cancelled'])->default('draft');
             $table->text('notes')->nullable();
             $table->timestamps();

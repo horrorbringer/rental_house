@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Invoice;
 use App\Models\Rental;
-use App\Models\UtilityRate;
 use App\Models\UtilityUsage;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
@@ -23,7 +22,7 @@ class UtilityUsageController extends Controller
      */
     public function index()
     {
-        $utilityUsages = UtilityUsage::with(['rental.room.building', 'rental.tenant', 'utilityRate'])
+        $utilityUsages = UtilityUsage::with(['rental.room.building', 'rental.tenant'])
             ->orderBy('reading_date', 'desc')
             ->paginate(10);
 
@@ -38,10 +37,8 @@ class UtilityUsageController extends Controller
         $rentals = Rental::whereNull('end_date')
             ->with(['room', 'tenant'])
             ->get();
-            
-        $utilityRates = UtilityRate::orderBy('effective_date', 'desc')->get();
 
-        return view('admin.utility-usages.create', compact('rentals', 'utilityRates'));
+        return view('admin.utility-usages.create', compact('rentals'));
     }
 
     /**
@@ -52,111 +49,65 @@ class UtilityUsageController extends Controller
         $messages = [
             'rental_id.required' => 'Please select a rental unit',
             'rental_id.exists' => 'The selected rental unit is invalid',
-            'reading_date.required' => 'Please enter the reading date',
-            'reading_date.date' => 'The reading date must be a valid date',
-            'water_meter_start.required' => 'Please enter the water meter start reading',
-            'water_meter_start.numeric' => 'Water meter start reading must be a number',
-            'water_meter_start.min' => 'Water meter start reading cannot be negative',
-            'water_meter_end.required' => 'Please enter the water meter end reading',
-            'water_meter_end.numeric' => 'Water meter end reading must be a number',
-            'water_meter_end.min' => 'Water meter end reading cannot be negative',
-            'water_meter_end.gt' => 'Water meter end reading must be greater than start reading',
-            'electric_meter_start.required' => 'Please enter the electric meter start reading',
-            'electric_meter_start.numeric' => 'Electric meter start reading must be a number',
-            'electric_meter_start.min' => 'Electric meter start reading cannot be negative',
-            'electric_meter_end.required' => 'Please enter the electric meter end reading',
-            'electric_meter_end.numeric' => 'Electric meter end reading must be a number',
-            'electric_meter_end.min' => 'Electric meter end reading cannot be negative',
-            'electric_meter_end.gt' => 'Electric meter end reading must be greater than start reading',
-            'utility_rate_id.required' => 'Please select a utility rate',
-            'utility_rate_id.exists' => 'The selected utility rate is invalid',
-            '*.image' => 'The file must be an image (jpeg, png, bmp, gif, svg, or webp)',
-            '*.max' => 'The image size must not be greater than 2MB',
+            'water_usage.required' => 'Please enter the water usage',
+            'water_usage.numeric' => 'Water usage must be a number',
+            'water_usage.min' => 'Water usage cannot be negative',
+            'electric_usage.required' => 'Please enter the electric usage',
+            'electric_usage.numeric' => 'Electric usage must be a number',
+            'electric_usage.min' => 'Electric usage cannot be negative',
+            'reading_date.required' => 'Please select a reading date',
+            'reading_date.date' => 'Invalid reading date format',
         ];
 
         // First validate all inputs
         $validated = $request->validate([
-            'rental_id' => 'required|exists:rentals,id',
-            'reading_date' => 'required|date',
-            'water_meter_start' => 'required|numeric|min:0',
-            'water_meter_end' => 'required|numeric|min:0|gt:water_meter_start',
-            'electric_meter_start' => 'required|numeric|min:0',
-            'electric_meter_end' => 'required|numeric|min:0|gt:electric_meter_start',
-            'utility_rate_id' => 'required|exists:utility_rates,id',
-            'water_meter_image_start' => 'nullable|image|max:2048',
-            'water_meter_image_end' => 'nullable|image|max:2048',
-            'electric_meter_image_start' => 'nullable|image|max:2048',
-            'electric_meter_image_end' => 'nullable|image|max:2048',
-            'notes' => 'nullable|string|max:1000',
+            'rental_id' => ['required', 'exists:rentals,id'],
+            'water_usage' => ['required', 'numeric', 'min:0'],
+            'electric_usage' => ['required', 'numeric', 'min:0'],
+            'reading_date' => ['required', 'date'],
+            'notes' => ['nullable', 'string', 'max:1000'],
         ], $messages);
-
 
         try {
             DB::beginTransaction();
 
-            // Handle file uploads
-            if ($request->hasFile('water_meter_image_start')) {
-                $validated['water_meter_image_start'] = $request->file('water_meter_image_start')->store('meter-readings', 'public');
-            }
-            if ($request->hasFile('water_meter_image_end')) {
-                $validated['water_meter_image_end'] = $request->file('water_meter_image_end')->store('meter-readings', 'public');
-            }
-            if ($request->hasFile('electric_meter_image_start')) {
-                $validated['electric_meter_image_start'] = $request->file('electric_meter_image_start')->store('meter-readings', 'public');
-            }
-            if ($request->hasFile('electric_meter_image_end')) {
-                $validated['electric_meter_image_end'] = $request->file('electric_meter_image_end')->store('meter-readings', 'public');
-            }
-
-            // Set billing month from reading date
-            $readingDate = Carbon::parse($validated['reading_date']);
-            
             // Create the utility usage record
             $utilityUsage = UtilityUsage::create([
                 'rental_id' => $validated['rental_id'],
+                'water_usage' => $validated['water_usage'],
+                'electric_usage' => $validated['electric_usage'],
                 'reading_date' => $validated['reading_date'],
-                'billing_month' => $readingDate->format('Y-m'),
-                'water_meter_start' => $validated['water_meter_start'],
-                'water_meter_end' => $validated['water_meter_end'],
-                'electric_meter_start' => $validated['electric_meter_start'],
-                'electric_meter_end' => $validated['electric_meter_end'],
-                'utility_rate_id' => $validated['utility_rate_id'],
                 'notes' => $validated['notes'] ?? null,
-                'water_meter_image_start' => $validated['water_meter_image_start'] ?? null,
-                'water_meter_image_end' => $validated['water_meter_image_end'] ?? null,
-                'electric_meter_image_start' => $validated['electric_meter_image_start'] ?? null,
-                'electric_meter_image_end' => $validated['electric_meter_image_end'] ?? null
             ]);
 
-            // Get rental and rate information
+            // Get rental information
             $rental = Rental::with('room')->findOrFail($validated['rental_id']);
-            $utilityRate = UtilityRate::findOrFail($validated['utility_rate_id']);
             
-            // Calculate charges
-            $waterUsage = $validated['water_meter_end'] - $validated['water_meter_start'];
-            $electricUsage = $validated['electric_meter_end'] - $validated['electric_meter_start'];
-            
-            $waterAmount = $waterUsage * $utilityRate->water_rate;
-            $electricAmount = $electricUsage * $utilityRate->electric_rate;
+            // Calculate charges based on room rates
+            $waterAmount = $validated['water_usage'] * ($rental->room->water_rate ?? 0);
+            $electricAmount = $validated['electric_usage'] * ($rental->room->electric_rate ?? 0);
 
-            // Calculate the due date (10 days from reading date)
-            $dueDate = $readingDate->copy()->addDays(10);
-            
+            // Generate unique invoice number
+            $latestInvoice = Invoice::orderBy('id', 'desc')->first();
+            $nextInvoiceNumber = $latestInvoice ? intval(substr($latestInvoice->invoice_number, 3)) + 1 : 1;
+            $invoiceNumber = 'INV' . str_pad($nextInvoiceNumber, 8, '0', STR_PAD_LEFT);
+
+            dd($invoiceNumber);
             // Create invoice with all required fields
             $invoice = Invoice::create([
+                'invoice_number' => $invoiceNumber,
                 'rental_id' => $validated['rental_id'],
                 'utility_usage_id' => $utilityUsage->id,
-                'billing_date' => $readingDate,
-                'due_date' => $dueDate,
+                'billing_date' => now(),
+                'due_date' => now()->addDays(10),
                 'rent_amount' => $rental->room->monthly_rent ?? 0,
-                'other_charges' => $waterAmount + $electricAmount,
-                'other_charges_notes' => "Water Usage: {$waterUsage}m³ at ₱{$utilityRate->water_rate}/m³ = ₱{$waterAmount}, Electric Usage: {$electricUsage}kWh at ₱{$utilityRate->electric_rate}/kWh = ₱{$electricAmount}",
+                'total_water_fee' => $waterAmount,
+                'total_electric_fee' => $electricAmount,
                 'total_amount' => ($rental->room->monthly_rent ?? 0) + $waterAmount + $electricAmount,
-                'amount_paid' => 0,
-                'balance' => ($rental->room->monthly_rent ?? 0) + $waterAmount + $electricAmount,
                 'status' => 'pending',
-                'notes' => $validated['notes'] ?? null
+                'notes' => "Water Usage: {$validated['water_usage']}m³ at ₱{$rental->room->water_rate}/m³ = ₱{$waterAmount}\nElectric Usage: {$validated['electric_usage']}kWh at ₱{$rental->room->electric_rate}/kWh = ₱{$electricAmount}"
             ]);            
+
 
             // Send notification or email to tenant about the new invoice
             // TODO: Implement notification system
@@ -186,9 +137,8 @@ class UtilityUsageController extends Controller
      */
     public function edit(UtilityUsage $utilityUsage)
     {
-        $utilityUsage->load(['rental.room', 'rental.tenant', 'utilityRate']);
-        $utilityRates = UtilityRate::orderBy('effective_date', 'desc')->get();
-        return view('admin.utility-usages.edit', compact('utilityUsage', 'utilityRates'));
+        $utilityUsage->load(['rental.room', 'rental.tenant']);
+        return view('admin.utility-usages.edit', compact('utilityUsage'));
     }
 
     /**
@@ -197,88 +147,40 @@ class UtilityUsageController extends Controller
     public function update(Request $request, UtilityUsage $utilityUsage)
     {
         $validated = $request->validate([
+            'water_usage' => 'required|numeric|min:0',
+            'electric_usage' => 'required|numeric|min:0',
             'reading_date' => 'required|date',
-            'water_meter_start' => 'required|numeric|min:0',
-            'water_meter_end' => 'required|numeric|min:0|gt:water_meter_start',
-            'electric_meter_start' => 'required|numeric|min:0',
-            'electric_meter_end' => 'required|numeric|min:0|gt:electric_meter_start',
-            'utility_rate_id' => 'required|exists:utility_rates,id',
-            'water_meter_image_start' => 'nullable|image|max:2048',
-            'water_meter_image_end' => 'nullable|image|max:2048',
-            'electric_meter_image_start' => 'nullable|image|max:2048',
-            'electric_meter_image_end' => 'nullable|image|max:2048',
             'notes' => 'nullable|string|max:1000',
         ]);
 
         try {
             DB::beginTransaction();
 
-            // Handle file uploads
-            if ($request->hasFile('water_meter_image_start')) {
-                if ($utilityUsage->water_meter_image_start) {
-                    Storage::disk('public')->delete($utilityUsage->water_meter_image_start);
-                }
-                $validated['water_meter_image_start'] = $request->file('water_meter_image_start')->store('meter-readings', 'public');
-            }
-
-            if ($request->hasFile('water_meter_image_end')) {
-                if ($utilityUsage->water_meter_image_end) {
-                    Storage::disk('public')->delete($utilityUsage->water_meter_image_end);
-                }
-                $validated['water_meter_image_end'] = $request->file('water_meter_image_end')->store('meter-readings', 'public');
-            }
-
-            if ($request->hasFile('electric_meter_image_start')) {
-                if ($utilityUsage->electric_meter_image_start) {
-                    Storage::disk('public')->delete($utilityUsage->electric_meter_image_start);
-                }
-                $validated['electric_meter_image_start'] = $request->file('electric_meter_image_start')->store('meter-readings', 'public');
-            }
-
-            if ($request->hasFile('electric_meter_image_end')) {
-                if ($utilityUsage->electric_meter_image_end) {
-                    Storage::disk('public')->delete($utilityUsage->electric_meter_image_end);
-                }
-                $validated['electric_meter_image_end'] = $request->file('electric_meter_image_end')->store('meter-readings', 'public');
-            }
-
-            $utilityUsage->update($validated);
-            
-            DB::commit();
-            
-            return redirect()->route('utility-usages.index')
-                ->with('success', 'Utility usage updated successfully.');
-
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return back()->with('error', 'Failed to update utility usage: ' . $e->getMessage());
-        }
-
-        try {
-            DB::beginTransaction();
-
-            $rental = $utilityUsage->rental;
+            $rental = $utilityUsage->rental()->with('room')->first();
             
             // Update utility usage
             $utilityUsage->update([
                 'water_usage' => $validated['water_usage'],
                 'electric_usage' => $validated['electric_usage'],
+                'reading_date' => $validated['reading_date'],
+                'billing_month' => Carbon::parse($validated['reading_date'])->format('Y-m-01'),
+                'notes' => $validated['notes'] ?? null,
             ]);
 
-            // Recalculate invoice amounts
-            $waterAmount = $validated['water_usage'] * $utilityUsage->water_price;
-            $electricAmount = $validated['electric_usage'] * $utilityUsage->electric_price;
+            // Recalculate charges
+            $waterAmount = $validated['water_usage'] * ($rental->room->water_rate ?? 0);
+            $electricAmount = $validated['electric_usage'] * ($rental->room->electric_rate ?? 0);
 
             // Update associated invoice
-            $invoice = Invoice::where('rental_id', $rental->id)
-                ->where('billing_month', $utilityUsage->billing_month)
-                ->first();
+            $invoice = Invoice::where('utility_usage_id', $utilityUsage->id)->first();
 
             if ($invoice) {
+                $total = ($rental->room->monthly_rent ?? 0) + $waterAmount + $electricAmount;
                 $invoice->update([
-                    'water_usage_amount' => $waterAmount,
-                    'electric_usage_amount' => $electricAmount,
-                    'total' => $rental->room->monthly_rent + $waterAmount + $electricAmount,
+                    'total_water_fee' => $waterAmount,
+                    'total_electric_fee' => $electricAmount,
+                    'total_amount' => $total,
+                    'notes' => "Water Usage: {$validated['water_usage']}m³ at ₱{$rental->room->water_rate}/m³ = ₱{$waterAmount}\nElectric Usage: {$validated['electric_usage']}kWh at ₱{$rental->room->electric_rate}/kWh = ₱{$electricAmount}"
                 ]);
             }
 
@@ -286,7 +188,7 @@ class UtilityUsageController extends Controller
 
             return redirect()
                 ->route('utility-usages.index')
-                ->with('success', 'Utility usage updated successfully.');
+                ->with('success', 'Utility usage and invoice updated successfully.');
 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -301,43 +203,50 @@ class UtilityUsageController extends Controller
     {
         try {
             DB::beginTransaction();
-
-            $currentMonth = Carbon::now()->startOfMonth();
             
             // Get all active rentals
             $rentals = Rental::whereNull('end_date')
                 ->with('room')
                 ->get();
 
+            $billingDate = now();
             $count = 0;
+
             foreach ($rentals as $rental) {
                 // Check if utility usage already exists for this month
                 $exists = UtilityUsage::where('rental_id', $rental->id)
-                    ->where('billing_month', $currentMonth)
+                    ->whereMonth('billing_month', $billingDate->month)
+                    ->whereYear('billing_month', $billingDate->year)
                     ->exists();
 
                 if (!$exists) {
                     // Create utility usage with zero readings
-                    UtilityUsage::create([
+                    $utilityUsage = UtilityUsage::create([
                         'rental_id' => $rental->id,
-                        'billing_month' => $currentMonth,
                         'water_usage' => 0,
                         'electric_usage' => 0,
-                        'water_price' => $rental->room->water_fee,
-                        'electric_price' => $rental->room->electric_fee,
+                        'reading_date' => $billingDate,
+                        'billing_month' => $billingDate->format('Y-m-01'),
                     ]);
+
+                    // Generate unique invoice number for auto-generated invoice
+                    $latestInvoice = Invoice::orderBy('id', 'desc')->first();
+                    $nextInvoiceNumber = $latestInvoice ? intval(substr($latestInvoice->invoice_number, 3)) + 1 : 1;
+                    $invoiceNumber = 'INV' . str_pad($nextInvoiceNumber, 8, '0', STR_PAD_LEFT);
 
                     // Create invoice
                     Invoice::create([
+                        'invoice_number' => $invoiceNumber,
                         'rental_id' => $rental->id,
-                        'billing_month' => $currentMonth,
-                        'rent_amount' => $rental->room->monthly_rent,
-                        'water_fee' => $rental->room->water_fee,
-                        'electric_fee' => $rental->room->electric_fee,
-                        'water_usage_amount' => 0,
-                        'electric_usage_amount' => 0,
-                        'total' => $rental->room->monthly_rent,
-                        'status' => 'unpaid'
+                        'utility_usage_id' => $utilityUsage->id,
+                        'billing_date' => $billingDate,
+                        'due_date' => $billingDate->copy()->addDays(10),
+                        'rent_amount' => $rental->room->monthly_rent ?? 0,
+                        'total_water_fee' => 0,
+                        'total_electric_fee' => 0,
+                        'total_amount' => $rental->room->monthly_rent ?? 0,
+                        'status' => 'draft',
+                        'notes' => "Water Usage: 0m³ at ₱{$rental->room->water_rate}/m³ = ₱0\nElectric Usage: 0kWh at ₱{$rental->room->electric_rate}/kWh = ₱0"
                     ]);
 
                     $count++;
@@ -348,7 +257,7 @@ class UtilityUsageController extends Controller
 
             return redirect()
                 ->route('utility-usages.index')
-                ->with('success', "Generated {$count} new utility usage records for {$currentMonth->format('F Y')}");
+                ->with('success', "Generated {$count} new utility usage records for {$billingDate->format('F Y')}");
 
         } catch (\Exception $e) {
             DB::rollBack();

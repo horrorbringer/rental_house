@@ -12,6 +12,26 @@ class Invoice extends Model
     use HasFactory;
 
     /**
+     * Invoice status constants
+     */
+    public const STATUS_DRAFT = 'draft';
+    public const STATUS_PENDING = 'pending';
+    public const STATUS_PAID = 'paid';
+    public const STATUS_OVERDUE = 'overdue';
+    public const STATUS_CANCELLED = 'cancelled';
+
+    /**
+     * Available invoice statuses
+     */
+    public static $statuses = [
+        self::STATUS_DRAFT,
+        self::STATUS_PENDING,
+        self::STATUS_PAID,
+        self::STATUS_OVERDUE,
+        self::STATUS_CANCELLED,
+    ];
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<string>
@@ -23,12 +43,9 @@ class Invoice extends Model
         'billing_date',
         'due_date',
         'rent_amount',
-        'other_charges',
-        'other_charges_notes',
+        'total_water_fee',
+        'total_electric_fee',
         'total_amount',
-        'amount_paid',
-        'balance',
-        'paid_at',
         'status',
         'notes',
     ];

@@ -17,16 +17,9 @@ class UtilityUsage extends Model
      */
     protected $fillable = [
         'rental_id',
+        'water_usage',
+        'electric_usage',
         'reading_date',
-        'water_meter_start',
-        'water_meter_end',
-        'electric_meter_start',
-        'electric_meter_end',
-        'utility_rate_id',
-        'water_meter_image_start',
-        'water_meter_image_end',
-        'electric_meter_image_start',
-        'electric_meter_image_end',
         'notes',
     ];
 
@@ -38,33 +31,32 @@ class UtilityUsage extends Model
         return $this->belongsTo(Rental::class);
     }
 
-    public function utilityRate(): BelongsTo
-    {
-        return $this->belongsTo(UtilityRate::class);
-    }
-
     public function invoice()
     {
         return $this->hasOne(Invoice::class);
     }
 
-    public function getWaterUsageAttribute()
-    {
-        return $this->water_meter_end - $this->water_meter_start;
-    }
-
-    public function getElectricUsageAttribute()
-    {
-        return $this->electric_meter_end - $this->electric_meter_start;
-    }
-
+    /**
+     * Get the total water charge.
+     */
     public function getWaterChargeAttribute()
     {
-        return $this->water_usage * $this->utilityRate->water_rate;
+        return $this->water_usage * ($this->rental->room->water_fee ?? 0);
     }
 
+    /**
+     * Get the total electric charge.
+     */
     public function getElectricChargeAttribute()
     {
-        return $this->electric_usage * $this->utilityRate->electric_rate;
+        return $this->electric_usage * ($this->rental->room->electric_fee ?? 0);
+    }
+
+    /**
+     * Get the total utility charge.
+     */
+    public function getTotalChargeAttribute()
+    {
+        return $this->water_charge + $this->electric_charge;
     }
 }

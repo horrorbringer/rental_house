@@ -15,17 +15,20 @@
                     <!-- Room Selection -->
                     <div class="space-y-4">
                         <label for="room_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                            Room Information
+                            Room Information <span class="text-red-500">*</span>
                         </label>
                         <div class="relative">
                             <select id="room_id" name="room_id" required
                                 class="block w-full pl-10 border-gray-300 dark:border-gray-700 dark:bg-gray-900 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 pr-10">
                                 <option value="">Select a room</option>
                                 @foreach($rooms as $room)
-                                    <option value="{{ $room->id }}" {{ old('room_id') == $room->id ? 'selected' : '' }}>
+                                    <option value="{{ $room->id }}" 
+                                    data-monthly-rent="{{ $room->monthly_rent }}"
+                                    {{ old('room_id') == $room->id ? 'selected' : '' }}>
                                         Room {{ $room->room_number }} - {{ $room->building->name }} 
-                                        ({{ $room->active_tenants_count }}/{{ $room->capacity }} occupied) - 
-                                        ฿{{ number_format($room->monthly_rent) }}
+                                        (Monthly: ${{ number_format($room->monthly_rent, 2) }}, 
+                                        Water: ${{ number_format($room->water_fee, 2) }}/m³, 
+                                        Electric: ${{ number_format($room->electric_fee, 2) }}/kWh)
                                     </option>
                                 @endforeach
                             </select>
@@ -53,7 +56,7 @@
                     <!-- Tenant Selection -->
                     <div class="space-y-4">
                         <label for="tenant_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                            Tenant Information
+                            Tenant Information <span class="text-red-500">*</span>
                         </label>
                         <div class="relative">
                             <select id="tenant_id" name="tenant_id" required
@@ -86,10 +89,38 @@
                         @enderror
                     </div>
 
+                    {{-- Deposit Amount --}}
+                    <div class="space-y-4">
+                        <label for="deposit" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                            Deposit Amount
+                        </label>
+                        <div class="relative">
+                            <input type="number" id="deposit" name="deposit"
+                                value="{{ old('deposit') }}"
+                                step="0.01"
+                                min="0"
+                                placeholder="Enter deposit amount (optional)"
+                                class="block w-full pl-10 border-gray-300 dark:border-gray-700 dark:bg-gray-900 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m-3-3H9"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        @error('deposit')
+                            <p class="mt-1 text-sm text-red-600 dark:text-red-400 flex items-center">
+                                <svg class="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                </svg>
+                                {{ $message }}
+                            </p>
+                        @enderror
+                    </div>
+
                     <!-- Start Date -->
                     <div class="space-y-4">
                         <label for="start_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                            Start Date
+                            Start Date <span class="text-red-500">*</span>
                         </label>
                         <div class="relative">
                             <input type="date" id="start_date" name="start_date" required 

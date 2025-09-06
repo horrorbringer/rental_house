@@ -26,6 +26,7 @@ class TenantController extends Controller
             'name' => 'required|string|max:100',
             'phone' => 'required|string|max:20',
             'email' => 'nullable|email|max:100|unique:tenants',
+            'id_card_number' => 'required|string|max:20',
             'id_card_front' => 'required|image|max:2048',
             'id_card_back' => 'required|image|max:2048',
         ]);
@@ -50,6 +51,7 @@ class TenantController extends Controller
             'name' => $request->name,
             'phone' => $request->phone,
             'email' => $request->email,
+            'id_card_number' => $request->id_card_number,
             'id_card_front_path' => $request->file('id_card_front')?->store('id-cards', 'public'),
             'id_card_back_path' => $request->file('id_card_back')?->store('id-cards', 'public'),
         ]);
@@ -94,6 +96,7 @@ class TenantController extends Controller
             'name' => 'required|string|max:100',
             'phone' => 'required|string|max:20',
             'email' => 'nullable|email|max:100|unique:tenants',
+            'id_card_number' => 'required|string|max:20|unique:tenants',
             'id_card_front' => 'nullable|image|max:2048',
             'id_card_back' => 'nullable|image|max:2048',
         ]);
@@ -104,7 +107,7 @@ class TenantController extends Controller
                 ->withInput();
         }
 
-        $data = $request->only(['name', 'phone', 'email']);
+        $data = $request->only(['name', 'phone', 'email', 'id_card_number']);
 
         // Handle ID card front image upload
         if ($request->hasFile('id_card_front')) {
@@ -148,6 +151,7 @@ class TenantController extends Controller
             'name' => 'required|string|max:100',
             'phone' => 'required|string|max:20',
             'email' => 'nullable|email|max:100|unique:tenants,email,' . $tenant->id,
+            'id_card_number' => 'required|string|max:20|unique:tenants,id_card_number,',
             'id_card_front' => 'nullable|image|max:2048',
             'id_card_back' => 'nullable|image|max:2048',
         ]);
@@ -158,7 +162,7 @@ class TenantController extends Controller
                 ->withInput();
         }
 
-        $data = $request->only(['name', 'phone', 'email']);
+        $data = $request->only(['name', 'phone', 'email', 'id_card_number']);
 
         // Handle ID card front image upload
         if ($request->hasFile('id_card_front')) {

@@ -27,23 +27,11 @@ class RentalController extends Controller
      */
     public function create()
     {
-        // Load rooms with active rentals count and room details
-        $rooms = Room::select('rooms.*')
-            ->selectRaw('COUNT(DISTINCT rentals.id) as active_tenants_count')
-            ->leftJoin('rentals', function($join) {
-                $join->on('rooms.id', '=', 'rentals.room_id')
-                    ->whereNull('rentals.end_date');
-            })
-            ->with('building')  // Eager load building relationship
-            ->where('status', '!=', Room::STATUS_FULL)
-            ->groupBy('rooms.id')
-            ->havingRaw('active_tenants_count < rooms.capacity')
+        // Load available rooms
+        $rooms = Room::with('building')
+            ->where('status', 'vacant')
             ->orderBy('room_number')
-            ->get()
-            ->map(function ($room) {
-                $room->available_slots = $room->capacity - $room->active_tenants_count;
-                return $room;
-            });
+            ->get();
 
         // Load tenants that are not currently in any active rental
         $tenants = Tenant::select('tenants.*')
@@ -63,48 +51,40 @@ class RentalController extends Controller
      */
     public function store(Request $request)
     {
+        // Convert empty string deposit to null
+        if ($request->has('deposit') && $request->deposit === '') {
+            $request->merge(['deposit' => null]);
+        }
+
         $validated = $request->validate([
             'room_id' => 'required|exists:rooms,id',
             'tenant_id' => 'required|exists:tenants,id',
-            'start_date' => 'required|date',
+            'deposit' => 'nullable|numeric|min:0',
+            'start_date' => 'required|date|after_or_equal:today',
         ]);
 
         DB::beginTransaction();
         try {
-            // Check room capacity and current occupancy
-            $room = Room::select('rooms.*')
-                ->selectRaw('COUNT(DISTINCT rentals.id) as active_tenants_count')
-                ->leftJoin('rentals', function($join) {
-                    $join->on('rooms.id', '=', 'rentals.room_id')
-                        ->whereNull('rentals.end_date');
-                })
-                ->where('rooms.id', $validated['room_id'])
-                ->groupBy('rooms.id')
+            // Check if room is still vacant
+            $room = Room::where('id', $validated['room_id'])
+                ->where('status', 'vacant')
                 ->firstOrFail();
 
-            // Check if room is full or tenant is already in an active rental
-            if ($room->active_tenants_count >= $room->capacity) {
-                throw new \Exception('This room has reached its maximum capacity.');
-            }
-
             // Check if tenant already has an active rental
-            $tenantHasActiveRental = Rental::where('tenant_id', $validated['tenant_id'])
+            $hasActiveRental = Rental::where('tenant_id', $validated['tenant_id'])
                 ->whereNull('end_date')
                 ->exists();
 
-            if ($tenantHasActiveRental) {
-                throw new \Exception('This tenant already has an active rental.');
+            if ($hasActiveRental) {
+                throw new \Exception('Tenant already has an active rental.');
             }
 
-            // Create the rental
+            // Set initial rental status
+            $validated['status'] = 'active';
+            
+            // Create rental and update room status
             $rental = Rental::create($validated);
-
-            // Update room status if it reaches capacity
-            if ($room->active_tenants_count + 1 >= $room->capacity) {
-                $room->update(['status' => Room::STATUS_FULL]);
-            } elseif ($room->active_tenants_count + 1 > 0) {
-                $room->update(['status' => Room::STATUS_OCCUPIED]);
-            }
+            $room->update(['status' => 'occupied']);
 
             DB::commit();
 
@@ -150,6 +130,10 @@ class RentalController extends Controller
                 'after:' . $rental->start_date,
                 'before_or_equal:' . now()->addDays(1)->format('Y-m-d')
             ],
+            'status' => [
+                'required',
+                'in:' . implode(',', Rental::$statuses)
+            ],
         ]);
 
         DB::beginTransaction();
@@ -158,15 +142,15 @@ class RentalController extends Controller
             $rental->update($validated);
 
             // Get the room and its current active tenants count
+            // When ending a rental
             $room = $rental->room;
-            $activeTenantsCount = $room->rentals()->whereNull('end_date')->count();
+            $hasActiveRentals = $room->rentals()
+                ->whereNull('end_date')
+                ->exists();
 
-            // Update room status based on occupancy
-            if ($activeTenantsCount === 0) {
-                $room->update(['status' => Room::STATUS_VACANT]);
-            } elseif ($activeTenantsCount < $room->capacity) {
-                $room->update(['status' => Room::STATUS_OCCUPIED]);
-            }
+            $room->update([
+                'status' => $hasActiveRentals ? 'occupied' : 'vacant'
+            ]);
 
             DB::commit();
 

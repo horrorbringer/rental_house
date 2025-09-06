@@ -31,7 +31,6 @@ class Room extends Model
      */
     public const STATUS_VACANT = 'vacant';
     public const STATUS_OCCUPIED = 'occupied';
-    public const STATUS_FULL = 'full';
 
     /**
      * Available room statuses
@@ -39,7 +38,6 @@ class Room extends Model
     public static $statuses = [
         self::STATUS_VACANT,
         self::STATUS_OCCUPIED,
-        self::STATUS_FULL,
     ];
 
     /**
@@ -53,11 +51,19 @@ class Room extends Model
         'monthly_rent',
         'water_fee',
         'electric_fee',
-        'status',
-        'capacity',
         'image',
-        'width',
-        'length',
+        'status'
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'monthly_rent' => 'decimal:2',
+        'water_fee' => 'decimal:2',
+        'electric_fee' => 'decimal:2'
     ];
 
     /**

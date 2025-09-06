@@ -73,24 +73,24 @@
 
             <!-- Room Specifications -->
             <div class="mt-8">
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="border rounded-lg p-4">
-                        <h4 class="font-medium text-gray-900 dark:text-white font-hanuman">ទំហំបន្ទប់</h4>
-                        <p class="mt-1 text-gray-600 dark:text-gray-300">{{ $room->width }}m × {{ $room->length }}m</p>
+                                    <div class="grid grid-cols-2 gap-4">
+                        <div class="border rounded-lg p-4">
+                            <h4 class="font-medium text-gray-900 dark:text-white font-hanuman">ទំហំបន្ទប់</h4>
+                            <p class="mt-1 text-gray-600 dark:text-gray-300">{{ $room->width && $room->length ? $room->width . 'm × ' . $room->length . 'm' : 'មិនមានទិន្នន័យ' }}</p>
+                        </div>
+                        <div class="border rounded-lg p-4">
+                            <h4 class="font-medium text-gray-900 dark:text-white font-hanuman">ចំនួនមនុស្សអតិបរមា</h4>
+                            <p class="mt-1 text-gray-600 dark:text-gray-300">{{ $room->capacity }} នាក់</p>
+                        </div>
+                        <div class="border rounded-lg p-4">
+                            <h4 class="font-medium text-gray-900 dark:text-white font-hanuman">ថ្លៃទឹក</h4>
+                            <p class="mt-1 text-gray-600 dark:text-gray-300">${{ number_format($room->water_fee, 2) }}/m³</p>
+                        </div>
+                        <div class="border rounded-lg p-4">
+                            <h4 class="font-medium text-gray-900 dark:text-white font-hanuman">ថ្លៃភ្លើង</h4>
+                            <p class="mt-1 text-gray-600 dark:text-gray-300">${{ number_format($room->electric_fee, 2) }}/kWh</p>
+                        </div>
                     </div>
-                    <div class="border rounded-lg p-4">
-                        <h4 class="font-medium text-gray-900 dark:text-white font-hanuman">ចំនួនមនុស្សអតិបរមា</h4>
-                        <p class="mt-1 text-gray-600 dark:text-gray-300">{{ $room->capacity }} នាក់</p>
-                    </div>
-                    <div class="border rounded-lg p-4">
-                        <h4 class="font-medium text-gray-900 dark:text-white font-hanuman">ថ្លៃទឹក</h4>
-                        <p class="mt-1 text-gray-600 dark:text-gray-300">${{ number_format($room->water_fee, 2) }}/m³</p>
-                    </div>
-                    <div class="border rounded-lg p-4">
-                        <h4 class="font-medium text-gray-900 dark:text-white font-hanuman">ថ្លៃភ្លើង</h4>
-                        <p class="mt-1 text-gray-600 dark:text-gray-300">${{ number_format($room->electric_fee, 2) }}/kWh</p>
-                    </div>
-                </div>
             </div>
 
             <!-- Contact/Book Button -->

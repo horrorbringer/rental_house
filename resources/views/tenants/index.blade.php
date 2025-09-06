@@ -21,6 +21,7 @@
                     <th class="py-3.5 px-4 text-left text-sm font-semibold text-gray-200">Name</th>
                     <th class="py-3.5 px-4 text-left text-sm font-semibold text-gray-200">Phone</th>
                     <th class="py-3.5 px-4 text-left text-sm font-semibold text-gray-200">Email</th>
+                    <th class="py-3.5 px-4 text-left text-sm font-semibold text-gray-200">ID Card Number</th>
                     <th class="py-3.5 px-4 text-left text-sm font-semibold text-gray-200">Active Rentals</th>
                     <th class="py-3.5 px-4 text-left text-sm font-semibold text-gray-200">Actions</th>
                 </tr>
@@ -31,6 +32,7 @@
                     <td class="whitespace-nowrap py-4 px-4 text-sm text-gray-300">{{ $tenant->name }}</td>
                     <td class="whitespace-nowrap py-4 px-4 text-sm text-gray-300">{{ $tenant->phone }}</td>
                     <td class="whitespace-nowrap py-4 px-4 text-sm text-gray-300">{{ $tenant->email ?? '-' }}</td>
+                    <td class="whitespace-nowrap py-4 px-4 text-sm text-gray-300">{{ $tenant->id_card_number }}</td>
                     <td class="whitespace-nowrap py-4 px-4 text-sm text-gray-300">{{ $tenant->rentals_count }}</td>
                     <td class="whitespace-nowrap py-4 px-4 text-sm text-gray-300 flex gap-2">
                         <a href="{{ route('tenants.show', $tenant) }}"

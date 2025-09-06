@@ -41,6 +41,11 @@
                     <dd class="mt-1 text-sm text-gray-200">{{ $tenant->email ?? '-' }}</dd>
                 </div>
 
+                <div class="sm:col-span-1">
+                    <dt class="text-sm font-medium text-gray-400">ID Card Number</dt>
+                    <dd class="mt-1 text-sm text-gray-200">{{ $tenant->id_card_number }}</dd>
+                </div>
+
                 <div class="sm:col-span-2">
                     <dt class="text-sm font-medium text-gray-400">ID Cards</dt>
                     <dd class="mt-2 flex gap-4">

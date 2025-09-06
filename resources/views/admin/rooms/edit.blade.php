@@ -272,83 +272,9 @@
                                 {{ (old('status', $room->status) == App\Models\Room::STATUS_OCCUPIED) ? 'selected' : '' }}>
                                 Occupied
                             </option>
-                            <option value="{{ App\Models\Room::STATUS_FULL }}"
-                                {{ (old('status', $room->status) == App\Models\Room::STATUS_FULL) ? 'selected' : '' }}>
-                                Full
-                            </option>
                         </select>
                     </div>
                     @error('status')
-                        <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <!-- Room Size -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6">
-                    <!-- Width -->
-                    <div>
-                        <label for="width" class="block text-sm font-medium text-gray-300 mb-1">
-                            Width (meters)
-                            <span class="text-gray-400 text-xs ml-1">(Optional)</span>
-                        </label>
-                        <div class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16"/>
-                                </svg>
-                            </div>
-                            <input type="number" 
-                                   name="width" 
-                                   id="width" 
-                                   step="0.01" 
-                                   min="0"
-                                   value="{{ old('width', $room->width) }}"
-                                   class="pl-10 block w-full rounded-lg bg-gray-700 border-gray-600 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 text-white transition-all duration-200"
-                                   placeholder="e.g., 4.00">
-                        </div>
-                        @error('width')
-                            <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <!-- Length -->
-                    <div>
-                        <label for="length" class="block text-sm font-medium text-gray-300 mb-1">
-                            Length (meters)
-                            <span class="text-gray-400 text-xs ml-1">(Optional)</span>
-                        </label>
-                        <div class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 4v16M16 4v16"/>
-                                </svg>
-                            </div>
-                            <input type="number" 
-                                   name="length" 
-                                   id="length" 
-                                   step="0.01" 
-                                   min="0"
-                                   value="{{ old('length', $room->length) }}"
-                                   class="pl-10 block w-full rounded-lg bg-gray-700 border-gray-600 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 text-white transition-all duration-200"
-                                   placeholder="e.g., 6.00">
-                        </div>
-                        @error('length')
-                            <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
-                        @enderror
-                    </div>
-                </div>
-
-                <!-- Capacity -->
-                <div>
-                    <label for="capacity" class="block text-sm font-medium text-gray-300 mb-1">Room Capacity</label>
-                    <div class="relative">
-                        <input type="number" name="capacity" id="capacity" min="1" required
-                            value="{{ old('capacity', $room->capacity) }}"
-                            class="block w-full rounded-lg bg-gray-700 border-gray-600 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 text-white transition-all duration-200"
-                            placeholder="Enter room capacity">
-                            placeholder="Maximum number of occupants">
-                    </div>
-                    @error('capacity')
                         <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
                     @enderror
                 </div>
@@ -500,14 +426,14 @@
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M19 12H5M12 19l-7-7 7-7"/>
                     </svg>
-                    Back to Rooms
+                    Back
                 </a>
                 <button type="submit"
                     class="inline-flex items-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-indigo-500 transition-colors duration-200">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M5 13l4 4L19 7"/>
                     </svg>
-                    Update Room
+                    Update
                 </button>
             </div>
         </form>

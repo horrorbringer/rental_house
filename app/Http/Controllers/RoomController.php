@@ -30,6 +30,9 @@ class RoomController extends Controller
             $query->where('status', $request->status);
         }
 
+        // Eager load active rentals count for capacity check
+        $query->withCount('activeRentals');
+
         $rooms = $query->latest()->paginate(12);
         $buildings = Building::where('user_id', Auth::id())->get();
 
@@ -55,6 +58,9 @@ class RoomController extends Controller
         // Verify building belongs to user
         $building = Building::where('user_id', Auth::id())
             ->findOrFail($validated['building_id']);
+
+        // Set default status based on capacity
+        $validated['status'] = 'vacant';
 
         // Create new room instance
         $room = new Room($validated);

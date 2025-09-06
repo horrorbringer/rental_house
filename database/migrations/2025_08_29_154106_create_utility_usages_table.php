@@ -14,16 +14,9 @@ return new class extends Migration
         Schema::create('utility_usages', function (Blueprint $table) {
             $table->id();
             $table->foreignId('rental_id')->constrained()->onDelete('cascade');
+            $table->decimal('water_usage', 10, 2)->default(0);
+            $table->decimal('electric_usage', 10, 2)->default(0);
             $table->date('reading_date');
-            $table->decimal('water_meter_start', 10, 2)->default(0);
-            $table->decimal('water_meter_end', 10, 2)->default(0);
-            $table->decimal('electric_meter_start', 10, 2)->default(0);
-            $table->decimal('electric_meter_end', 10, 2)->default(0);
-            $table->foreignId('utility_rate_id')->constrained();
-            $table->string('water_meter_image_start')->nullable();
-            $table->string('water_meter_image_end')->nullable();
-            $table->string('electric_meter_image_start')->nullable();
-            $table->string('electric_meter_image_end')->nullable();
             $table->text('notes')->nullable();
             $table->timestamps();
         });

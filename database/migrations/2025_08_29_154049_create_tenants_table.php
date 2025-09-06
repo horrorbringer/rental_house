@@ -16,8 +16,9 @@ return new class extends Migration
             $table->string('name', 100);
             $table->string('phone', 20);
             $table->string('email', 100)->unique()->nullable();
-            $table->string('id_card_front_path')->nullable();
-            $table->string('id_card_back_path')->nullable();
+            $table->string('id_card_number', 50)->unique();
+            $table->string('id_card_front_path');
+            $table->string('id_card_back_path');
             $table->timestamps();
         });
     }

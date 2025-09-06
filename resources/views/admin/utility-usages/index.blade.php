@@ -94,25 +94,25 @@
                                     </td>
                                     <td class="px-6 py-4">
                                         <div class="font-medium">
-                                            {{ number_format($usage->water_meter_end - $usage->water_meter_start, 2) }} m³
+                                            {{ number_format($usage->water_usage, 2) }} m³
                                         </div>
                                         <div class="text-xs text-gray-500">
-                                            ₱{{ number_format(($usage->water_meter_end - $usage->water_meter_start) * $usage->utilityRate->water_rate, 2) }}
+                                            ₱{{ number_format($usage->water_usage * $usage->rental->room->water_rate, 2) }}
                                         </div>
                                     </td>
                                     <td class="px-6 py-4">
                                         <div class="font-medium">
-                                            {{ number_format($usage->electric_meter_end - $usage->electric_meter_start, 2) }} kWh
+                                            {{ number_format($usage->electric_usage, 2) }} kWh
                                         </div>
                                         <div class="text-xs text-gray-500">
-                                            ₱{{ number_format(($usage->electric_meter_end - $usage->electric_meter_start) * $usage->utilityRate->electric_rate, 2) }}
+                                            ₱{{ number_format($usage->electric_usage * $usage->rental->room->electric_rate, 2) }}
                                         </div>
                                     </td>
                                     <td class="px-6 py-4">
                                         <div class="text-lg font-bold text-gray-900 dark:text-white">
                                             ₱{{ number_format(
-                                                ($usage->water_meter_end - $usage->water_meter_start) * $usage->utilityRate->water_rate +
-                                                ($usage->electric_meter_end - $usage->electric_meter_start) * $usage->utilityRate->electric_rate, 
+                                                ($usage->water_usage * $usage->rental->room->water_rate) +
+                                                ($usage->electric_usage * $usage->rental->room->electric_rate), 
                                                 2
                                             ) }}
                                         </div>
