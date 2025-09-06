@@ -71,28 +71,39 @@ class UtilityUsageController extends Controller
         try {
             DB::beginTransaction();
 
-            // Create the utility usage record
+            // Get rental information with previous utility usage
+            $rental = Rental::with(['room', 'utilityUsages' => function($query) use ($validated) {
+                $query->where('reading_date', '<', $validated['reading_date'])
+                    ->orderBy('reading_date', 'desc');
+            }])->findOrFail($validated['rental_id']);
+
+            // Get previous readings
+            $previousUsage = $rental->utilityUsages()->first();
+            $previousWaterReading = $previousUsage ? $previousUsage->water_usage : 0;
+            $previousElectricReading = $previousUsage ? $previousUsage->electric_usage : 0;
+
+            // Calculate actual usage (current reading - previous reading)
+            $waterUsage = max(0, $validated['water_usage'] - $previousWaterReading);
+            $electricUsage = max(0, $validated['electric_usage'] - $previousElectricReading);
+
+            // Create the utility usage record with current meter readings
             $utilityUsage = UtilityUsage::create([
                 'rental_id' => $validated['rental_id'],
-                'water_usage' => $validated['water_usage'],
-                'electric_usage' => $validated['electric_usage'],
+                'water_usage' => $validated['water_usage'], // Store the actual meter reading
+                'electric_usage' => $validated['electric_usage'], // Store the actual meter reading
                 'reading_date' => $validated['reading_date'],
                 'notes' => $validated['notes'] ?? null,
             ]);
 
-            // Get rental information
-            $rental = Rental::with('room')->findOrFail($validated['rental_id']);
-            
-            // Calculate charges based on room rates
-            $waterAmount = $validated['water_usage'] * ($rental->room->water_rate ?? 0);
-            $electricAmount = $validated['electric_usage'] * ($rental->room->electric_rate ?? 0);
+            // Calculate charges based on actual usage and room rates
+            $waterAmount = $waterUsage * ($rental->room->water_fee ?? 0);
+            $electricAmount = $electricUsage * ($rental->room->electric_fee ?? 0);
 
             // Generate unique invoice number
             $latestInvoice = Invoice::orderBy('id', 'desc')->first();
             $nextInvoiceNumber = $latestInvoice ? intval(substr($latestInvoice->invoice_number, 3)) + 1 : 1;
             $invoiceNumber = 'INV' . str_pad($nextInvoiceNumber, 8, '0', STR_PAD_LEFT);
 
-            dd($invoiceNumber);
             // Create invoice with all required fields
             $invoice = Invoice::create([
                 'invoice_number' => $invoiceNumber,
@@ -105,9 +116,9 @@ class UtilityUsageController extends Controller
                 'total_electric_fee' => $electricAmount,
                 'total_amount' => ($rental->room->monthly_rent ?? 0) + $waterAmount + $electricAmount,
                 'status' => 'pending',
-                'notes' => "Water Usage: {$validated['water_usage']}m³ at ₱{$rental->room->water_rate}/m³ = ₱{$waterAmount}\nElectric Usage: {$validated['electric_usage']}kWh at ₱{$rental->room->electric_rate}/kWh = ₱{$electricAmount}"
+                'notes' => "Water Usage: {$waterUsage}m³ (Current: {$validated['water_usage']}m³ - Previous: {$previousWaterReading}m³) at ₱{$rental->room->water_fee}/m³ = ₱{$waterAmount} " .
+                          "Electric Usage: {$electricUsage}kWh (Current: {$validated['electric_usage']}kWh - Previous: {$previousElectricReading}kWh) at ₱{$rental->room->electric_rate}/kWh = ₱{$electricAmount}"
             ]);            
-
 
             // Send notification or email to tenant about the new invoice
             // TODO: Implement notification system

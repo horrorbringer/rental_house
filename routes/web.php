@@ -43,9 +43,6 @@ Route::middleware(['auth','verified'])->group(function () {
     Route::resource('rooms', RoomController::class);
     Route::resource('rentals', RentalController::class);
 
-    // Utilities management
-    Route::resource('utility-rates', UtilityRateController::class);
-
     // Tenant management
     Route::resource('tenants', TenantController::class);
 });
@@ -53,4 +50,3 @@ Route::middleware(['auth','verified'])->group(function () {
 // Include other route files
 require __DIR__.'/auth.php';
 require __DIR__.'/invoices.php';
-require __DIR__.'/payments.php';

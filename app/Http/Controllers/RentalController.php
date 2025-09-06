@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Rental;
 use App\Models\Room;
 use App\Models\Tenant;
+use App\Models\UtilityUsage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -61,6 +62,10 @@ class RentalController extends Controller
             'tenant_id' => 'required|exists:tenants,id',
             'deposit' => 'nullable|numeric|min:0',
             'start_date' => 'required|date|after_or_equal:today',
+            'water_usage' => 'required|numeric|min:0',
+            'electric_usage' => 'required|numeric|min:0',
+            'reading_date' => 'required|date|after_or_equal:start_date',
+            'notes' => 'nullable|string|max:255',
         ]);
 
         DB::beginTransaction();
@@ -83,7 +88,24 @@ class RentalController extends Controller
             $validated['status'] = 'active';
             
             // Create rental and update room status
-            $rental = Rental::create($validated);
+            $rental = Rental::create([
+                'room_id' => $validated['room_id'],
+                'tenant_id' => $validated['tenant_id'],
+                'deposit' => $validated['deposit'],
+                'start_date' => $validated['start_date'],
+                'status' => 'active'
+            ]);
+
+            // Create UtilityUsage record
+            UtilityUsage::create([
+                'rental_id' => $rental->id,
+                'water_usage' => $validated['water_usage'],
+                'electric_usage' => $validated['electric_usage'],
+                'reading_date' => $validated['reading_date'],
+                'notes' => $validated['notes'] ?? null,
+            ]);
+
+            // Update room status
             $room->update(['status' => 'occupied']);
 
             DB::commit();
