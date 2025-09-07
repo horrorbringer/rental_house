@@ -47,7 +47,7 @@ class Invoice extends Model
         'total_electric_fee',
         'total_amount',
         'status',
-        'notes',
+        'notes'
     ];
 
     protected $casts = [

@@ -78,7 +78,7 @@ class UtilityUsageController extends Controller
             }])->findOrFail($validated['rental_id']);
 
             // Get previous readings
-            $previousUsage = $rental->utilityUsages()->first();
+            $previousUsage = $rental->utilityUsages->first();
             $previousWaterReading = $previousUsage ? $previousUsage->water_usage : 0;
             $previousElectricReading = $previousUsage ? $previousUsage->electric_usage : 0;
 
@@ -99,14 +99,24 @@ class UtilityUsageController extends Controller
             $waterAmount = $waterUsage * ($rental->room->water_fee ?? 0);
             $electricAmount = $electricUsage * ($rental->room->electric_fee ?? 0);
 
-            // Generate unique invoice number
-            $latestInvoice = Invoice::orderBy('id', 'desc')->first();
-            $nextInvoiceNumber = $latestInvoice ? intval(substr($latestInvoice->invoice_number, 3)) + 1 : 1;
-            $invoiceNumber = 'INV' . str_pad($nextInvoiceNumber, 8, '0', STR_PAD_LEFT);
+            // Prepare the usage notes
+            $notes = sprintf(
+                "Water Usage: %.2fm³ (Current: %.2fm³ - Previous: %.2fm³) at ₱%.2f/m³ = ₱%.2f\n" .
+                "Electric Usage: %.2fkWh (Current: %.2fkWh - Previous: %.2fkWh) at ₱%.2f/kWh = ₱%.2f",
+                $waterUsage,
+                $validated['water_usage'],
+                $previousWaterReading,
+                $rental->room->water_rate ?? 0,
+                $waterAmount,
+                $electricUsage,
+                $validated['electric_usage'],
+                $previousElectricReading,
+                $rental->room->electric_rate ?? 0,
+                $electricAmount
+            );
 
-            // Create invoice with all required fields
+            // Create invoice - number will be generated automatically by the model
             $invoice = Invoice::create([
-                'invoice_number' => $invoiceNumber,
                 'rental_id' => $validated['rental_id'],
                 'utility_usage_id' => $utilityUsage->id,
                 'billing_date' => now(),
@@ -114,10 +124,8 @@ class UtilityUsageController extends Controller
                 'rent_amount' => $rental->room->monthly_rent ?? 0,
                 'total_water_fee' => $waterAmount,
                 'total_electric_fee' => $electricAmount,
-                'total_amount' => ($rental->room->monthly_rent ?? 0) + $waterAmount + $electricAmount,
-                'status' => 'pending',
-                'notes' => "Water Usage: {$waterUsage}m³ (Current: {$validated['water_usage']}m³ - Previous: {$previousWaterReading}m³) at ₱{$rental->room->water_fee}/m³ = ₱{$waterAmount} " .
-                          "Electric Usage: {$electricUsage}kWh (Current: {$validated['electric_usage']}kWh - Previous: {$previousElectricReading}kWh) at ₱{$rental->room->electric_rate}/kWh = ₱{$electricAmount}"
+                'status' => Invoice::STATUS_PENDING,
+                'notes' => $notes
             ]);            
 
             // Send notification or email to tenant about the new invoice
@@ -240,14 +248,8 @@ class UtilityUsageController extends Controller
                         'billing_month' => $billingDate->format('Y-m-01'),
                     ]);
 
-                    // Generate unique invoice number for auto-generated invoice
-                    $latestInvoice = Invoice::orderBy('id', 'desc')->first();
-                    $nextInvoiceNumber = $latestInvoice ? intval(substr($latestInvoice->invoice_number, 3)) + 1 : 1;
-                    $invoiceNumber = 'INV' . str_pad($nextInvoiceNumber, 8, '0', STR_PAD_LEFT);
-
-                    // Create invoice
+                    // Create invoice with zero utility charges
                     Invoice::create([
-                        'invoice_number' => $invoiceNumber,
                         'rental_id' => $rental->id,
                         'utility_usage_id' => $utilityUsage->id,
                         'billing_date' => $billingDate,
@@ -255,9 +257,13 @@ class UtilityUsageController extends Controller
                         'rent_amount' => $rental->room->monthly_rent ?? 0,
                         'total_water_fee' => 0,
                         'total_electric_fee' => 0,
-                        'total_amount' => $rental->room->monthly_rent ?? 0,
-                        'status' => 'draft',
-                        'notes' => "Water Usage: 0m³ at ₱{$rental->room->water_rate}/m³ = ₱0\nElectric Usage: 0kWh at ₱{$rental->room->electric_rate}/kWh = ₱0"
+                        'status' => Invoice::STATUS_DRAFT,
+                        'notes' => sprintf(
+                            "Water Usage: 0m³ at ₱%.2f/m³ = ₱0\n" .
+                            "Electric Usage: 0kWh at ₱%.2f/kWh = ₱0",
+                            $rental->room->water_rate ?? 0,
+                            $rental->room->electric_rate ?? 0
+                        )
                     ]);
 
                     $count++;

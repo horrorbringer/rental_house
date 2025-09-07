@@ -1,16 +1,13 @@
 <?php
 
 use App\Http\Controllers\BuildingController;
-use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\RoomPublicController;
 use App\Http\Controllers\RentalController;
 use App\Http\Controllers\TenantController;
-use App\Http\Controllers\UtilityRateController;
 use App\Http\Controllers\UtilityUsageController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 

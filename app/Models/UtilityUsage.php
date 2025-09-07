@@ -17,9 +17,7 @@ class UtilityUsage extends Model
      */
     protected $fillable = [
         'rental_id',
-        'rental_id',
         'water_usage',
-        'rental_id',
         'electric_usage',
         'reading_date',
         'notes',
