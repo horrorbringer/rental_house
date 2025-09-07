@@ -116,7 +116,7 @@ class UtilityUsageController extends Controller
             );
 
             // Create invoice - number will be generated automatically by the model
-            $invoice = Invoice::create([
+            Invoice::create([
                 'rental_id' => $validated['rental_id'],
                 'utility_usage_id' => $utilityUsage->id,
                 'billing_date' => now(),
@@ -124,6 +124,7 @@ class UtilityUsageController extends Controller
                 'rent_amount' => $rental->room->monthly_rent ?? 0,
                 'total_water_fee' => $waterAmount,
                 'total_electric_fee' => $electricAmount,
+                'total_amount' => ($rental->room->monthly_rent ?? 0) + $waterAmount + $electricAmount,
                 'status' => Invoice::STATUS_PENDING,
                 'notes' => $notes
             ]);            
