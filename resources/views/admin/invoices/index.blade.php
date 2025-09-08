@@ -71,7 +71,7 @@
                                 </dt>
                                 <dd class="flex items-baseline">
                                     <div class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
-                                        ₱{{ number_format($totalOutstanding, 2) }}
+                                        ៛{{ number_format($stats['total_pending'], 2) }}
                                     </div>
                                 </dd>
                             </dl>
@@ -92,11 +92,14 @@
                         <div class="ml-5 w-0 flex-1">
                             <dl>
                                 <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
-                                    Overdue Invoices
+                                    Overdue
                                 </dt>
                                 <dd class="flex items-baseline">
                                     <div class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
-                                        {{ $overdueCount }}
+                                        {{ $stats['overdue_count'] }}
+                                    </div>
+                                    <div class="ml-2 text-sm font-medium text-gray-500">
+                                        ៛{{ number_format($stats['total_overdue'], 2) }}
                                     </div>
                                 </dd>
                             </dl>
@@ -105,7 +108,7 @@
                 </div>
             </div>
 
-            <!-- Paid This Month -->
+            <!-- Paid -->
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
                 <div class="p-5">
                     <div class="flex items-center">
@@ -117,11 +120,11 @@
                         <div class="ml-5 w-0 flex-1">
                             <dl>
                                 <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
-                                    Paid This Month
+                                    Paid
                                 </dt>
                                 <dd class="flex items-baseline">
                                     <div class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
-                                        ₱{{ number_format($paidThisMonth, 2) }}
+                                        ៛{{ number_format($stats['total_paid'], 2) }}
                                     </div>
                                 </dd>
                             </dl>
@@ -130,7 +133,7 @@
                 </div>
             </div>
 
-            <!-- Collection Rate -->
+            <!-- This Month -->
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
                 <div class="p-5">
                     <div class="flex items-center">
@@ -142,11 +145,11 @@
                         <div class="ml-5 w-0 flex-1">
                             <dl>
                                 <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
-                                    Collection Rate
+                                    This Month
                                 </dt>
                                 <dd class="flex items-baseline">
                                     <div class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
-                                        {{ number_format($collectionRate, 1) }}%
+                                        ៛{{ number_format($stats['total_this_month'], 2) }}
                                     </div>
                                 </dd>
                             </dl>
@@ -156,125 +159,202 @@
             </div>
         </div>
 
-        <div class="bg-white dark:bg-gray-800 shadow-xl sm:rounded-lg overflow-hidden">
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                    <thead class="bg-gray-50 dark:bg-gray-700">
-                        <tr>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                Invoice Details
-                            </th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                Tenant & Room
-                            </th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                Amount & Status
-                            </th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                Due Date
-                            </th>
-                            <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                Actions
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                        @forelse($invoices as $invoice)
-                            <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
-                                <td class="px-6 py-4">
-                                    <div class="text-sm font-medium text-gray-900 dark:text-white">
-                                        {{ $invoice->invoice_number }}
-                                    </div>
-                                    <div class="text-sm text-gray-500 dark:text-gray-400">
-                                        {{ $invoice->billing_date->format('M j, Y') }}
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <div class="text-sm font-medium text-gray-900 dark:text-white">
-                                        {{ $invoice->rental->tenant->name }}
-                                    </div>
-                                    <div class="text-sm text-gray-500 dark:text-gray-400">
-                                        {{ $invoice->rental->room->building->name }} - Room {{ $invoice->rental->room->room_number }}
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <div class="text-sm font-medium text-gray-900 dark:text-white">
-                                        ₱{{ number_format($invoice->total_amount, 2) }}
-                                    </div>
-                                    <div class="mt-1">
-                                        @if($invoice->status === 'paid')
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100">
-                                                Paid
-                                            </span>
-                                            @if($invoice->paid_at)
-                                            <span class="block text-xs text-gray-500 dark:text-gray-400 mt-1">
-                                                on {{ $invoice->paid_at->format('M d, Y') }}
-                                            </span>
-                                            @endif
-                                        @elseif($invoice->status === 'overdue')
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100">
-                                                Overdue
-                                            </span>
-                                        @else
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100">
-                                                Pending
-                                            </span>
-                                        @endif
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <div class="text-sm text-gray-900 dark:text-white">
-                                        {{ $invoice->due_date->format('M j, Y') }}
-                                    </div>
-                                    <div class="text-sm text-gray-500 dark:text-gray-400">
-                                        {{ $invoice->due_date->diffForHumans() }}
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 text-right space-x-3">
-                                    <div class="flex justify-end space-x-2">
-                                        @if($invoice->status !== 'paid')
-                                            <a href="{{ route('payments.create', $invoice) }}" 
-                                               class="inline-flex items-center px-3 py-1.5 bg-green-100 text-green-700 rounded-md hover:bg-green-200 dark:bg-green-700 dark:text-green-100 dark:hover:bg-green-600">
-                                                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>
-                                                </svg>
-                                                Pay
-                                            </a>
-                                        @endif
-                                        <a href="{{ route('invoices.show', $invoice) }}" 
-                                           class="inline-flex items-center px-3 py-1.5 bg-indigo-100 text-indigo-700 rounded-md hover:bg-indigo-200 dark:bg-indigo-700 dark:text-indigo-100 dark:hover:bg-indigo-600">
-                                            <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                                            </svg>
-                                            View
-                                        </a>
-                                        <a href="{{ route('invoices.download-pdf', $invoice) }}" 
-                                           class="inline-flex items-center px-3 py-1.5 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600">
-                                            <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                                            </svg>
-                                            PDF
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                        @empty
+        <!-- Table view (hidden on mobile) -->
+        <div class="hidden md:block">
+            <div class="bg-white dark:bg-gray-800 shadow-xl sm:rounded-lg overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                        <thead class="bg-gray-50 dark:bg-gray-700">
                             <tr>
-                                <td colspan="5" class="px-6 py-8 text-center text-gray-500 dark:text-gray-400">
-                                    <div class="flex flex-col items-center justify-center">
-                                        <svg class="w-12 h-12 mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                                        </svg>
-                                        <p class="text-xl font-medium">No invoices found</p>
-                                        <p class="mt-1 text-sm text-gray-500">Get started by creating a new invoice</p>
-                                    </div>
-                                </td>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                    Invoice Details
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                    Tenant & Room
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                    Amount & Status
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                    Due Date
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                    Actions
+                                </th>
                             </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                            @forelse($invoices as $invoice)
+                                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                                    <td class="px-6 py-4">
+                                        <div class="text-sm font-medium text-gray-900 dark:text-white">
+                                            {{ $invoice->invoice_number }}
+                                        </div>
+                                        <div class="text-sm text-gray-500 dark:text-gray-400">
+                                            {{ $invoice->billing_date->format('M j, Y') }}
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="text-sm font-medium text-gray-900 dark:text-white">
+                                            {{ $invoice->rental->tenant->name }}
+                                        </div>
+                                        <div class="text-sm text-gray-500 dark:text-gray-400">
+                                            {{ $invoice->rental->room->building->name }} - Room {{ $invoice->rental->room->room_number }}
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="text-sm font-medium text-gray-900 dark:text-white">
+                                            ៛{{ number_format($invoice->total_amount, 2) }}
+                                        </div>
+                                        <div class="mt-1">
+                                            @if($invoice->status === 'paid')
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100">
+                                                    Paid
+                                                </span>
+                                            @elseif($invoice->status === 'overdue')
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100">
+                                                    Overdue
+                                                </span>
+                                            @else
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100">
+                                                    Pending
+                                                </span>
+                                            @endif
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="text-sm text-gray-900 dark:text-white">
+                                            {{ $invoice->due_date->format('M j, Y') }}
+                                        </div>
+                                        <div class="text-sm text-gray-500 dark:text-gray-400">
+                                            {{ $invoice->due_date->diffForHumans() }}
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 text-right space-x-3">
+                                        <div class="flex justify-end space-x-2">
+                                            <a href="{{ route('invoices.show', $invoice) }}" 
+                                               class="inline-flex items-center px-3 py-1.5 bg-indigo-100 text-indigo-700 rounded-md hover:bg-indigo-200 dark:bg-indigo-700 dark:text-indigo-100 dark:hover:bg-indigo-600">
+                                                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                                </svg>
+                                                View
+                                            </a>
+                                            <a href="{{ route('invoices.download-pdf', $invoice) }}" 
+                                               class="inline-flex items-center px-3 py-1.5 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600">
+                                                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                                </svg>
+                                                PDF
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="5" class="px-6 py-8 text-center text-gray-500 dark:text-gray-400">
+                                        <div class="flex flex-col items-center justify-center">
+                                            <svg class="w-12 h-12 mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                            </svg>
+                                            <p class="text-xl font-medium">No invoices found</p>
+                                            <p class="mt-1 text-sm text-gray-500">Get started by creating a new invoice</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
             </div>
+        </div>
+
+        <!-- Card view (visible only on mobile) -->
+        <div class="md:hidden space-y-4">
+            @forelse($invoices as $invoice)
+                <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg overflow-hidden">
+                    <div class="p-4">
+                        <!-- Status Badge -->
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="text-sm font-medium text-gray-900 dark:text-white">
+                                {{ $invoice->invoice_number }}
+                            </div>
+                            <div>
+                                @if($invoice->status === 'paid')
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100">
+                                        Paid
+                                    </span>
+                                @elseif($invoice->status === 'overdue')
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100">
+                                        Overdue
+                                    </span>
+                                @else
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100">
+                                        Pending
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <!-- Tenant & Room Info -->
+                        <div class="mb-4">
+                            <div class="text-sm font-medium text-gray-900 dark:text-white">
+                                {{ $invoice->rental->tenant->name }}
+                            </div>
+                            <div class="text-sm text-gray-500 dark:text-gray-400">
+                                {{ $invoice->rental->room->building->name }} - Room {{ $invoice->rental->room->room_number }}
+                            </div>
+                        </div>
+
+                        <!-- Amount & Dates -->
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <div class="text-xs text-gray-500 dark:text-gray-400">Amount</div>
+                                <div class="text-sm font-medium text-gray-900 dark:text-white">
+                                    ៛{{ number_format($invoice->total_amount, 2) }}
+                                </div>
+                            </div>
+                            <div>
+                                <div class="text-xs text-gray-500 dark:text-gray-400">Due Date</div>
+                                <div class="text-sm font-medium text-gray-900 dark:text-white">
+                                    {{ $invoice->due_date->format('M j, Y') }}
+                                </div>
+                                <div class="text-xs text-gray-500 dark:text-gray-400">
+                                    {{ $invoice->due_date->diffForHumans() }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="flex justify-end space-x-2 border-t dark:border-gray-700 pt-4">
+                            <a href="{{ route('invoices.show', $invoice) }}" 
+                               class="flex-1 inline-flex justify-center items-center px-3 py-2 bg-indigo-100 text-indigo-700 rounded-md hover:bg-indigo-200 dark:bg-indigo-700 dark:text-indigo-100 dark:hover:bg-indigo-600">
+                                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                </svg>
+                                View
+                            </a>
+                            <a href="{{ route('invoices.download-pdf', $invoice) }}" 
+                               class="flex-1 inline-flex justify-center items-center px-3 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600">
+                                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                </svg>
+                                PDF
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            @empty
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 text-center">
+                    <svg class="w-12 h-12 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                    <p class="text-xl font-medium">No invoices found</p>
+                    <p class="mt-1 text-sm text-gray-500">Get started by creating a new invoice</p>
+                </div>
+            @endforelse
+        </div>
             
             <div class="p-4 border-t border-gray-200 dark:border-gray-700">
                 {{ $invoices->links() }}

@@ -118,7 +118,7 @@
     <nav class="mb-6 flex" aria-label="Breadcrumb">
         <ol class="inline-flex items-center space-x-1 md:space-x-3">
             <li class="inline-flex items-center">
-                <a href="{{ route('dashboard') }}" class="text-gray-400 hover:text-white inline-flex items-center">
+                <a href="{{ route('dashboard') }}" class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white inline-flex items-center transition-colors duration-200">
                     <svg class="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                         <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
                     </svg>
@@ -127,14 +127,14 @@
             </li>
             <li>
                 <div class="flex items-center">
-                    <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
-                    <a href="{{ route('rooms.index') }}" class="text-gray-400 hover:text-white ml-1 md:ml-2">Rooms</a>
+                    <svg class="w-6 h-6 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+                    <a href="{{ route('rooms.index') }}" class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white ml-1 md:ml-2 transition-colors duration-200">Rooms</a>
                 </div>
             </li>
             <li aria-current="page">
                 <div class="flex items-center">
-                    <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
-                    <span class="text-gray-500 ml-1 md:ml-2">{{ isset($room) ? 'Edit Room' : 'Create Room' }}</span>
+                    <svg class="w-6 h-6 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+                    <span class="text-gray-700 dark:text-gray-300 ml-1 md:ml-2">{{ isset($room) ? 'Edit Room' : 'Create Room' }}</span>
                 </div>
             </li>
         </ol>
@@ -155,27 +155,27 @@
         </div>
     </div>
 
-    <div class="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl shadow-lg p-8">
+    <div class="bg-white dark:bg-gray-800/50 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg p-8">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
             <!-- Room Information Section -->
             <div class="space-y-2">
-                <h3 class="text-lg font-semibold text-white flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-indigo-500 dark:text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
                     Room Information
                 </h3>
-                <p class="text-sm text-gray-400">Basic details about the room and its location</p>
+                <p class="text-sm text-gray-500 dark:text-gray-400">Basic details about the room and its location</p>
             </div>
             <!-- Pricing Section -->
             <div class="space-y-2">
-                <h3 class="text-lg font-semibold text-white flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-indigo-500 dark:text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
                     Pricing & Fees
                 </h3>
-                <p class="text-sm text-gray-400">Set the room's rental rates and utility fees</p>
+                <p class="text-sm text-gray-500 dark:text-gray-400">Set the room's rental rates and utility fees</p>
             </div>
         </div>
 
@@ -431,7 +431,7 @@
                             </div>
                             <input type="number" name="water_fee" id="water_fee" required step="0.01"
                                 value="{{ old('water_fee', $room->water_fee ?? '') }}"
-                                class="pl-8 block w-full h-10 rounded-lg bg-gray-700/50 border border-gray-600 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 text-white transition-all duration-200"
+                                class="pl-8 block w-full h-10 rounded-lg bg-white dark:bg-gray-700/50 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 transition-all duration-200"
                                 placeholder="0.00">
                         </div>
                         @error('water_fee')
@@ -441,17 +441,17 @@
 
                     <!-- Electric Fee -->
                     <div class="relative group">
-                        <label for="electric_fee" class="block text-sm font-medium text-gray-300 mb-1">
+                        <label for="electric_fee" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                             Electric Fee
                             <span class="text-red-500">*</span>
                         </label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <span class="text-gray-400">₱</span>
+                                <span class="text-gray-500 dark:text-gray-400">₱</span>
                             </div>
                             <input type="number" name="electric_fee" id="electric_fee" required step="0.01"
                                 value="{{ old('electric_fee', $room->electric_fee ?? '') }}"
-                                class="pl-8 block w-full h-10 rounded-lg bg-gray-700/50 border border-gray-600 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 text-white transition-all duration-200"
+                                class="pl-8 block w-full h-10 rounded-lg bg-white dark:bg-gray-700/50 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 transition-all duration-200"
                                 placeholder="0.00">
                         </div>
                         @error('electric_fee')
@@ -462,13 +462,13 @@
 
 
                 <div class="relative group" x-data="{ preview: '{{ isset($room) && $room->image ? asset('storage/' . $room->image) : '' }}' }">
-                    <label for="image" class="block text-sm font-medium text-gray-300 mb-1">
+                    <label for="image" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                         Main Room Image
                         <span class="text-red-500">*</span>
                     </label>
                     <div class="relative space-y-4">
                         <template x-if="preview">
-                            <div class="relative w-full h-40 rounded-lg overflow-hidden bg-gray-700">
+                            <div class="relative w-full h-40 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-700">
                                 <img :src="preview" class="w-full h-full object-cover" alt="Main room image preview">
                                 <button type="button" @click="preview = ''; $refs.mainImage.value = ''"
                                     class="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
@@ -484,7 +484,7 @@
                             x-ref="mainImage"
                             accept="image/jpeg,image/png,image/webp"
                             @change="const file = $event.target.files[0]; if (file) preview = URL.createObjectURL(file)"
-                            class="block w-full py-2 px-3 rounded-lg bg-gray-700/50 border border-gray-600 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 text-white transition-all duration-200 file:mr-4 file:py-1 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-indigo-600 file:text-white hover:file:bg-indigo-700">
+                            class="block w-full py-2 px-3 rounded-lg bg-white dark:bg-gray-700/50 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 transition-all duration-200 file:mr-4 file:py-1 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-indigo-600 file:text-white hover:file:bg-indigo-700">
                     </div>
                     @error('image')
                         <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
@@ -494,9 +494,9 @@
             </div>
 
             <!-- Form Actions -->
-            <div class="flex items-center justify-between pt-8 mt-8 border-t border-gray-700">
+            <div class="flex items-center justify-between pt-8 mt-8 border-t border-gray-200 dark:border-gray-700">
                 <a href="{{ route('rooms.index') }}"
-                    class="inline-flex items-center px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm font-medium text-gray-200 hover:bg-gray-600 hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-indigo-500 transition-colors duration-200">
+                    class="inline-flex items-center px-4 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 hover:border-gray-400 dark:hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 dark:focus:ring-offset-gray-800 focus:ring-indigo-500 transition-colors duration-200">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                     </svg>
@@ -504,14 +504,14 @@
                 </a>
                 <div class="flex gap-4">
                     <button type="reset"
-                        class="inline-flex items-center px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-sm font-medium text-gray-200 hover:bg-gray-600 hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-indigo-500 transition-colors duration-200">
+                        class="inline-flex items-center px-4 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 hover:border-gray-400 dark:hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 dark:focus:ring-offset-gray-800 focus:ring-indigo-500 transition-colors duration-200">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                         </svg>
                         Reset
                     </button>
                     <button type="submit"
-                        class="inline-flex items-center px-6 py-2 bg-indigo-600 border border-transparent rounded-lg text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-indigo-500 transition-colors duration-200">
+                        class="inline-flex items-center px-6 py-2 bg-indigo-600 border border-transparent rounded-lg text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 dark:focus:ring-offset-gray-800 focus:ring-indigo-500 transition-colors duration-200">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                         </svg>

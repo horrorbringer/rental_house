@@ -54,6 +54,8 @@ class Invoice extends Model
         'billing_date' => 'date',
         'due_date' => 'date',
         'rent_amount' => 'decimal:2',
+        'total_water_fee' => 'decimal:2',
+        'total_electric_fee' => 'decimal:2',
         'total_amount' => 'decimal:2',
     ];
 
@@ -64,6 +66,16 @@ class Invoice extends Model
         static::creating(function ($invoice) {
             if (!$invoice->invoice_number) {
                 $invoice->invoice_number = 'INV-' . date('Ym') . '-' . str_pad(static::count() + 1, 4, '0', STR_PAD_LEFT);
+            }
+
+            // Set total amount
+            $invoice->total_amount = $invoice->rent_amount + $invoice->total_water_fee + $invoice->total_electric_fee;
+        });
+
+        static::updating(function ($invoice) {
+            // Update overdue status
+            if ($invoice->due_date < now() && $invoice->status === self::STATUS_PENDING) {
+                $invoice->status = self::STATUS_OVERDUE;
             }
         });
     }

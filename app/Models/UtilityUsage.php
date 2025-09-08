@@ -23,6 +23,13 @@ class UtilityUsage extends Model
         'notes',
     ];
 
+    protected $casts = [
+        'reading_date' => 'date',
+        'water_usage' => 'decimal:2',
+        'electric_usage' => 'decimal:2',
+        'is_initial_reading' => 'boolean',
+    ];
+
     /**
      * Get the rental that the utility usage belongs to.
      */

@@ -119,13 +119,6 @@
                             <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-gray-100">
                                 Invoice Summary
                             </h3>
-                            <a href="{{ route('payments.create', $invoice) }}" 
-                                class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>
-                                    </svg>
-                                    Record Payment
-                            </a>
                         </div>
                         <div class="border-t border-gray-200 dark:border-gray-700">
                             <dl>

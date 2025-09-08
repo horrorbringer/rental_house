@@ -83,14 +83,6 @@ class Room extends Model
     }
 
     /**
-     * Get the latest rental for the room.
-     */
-    public function rental(): HasOne
-    {
-        return $this->hasOne(Rental::class)->latest();
-    }
-
-    /**
      * Get all rentals associated with the room.
      */
     public function rentals(): HasMany
@@ -108,11 +100,30 @@ class Room extends Model
 
     /**
      * Active rentals (where end_date is null).
-     * This is used when checking capacity and available slots.
+     * This is used for co-tenants in a shared room.
      */
     public function activeRentals(): HasMany
     {
-        return $this->hasMany(Rental::class)->whereNull('end_date');
+        return $this->hasMany(Rental::class)
+            ->whereNull('end_date')
+            ->with('tenant'); // Include tenant info for displaying co-tenants
+    }
+
+    /**
+     * Get the latest utility usage through any active rental.
+     */
+    public function latestUtilityUsage(): HasOne
+    {
+        return $this->hasOneThrough(
+            UtilityUsage::class,
+            Rental::class,
+            'room_id',
+            'rental_id',
+            'id',
+            'id'
+        )->whereHas('rental', function($query) {
+            $query->whereNull('end_date');
+        })->latest('utility_usages.created_at');
     }
 
     /**
@@ -132,5 +143,6 @@ class Room extends Model
             ->whereNull('end_date')
             ->latestOfMany();
     }
+
 }
 

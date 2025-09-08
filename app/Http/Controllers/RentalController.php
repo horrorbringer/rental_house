@@ -29,10 +29,14 @@ class RentalController extends Controller
     public function create()
     {
         // Load available rooms
-        $rooms = Room::with('building')
-            ->where('status', 'vacant')
-            ->orderBy('room_number')
-            ->get();
+        $rooms = Room::with(['latestRental', 'building'])
+            ->get()
+            ->map(function($room) {
+                // Add a flag to indicate if room has active rental
+                $room->hasActiveRental = $room->latestRental && !$room->latestRental->end_date;
+                return $room;
+            })
+            ->sortBy('room_number');
 
         // Load tenants that are not currently in any active rental
         $tenants = Tenant::select('tenants.*')
@@ -43,7 +47,7 @@ class RentalController extends Controller
             ->whereNull('rentals.id')
             ->orderBy('tenants.name')
             ->get();
-        
+
         return view('admin.rentals.create', compact('rooms', 'tenants'));
     }
 
@@ -57,22 +61,66 @@ class RentalController extends Controller
             $request->merge(['deposit' => null]);
         }
 
-        $validated = $request->validate([
+                $messages = [
+            'room_id.required' => 'Please select a room',
+            'room_id.exists' => 'The selected room is invalid',
+            'tenant_id.required' => 'Please select a tenant',
+            'tenant_id.exists' => 'The selected tenant is invalid',
+            'deposit.numeric' => 'Deposit amount must be a number',
+            'deposit.min' => 'Deposit amount cannot be negative',
+            'start_date.required' => 'Please select a start date',
+            'start_date.date' => 'Invalid start date format',
+            'start_date.after_or_equal' => 'Start date must be today or a future date',
+            'water_usage.required' => 'Please enter the initial water meter reading',
+            'water_usage.numeric' => 'Water meter reading must be a number',
+            'water_usage.min' => 'Water meter reading cannot be negative',
+            'electric_usage.required' => 'Please enter the initial electric meter reading',
+            'electric_usage.numeric' => 'Electric meter reading must be a number',
+            'electric_usage.min' => 'Electric meter reading cannot be negative',
+            'reading_date.required' => 'Please select the meter reading date',
+            'reading_date.date' => 'Invalid reading date format',
+            'notes.max' => 'Notes cannot exceed 255 characters',
+        ];
+
+        // Check if room has active rentals first
+        $room = Room::with(['activeRentals'])->findOrFail($request->room_id);
+        $hasActiveRentals = $room->activeRentals->count() > 0;
+
+        // Build validation rules based on whether room has active rentals
+        $rules = [
             'room_id' => 'required|exists:rooms,id',
             'tenant_id' => 'required|exists:tenants,id',
             'deposit' => 'nullable|numeric|min:0',
             'start_date' => 'required|date|after_or_equal:today',
-            'water_usage' => 'required|numeric|min:0',
-            'electric_usage' => 'required|numeric|min:0',
-            'reading_date' => 'required|date|after_or_equal:start_date',
             'notes' => 'nullable|string|max:255',
-        ]);
+        ];
+
+        // Only require utility readings for first tenant
+        if (!$hasActiveRentals) {
+            $rules['water_usage'] = 'required|numeric|min:0';
+            $rules['electric_usage'] = 'required|numeric|min:0';
+            $rules['reading_date'] = [
+                'required',
+                'date',
+                function ($attribute, $value, $fail) use ($request) {
+                    $readingDate = \Carbon\Carbon::parse($value);
+                    $startDate = \Carbon\Carbon::parse($request->start_date);
+                    
+                    // Reading date must be within the same month as start date
+                    if ($readingDate->format('Y-m') !== $startDate->format('Y-m')) {
+                        $fail('Initial meter reading date must be in the same month as the rental start date (' . $startDate->format('F Y') . ').');
+                    }
+                }
+            ];
+        }
+
+        $validated = $request->validate($rules, $messages);
 
         DB::beginTransaction();
         try {
-            // Check if room is still vacant
-            $room = Room::where('id', $validated['room_id'])
-                ->where('status', 'vacant')
+            // Get the room and its current active rentals
+            $room = Room::with(['latestRental', 'activeRentals'])
+                ->where('id', $validated['room_id'])
                 ->firstOrFail();
 
             // Check if tenant already has an active rental
@@ -81,13 +129,13 @@ class RentalController extends Controller
                 ->exists();
 
             if ($hasActiveRental) {
-                throw new \Exception('Tenant already has an active rental.');
+                throw new \Exception('This tenant already has an active rental. One tenant cannot rent multiple rooms.');
             }
 
             // Set initial rental status
             $validated['status'] = 'active';
             
-            // Create rental and update room status
+            // Create rental
             $rental = Rental::create([
                 'room_id' => $validated['room_id'],
                 'tenant_id' => $validated['tenant_id'],
@@ -96,14 +144,21 @@ class RentalController extends Controller
                 'status' => 'active'
             ]);
 
-            // Create UtilityUsage record
-            UtilityUsage::create([
-                'rental_id' => $rental->id,
-                'water_usage' => $validated['water_usage'],
-                'electric_usage' => $validated['electric_usage'],
-                'reading_date' => $validated['reading_date'],
-                'notes' => $validated['notes'] ?? null,
-            ]);
+            // Only create utility usage for first tenant
+            if (!$hasActiveRentals && isset($validated['water_usage'])) {
+                UtilityUsage::create([
+                    'rental_id' => $rental->id,
+                    'water_usage' => $validated['water_usage'],
+                    'electric_usage' => $validated['electric_usage'],
+                    'reading_date' => $validated['reading_date'],
+                    'notes' => sprintf(
+                        "Initial meter readings - Water: %.2f m³, Electric: %.2f kWh",
+                        $validated['water_usage'],
+                        $validated['electric_usage']
+                    ),
+                    'is_initial_reading' => true,
+                ]);
+            }
 
             // Update room status
             $room->update(['status' => 'occupied']);

@@ -22,10 +22,6 @@ class DashboardController extends Controller
             $query->where('status', 'active');
         })->sum('monthly_rent');
 
-        $totalRevenuePaid = Payment::whereYear('created_at', $now->year)
-            ->whereMonth('created_at', $now->month)
-            ->sum('amount');
-
         // Get building and room stats
         $buildings = Building::count();
         $rooms = Room::count();
@@ -53,30 +49,13 @@ class DashboardController extends Controller
                 ];
             });
 
-        // Get recent payments
-        $recentPayments = Payment::with('invoice.rental.tenant')
-            ->latest()
-            ->take(5)
-            ->get()
-            ->map(function($payment) {
-                return [
-                    'type' => 'payment',
-                    'message' => "Payment received",
-                    'subject' => $payment->invoice->rental->tenant->name,
-                    'amount' => $payment->amount,
-                    'date' => $payment->created_at,
-                    'color' => 'green'
-                ];
-            });
-
-        // Merge and sort activities
-        $recentActivities = $recentTenants->concat($recentPayments)
+        // Sort activities
+        $recentActivities = $recentTenants
             ->sortByDesc('date')
             ->take(5);
 
         // Get upcoming rent payments
         $upcomingPayments = Invoice::with('rental.tenant', 'rental.room')
-            ->whereNull('paid_at')
             ->where('due_date', '>=', now())
             ->orderBy('due_date')
             ->take(5)
@@ -84,7 +63,6 @@ class DashboardController extends Controller
 
         return view('admin.dashboard', compact(
             'monthlyRevenue',
-            'totalRevenuePaid',
             'buildings',
             'rooms',
             'vacantRooms',

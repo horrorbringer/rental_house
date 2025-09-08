@@ -112,7 +112,7 @@
             <div class="flex space-x-3">
                 <a href="{{ route('buildings.edit', $building) }}"
                     class="bg-indigo-500 hover:bg-indigo-600 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200">
-                    Edit Building
+                    Edit 
                 </a>
                 <form action="{{ route('buildings.destroy', $building) }}" method="POST" class="inline">
                     @csrf
@@ -120,7 +120,7 @@
                     <button type="submit"
                         class="bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200"
                         onclick="return confirm('Are you sure you want to delete this building?')">
-                        Delete Building
+                        Delete 
                     </button>
                 </form>
             </div>

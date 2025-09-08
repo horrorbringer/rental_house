@@ -118,9 +118,18 @@
                             </div>
                             <div class="relative">
                                 <input type="date" name="reading_date" id="reading_date" autocomplete="off"
-                                    class="peer mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-gray-900 dark:text-gray-100 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-all"
-                                    value="{{ old('reading_date', date('Y-m-d')) }}" required>
-                                <label for="reading_date" class="absolute left-3 top-0 text-xs text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 px-1 transition-all peer-focus:-top-4 peer-focus:text-indigo-600 peer-focus:dark:text-indigo-400">Reading Date</label>
+                                    class="peer mt-1 block w-full rounded-md @error('reading_date') border-red-300 dark:border-red-600 text-red-900 dark:text-red-100 placeholder-red-300 focus:border-red-500 focus:ring-red-500 @else border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:border-indigo-500 focus:ring-indigo-500 @enderror shadow-sm transition-all"
+                                    value="{{ old('reading_date', now()->format('Y-m-d')) }}" required>
+                                <label for="reading_date" class="absolute left-3 top-0 text-xs @error('reading_date') text-red-500 dark:text-red-400 @else text-gray-500 dark:text-gray-400 @enderror bg-white dark:bg-gray-800 px-1 transition-all peer-focus:-top-4 peer-focus:text-indigo-600 peer-focus:dark:text-indigo-400">Reading Date</label>
+                                <div class="mt-2 flex items-center text-sm text-gray-500 dark:text-gray-400">
+                                    <svg class="h-5 w-5 mr-1.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                    Must be at least one month after rental start date
+                                </div>
+                                @error('reading_date')
+                                    <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                                @enderror
                             </div>
                         </div>
 
@@ -189,4 +198,64 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const rentalSelect = document.getElementById('rental_id');
+    const readingDateInput = document.getElementById('reading_date');
+    
+    // Store rental and reading information
+    const rentalData = {
+        @foreach($rentals as $rental)
+            {{ $rental->id }}: {
+                startDate: '{{ $rental->start_date->format('Y-m-d') }}',
+                lastReading: @php
+                    $lastReading = $rental->utilityUsages()->latest('reading_date')->first();
+                @endphp
+                @if($lastReading)
+                    '{{ $lastReading->reading_date->format('Y-m-d') }}'
+                @else
+                    null
+                @endif
+            },
+        @endforeach
+    };
+    
+    function updateMinReadingDate() {
+        const rentalId = rentalSelect.value;
+        if (rentalId && rentalData[rentalId]) {
+            const data = rentalData[rentalId];
+            let baseDate;
+            
+            if (data.lastReading) {
+                // Use last reading date as base
+                baseDate = new Date(data.lastReading);
+                readingDateInput.title = `Next reading must be at least one month after the previous reading (${new Date(data.lastReading).toLocaleDateString()})`;
+            } else {
+                // Use rental start date as base for first reading
+                baseDate = new Date(data.startDate);
+                readingDateInput.title = `First reading must be at least one month after rental start (${new Date(data.startDate).toLocaleDateString()})`;
+            }
+            
+            // Set min date to one month after the base date
+            const minDate = new Date(baseDate.setMonth(baseDate.getMonth() + 1));
+            readingDateInput.min = minDate.toISOString().split('T')[0];
+            
+            // If current value is before min date, update it
+            if (readingDateInput.value < readingDateInput.min) {
+                readingDateInput.value = readingDateInput.min;
+            }
+        } else {
+            readingDateInput.min = '';
+            readingDateInput.title = '';
+        }
+    }
+    
+    rentalSelect.addEventListener('change', updateMinReadingDate);
+    updateMinReadingDate(); // Run on page load
+});
+</script>
+@endpush
+
 @endsection

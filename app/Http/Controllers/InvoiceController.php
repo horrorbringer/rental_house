@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Invoice;
-use App\Models\Payment;
 use App\Models\Rental;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class InvoiceController extends Controller
 {
@@ -15,7 +15,7 @@ class InvoiceController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Invoice::with(['rental.room.building', 'rental.tenant', 'payments'])
+        $query = Invoice::with(['rental.room.building', 'rental.tenant'])
             ->when($request->status, function ($query, $status) {
                 return $query->where('status', $status);
             })
@@ -33,35 +33,27 @@ class InvoiceController extends Controller
                     'this_week' => $query->whereBetween('billing_date', [now()->startOfWeek(), now()->endOfWeek()]),
                     'this_month' => $query->whereMonth('billing_date', now()->month)->whereYear('billing_date', now()->year),
                     'last_month' => $query->whereMonth('billing_date', now()->subMonth()->month)->whereYear('billing_date', now()->subMonth()->year),
+                    'overdue' => $query->where('status', Invoice::STATUS_OVERDUE),
                     default => $query
                 };
             })
             ->latest('billing_date');
 
-        // Calculate statistics
-        $totalOutstanding = Invoice::where('status', '!=', 'paid')->sum('balance');
-        $overdueCount = Invoice::where('status', 'overdue')->count();
-        $paidThisMonth = Payment::whereMonth('payment_date', now()->month)
-            ->whereYear('payment_date', now()->year)
-            ->sum('amount');
-        
-        // Calculate collection rate (paid amount vs total amount for current month)
-        $thisMonthTotal = Invoice::whereMonth('billing_date', now()->month)
-            ->whereYear('billing_date', now()->year)
-            ->sum('total_amount');
-        $collectionRate = $thisMonthTotal > 0 
-            ? ($paidThisMonth / $thisMonthTotal) * 100 
-            : 0;
-
         $invoices = $query->paginate(10)->withQueryString();
 
-        return view('admin.invoices.index', compact(
-            'invoices',
-            'totalOutstanding',
-            'overdueCount',
-            'paidThisMonth',
-            'collectionRate'
-        ));
+        // Calculate statistics
+        $stats = [
+            'total_pending' => DB::selectOne('SELECT SUM(total_amount) as total FROM invoices WHERE status = ?', [Invoice::STATUS_PENDING])->total ?? 0,
+            'total_overdue' => DB::selectOne('SELECT SUM(total_amount) as total FROM invoices WHERE status = ?', [Invoice::STATUS_OVERDUE])->total ?? 0,
+            'total_paid' => DB::selectOne('SELECT SUM(total_amount) as total FROM invoices WHERE status = ?', [Invoice::STATUS_PAID])->total ?? 0,
+            'overdue_count' => DB::selectOne('SELECT COUNT(*) as count FROM invoices WHERE status = ?', [Invoice::STATUS_OVERDUE])->count ?? 0,
+            'total_this_month' => DB::selectOne(
+                'SELECT SUM(total_amount) as total FROM invoices WHERE MONTH(billing_date) = ? AND YEAR(billing_date) = ?',
+                [now()->month, now()->year]
+            )->total ?? 0
+        ];
+
+        return view('admin.invoices.index', compact('invoices', 'stats'));
     }
 
     /**
@@ -69,7 +61,7 @@ class InvoiceController extends Controller
      */
     public function show(Invoice $invoice)
     {
-        $invoice->load(['rental.room', 'rental.tenant', 'utilityUsage.utilityRate', 'payments']);
+        $invoice->load(['rental.room', 'rental.tenant', 'utilityUsage']);
         return view('admin.invoices.show', compact('invoice'));
     }
 
@@ -107,22 +99,42 @@ class InvoiceController extends Controller
         
         $validated = $request->validate([
             'rent_amount' => 'required|numeric|min:0',
-            'water_fee' => 'required|numeric|min:0',
-            'electric_fee' => 'required|numeric|min:0',
-            'water_usage_amount' => 'required|numeric|min:0',
-            'electric_usage_amount' => 'required|numeric|min:0',
+            'total_water_fee' => 'required|numeric|min:0',
+            'total_electric_fee' => 'required|numeric|min:0',
+            'status' => 'required|in:' . implode(',', Invoice::$statuses),
+            'notes' => 'nullable|string|max:1000',
+            'due_date' => 'required|date|after_or_equal:billing_date'
         ]);
 
-        $validated['total'] = $validated['rent_amount'] + 
-                            $validated['water_fee'] + 
-                            $validated['electric_fee'] +
-                            $validated['water_usage_amount'] + 
-                            $validated['electric_usage_amount'];
+        // Calculate total amount
+        $validated['total_amount'] = $validated['rent_amount'] + 
+                                   $validated['total_water_fee'] + 
+                                   $validated['total_electric_fee'];
 
-        $invoice->update($validated);
+        try {
+            DB::beginTransaction();
 
-        return redirect()->route('invoices.show', $invoice)
-                        ->with('success', 'Invoice updated successfully.');
+            $invoice->update($validated);
+
+            // If status changed to paid, log the payment
+            if ($validated['status'] === Invoice::STATUS_PAID && $invoice->getOriginal('status') !== Invoice::STATUS_PAID) {
+                $invoice->payments()->create([
+                    'amount' => $invoice->total_amount,
+                    'payment_date' => now(),
+                    'payment_method' => 'cash',
+                    'notes' => 'Payment marked as completed from invoice edit'
+                ]);
+            }
+
+            DB::commit();
+            return redirect()->route('invoices.show', $invoice)
+                           ->with('success', 'Invoice updated successfully.');
+                           
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->withInput()
+                        ->with('error', 'Failed to update invoice: ' . $e->getMessage());
+        }
     }
 
     /**
