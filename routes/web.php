@@ -12,7 +12,7 @@ use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 
 // Public Routes
-Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
+Route::get('/w', [WelcomeController::class, 'index'])->name('welcome');
 
 // Public Room Routes (must be defined before the admin routes to prevent conflicts)
 Route::prefix('public/rooms')->group(function () {
@@ -25,7 +25,7 @@ Route::prefix('public/rooms')->group(function () {
 // Admin Routes
 Route::middleware(['auth','verified'])->group(function () {
 
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::resource('utility-usages', UtilityUsageController::class);
     Route::post('utility-usages/generate-monthly', [UtilityUsageController::class, 'generateMonthly'])

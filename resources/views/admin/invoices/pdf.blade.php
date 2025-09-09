@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="km">
 <head>
-    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>បង្កាន់ដៃបង់ប្រាក់</title>
     <style>
         @font-face {
@@ -19,39 +19,56 @@
 
         @page {
             size: A5 landscape;
-            margin: 15px;
+            margin: 12px;
+        }
+        * {
+            font-family: 'Hanuman' !important;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
         body {
-            font-family: 'Hanuman', sans-serif;
-            font-size: 12px;
-            line-height: 1.5;
+            font-family: 'Hanuman' !important;
+            font-size: 11px;
+            line-height: 1.4;
             color: #000;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
         .header {
             text-align: center;
             position: relative;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .logo {
             position: absolute;
             left: 0;
-            top: 0;
-            width: 120px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 80px;
+            height: auto;
         }
         h2 {
-            font-size: 30px;
+            font-size: 24px;
             margin: 0;
+            font-weight: bold;
         }
         table {
             border-collapse: collapse;
             width: 100%;
+            margin-bottom: 6px;
         }
         td, th {
-            padding: 3px;
+            padding: 4px;
             border: 1px solid #000;
+            line-height: 1.3;
         }
         .no-border td {
             border: none;
+            padding: 2px 4px;
         }
         .text-center {
             text-align: center;
@@ -60,16 +77,25 @@
             text-align: right;
         }
         .footer {
-            margin-top: 25px;
+            margin-top: 15px;
             text-align: center;
         }
         .qr {
-            width: 80px;
-            height: 80px;
+            width: 60px;
+            height: 60px;
+            margin-bottom: 4px;
         }
         .col4 {
             width: 40%;
             border: none;
+        }
+        .signature-text {
+            font-size: 10px;
+            margin-top: 2px;
+        }
+        th {
+            background-color: #f8f8f8;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -124,20 +150,20 @@
             <tr>
                 <td class="text-center">២</td>
                 <td>ថ្លៃទឹក</td>
-                <td class="text-center">{{ $invoice->utilityUsage->water_meter_start }}</td>
-                <td class="text-center">{{ $invoice->utilityUsage->water_meter_end }}</td>
-                <td class="text-center">{{ $invoice->utilityUsage->water_meter_end - $invoice->utilityUsage->water_meter_start }}</td>
-                <td class="text-right">${{ number_format($invoice->utilityUsage->utilityRate->water_rate, 2) }}</td>
-                <td class="text-right">${{ number_format(($invoice->utilityUsage->water_meter_end - $invoice->utilityUsage->water_meter_start) * $invoice->utilityUsage->utilityRate->water_rate, 2) }}</td>
+                <td class="text-center">-</td>
+                <td class="text-center">-</td>
+                <td class="text-center">{{ $invoice->utilityUsage->water_usage }}</td>
+                <td class="text-right">${{ number_format($invoice->rental->room->water_fee, 2) }}</td>
+                <td class="text-right">${{ number_format($invoice->total_water_fee, 2) }}</td>
             </tr>
             <tr>
                 <td class="text-center">៣</td>
                 <td>ថ្លៃភ្លើង</td>
-                <td class="text-center">{{ $invoice->utilityUsage->electric_meter_start }}</td>
-                <td class="text-center">{{ $invoice->utilityUsage->electric_meter_end }}</td>
-                <td class="text-center">{{ $invoice->utilityUsage->electric_meter_end - $invoice->utilityUsage->electric_meter_start }}</td>
-                <td class="text-right">${{ number_format($invoice->utilityUsage->utilityRate->electric_rate, 2) }}</td>
-                <td class="text-right">${{ number_format(($invoice->utilityUsage->electric_meter_end - $invoice->utilityUsage->electric_meter_start) * $invoice->utilityUsage->utilityRate->electric_rate, 2) }}</td>
+                <td class="text-center">-</td>
+                <td class="text-center">-</td>
+                <td class="text-center">{{ $invoice->utilityUsage->electric_usage }}</td>
+                <td class="text-right">${{ number_format($invoice->rental->room->electric_fee, 2) }}</td>
+                <td class="text-right">${{ number_format($invoice->total_electric_fee, 2) }}</td>
             </tr>
             <tr>
                 <td colspan="4" class="col4"></td>
@@ -151,13 +177,13 @@
     <div class="footer">
         <table class="no-border" style="width: 100%;">
             <tr>
-                <td style="width: 50%; text-center">
-                    <img src="https://via.placeholder.com/80x80?text=QR1" class="qr"><br>
-                    <p>ហត្ថលេខាអ្នកទទួល</p>
+                <td style="width: 50%; text-align: center;">
+                    <img src="https://via.placeholder.com/60x60?text=QR1" class="qr">
+                    <p class="signature-text">ហត្ថលេខាអ្នកទទួល</p>
                 </td>
-                <td style="width: 50%; text-center">
-                    <img src="https://via.placeholder.com/80x80?text=QR2" class="qr"><br>
-                    <p>ហត្ថលេខាអ្នកបង់</p>
+                <td style="width: 50%; text-align: center;">
+                    <img src="https://via.placeholder.com/60x60?text=QR2" class="qr">
+                    <p class="signature-text">ហត្ថលេខាអ្នកបង់</p>
                 </td>
             </tr>
         </table>
