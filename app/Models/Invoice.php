@@ -12,21 +12,73 @@ class Invoice extends Model
     use HasFactory;
 
     /**
+     * Invoice status constants
+     */
+    public const STATUS_DRAFT = 'draft';
+    public const STATUS_PENDING = 'pending';
+    public const STATUS_PAID = 'paid';
+    public const STATUS_OVERDUE = 'overdue';
+    public const STATUS_CANCELLED = 'cancelled';
+
+    /**
+     * Available invoice statuses
+     */
+    public static $statuses = [
+        self::STATUS_DRAFT,
+        self::STATUS_PENDING,
+        self::STATUS_PAID,
+        self::STATUS_OVERDUE,
+        self::STATUS_CANCELLED,
+    ];
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<string>
      */
     protected $fillable = [
+        'invoice_number',
         'rental_id',
-        'billing_month',
+        'utility_usage_id',
+        'billing_date',
+        'due_date',
         'rent_amount',
-        'water_fee',
-        'electric_fee',
-        'water_usage_amount',
-        'electric_usage_amount',
-        'total',
+        'total_water_fee',
+        'total_electric_fee',
+        'total_amount',
         'status',
+        'notes'
     ];
+
+    protected $casts = [
+        'billing_date' => 'date',
+        'due_date' => 'date',
+        'rent_amount' => 'decimal:2',
+        'total_water_fee' => 'decimal:2',
+        'total_electric_fee' => 'decimal:2',
+        'total_amount' => 'decimal:2',
+    ];
+
+    protected static function boot()
+    {
+        parent::boot();
+        
+        static::creating(function ($invoice) {
+            if (!$invoice->invoice_number) {
+                $invoice->invoice_number = 'INV-' . date('Ym') . '-' . str_pad(static::count() + 1, 4, '0', STR_PAD_LEFT);
+            }
+
+            // Set total amount
+            $invoice->total_amount = $invoice->rent_amount + $invoice->total_water_fee + $invoice->total_electric_fee;
+        });
+
+        static::updating(function ($invoice) {
+            // Update overdue status
+            if ($invoice->due_date < now() && $invoice->status === self::STATUS_PENDING) {
+                $invoice->status = self::STATUS_OVERDUE;
+            }
+        });
+    }
 
     /**
      * Get the rental that the invoice belongs to.
@@ -36,11 +88,9 @@ class Invoice extends Model
         return $this->belongsTo(Rental::class);
     }
 
-    /**
-     * Get the payments for the invoice.
-     */
-    public function payments(): HasMany
+    public function utilityUsage(): BelongsTo
     {
-        return $this->hasMany(Payment::class);
+        return $this->belongsTo(UtilityUsage::class);
     }
+
 }

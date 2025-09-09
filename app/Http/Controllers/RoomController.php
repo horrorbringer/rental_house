@@ -8,6 +8,7 @@ use App\Models\Building;
 use App\Models\Room;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class RoomController extends Controller
 {
@@ -29,10 +30,13 @@ class RoomController extends Controller
             $query->where('status', $request->status);
         }
 
+        // Eager load active rentals count for capacity check
+        $query->withCount('activeRentals');
+
         $rooms = $query->latest()->paginate(12);
         $buildings = Building::where('user_id', Auth::id())->get();
 
-        return view('rooms.index', compact('rooms', 'buildings'));
+        return view('admin.rooms.index', compact('rooms', 'buildings'));
     }
 
     /**
@@ -41,7 +45,7 @@ class RoomController extends Controller
     public function create()
     {
         $buildings = Building::where('user_id', Auth::id())->get();
-        return view('rooms.create', compact('buildings'));
+        return view('admin.rooms.create', compact('buildings'));
     }
 
     /**
@@ -55,8 +59,27 @@ class RoomController extends Controller
         $building = Building::where('user_id', Auth::id())
             ->findOrFail($validated['building_id']);
 
+        // Set default status based on capacity
+        $validated['status'] = 'vacant';
+
+        // Create new room instance
         $room = new Room($validated);
+
+        // Handle main image upload
+        if ($image = $request->validated()['image'] ?? null) {
+            $path = Storage::disk('public')->put('rooms', $image);
+            $room->image = $path;
+        }
+
         $room->save();
+
+        // Handle additional images
+        if ($additionalImages = $request->validated()['additional_images'] ?? null) {
+            foreach ($additionalImages as $image) {
+                $path = Storage::disk('public')->put('rooms', $image);
+                $room->images()->create(['path' => $path]);
+            }
+        }
 
         return redirect()->route('rooms.index')
             ->with('success', 'Room created successfully.');
@@ -67,8 +90,15 @@ class RoomController extends Controller
      */
     public function show(Room $room)
     {
-        $room->load(['building', 'rental.tenant', 'rental.utilityUsage']);
-        return view('rooms.show', compact('room'));
+        // $room->load(['building', 'rental.tenant', 'rental.utilityUsages']);
+
+        $room->load([
+        'building',
+        'activeRentals.tenant',
+        'activeRentals.utilityUsages'
+        ])->loadCount('activeRentals');
+
+        return view('admin.rooms.show', compact('room'));
     }
 
     /**
@@ -77,7 +107,7 @@ class RoomController extends Controller
     public function edit(Room $room)
     {
         $buildings = Building::where('user_id', Auth::id())->get();
-        return view('rooms.edit', compact('room', 'buildings'));
+        return view('admin.rooms.edit', compact('room', 'buildings'));
     }
 
     /**
@@ -85,7 +115,6 @@ class RoomController extends Controller
      */
     public function update(UpdateRoomRequest $request, Room $room)
     {
-
         $validated = $request->validated();
 
         if (isset($validated['building_id'])) {
@@ -94,7 +123,25 @@ class RoomController extends Controller
                 ->findOrFail($validated['building_id']);
         }
 
+        // Handle main image upload
+        if ($image = $request->validated()['image'] ?? null) {
+            // Delete old image if exists
+            if ($room->image && Storage::disk('public')->exists($room->image)) {
+                Storage::disk('public')->delete($room->image);
+            }
+            $path = Storage::disk('public')->put('rooms', $image);
+            $validated['image'] = $path;
+        }
+
         $room->update($validated);
+
+        // Handle additional images
+        if ($additionalImages = $request->validated()['additional_images'] ?? null) {
+            foreach ($additionalImages as $image) {
+                $path = Storage::disk('public')->put('rooms', $image);
+                $room->images()->create(['path' => $path]);
+            }
+        }
 
         return redirect()->route('rooms.index')
             ->with('success', 'Room updated successfully.');

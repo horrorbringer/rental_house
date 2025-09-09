@@ -13,6 +13,20 @@ class Room extends Model
     use HasFactory;
 
     /**
+     * The relationships that should be eager loaded.
+     *
+     * @var array
+     */
+    protected $with = ['building','latestRental'];
+
+    /**
+     * The cache tags for the model.
+     *
+     * @var array
+     */
+    protected static $cacheTags = ['rooms'];
+
+    /**
      * Room status constants
      */
     public const STATUS_VACANT = 'vacant';
@@ -37,7 +51,19 @@ class Room extends Model
         'monthly_rent',
         'water_fee',
         'electric_fee',
-        'status',
+        'image',
+        'status'
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'monthly_rent' => 'decimal:2',
+        'water_fee' => 'decimal:2',
+        'electric_fee' => 'decimal:2'
     ];
 
     /**
@@ -49,11 +75,74 @@ class Room extends Model
     }
 
     /**
-     * Get the rental associated with the room.
+     * Get the current active rental for the room.
+     */
+    public function activeRental(): HasOne
+    {
+        return $this->hasOne(Rental::class)->whereNull('end_date');
+    }
+
+    /**
+     * Get all rentals associated with the room.
      */
     public function rentals(): HasMany
     {
         return $this->hasMany(Rental::class);
     }
+
+    /**
+     * Get the images associated with the room.
+     */
+    public function images(): HasMany
+    {
+        return $this->hasMany(RoomImage::class);
+    }
+
+    /**
+     * Active rentals (where end_date is null).
+     * This is used for co-tenants in a shared room.
+     */
+    public function activeRentals(): HasMany
+    {
+        return $this->hasMany(Rental::class)
+            ->whereNull('end_date')
+            ->with('tenant'); // Include tenant info for displaying co-tenants
+    }
+
+    /**
+     * Get the latest utility usage through any active rental.
+     */
+    public function latestUtilityUsage(): HasOne
+    {
+        return $this->hasOneThrough(
+            UtilityUsage::class,
+            Rental::class,
+            'room_id',
+            'rental_id',
+            'id',
+            'id'
+        )->whereHas('rental', function($query) {
+            $query->whereNull('end_date');
+        })->latest('utility_usages.created_at');
+    }
+
+    /**
+     * The latest rental (regardless of active or ended).
+     */
+    public function latestRental(): HasOne
+    {
+        return $this->hasOne(Rental::class)->latestOfMany();
+    }
+
+    /**
+     * The latest active rental (only if still ongoing).
+     */
+    public function latestActiveRental(): HasOne
+    {
+        return $this->hasOne(Rental::class)
+            ->whereNull('end_date')
+            ->latestOfMany();
+    }
+
 }
 

@@ -4,24 +4,52 @@ namespace App\Http\Controllers;
 
 use App\Models\Building;
 use App\Models\Room;
-use App\Models\Tenant;
 use Illuminate\Http\Request;
 
 class WelcomeController extends Controller
 {
     public function index()
     {
-        $stats = [
-            'buildings' => Building::count(),
-            'rooms' => Room::count(),
-            'tenants' => Tenant::count(),
-            'available_rooms' => Room::whereDoesntHave('rental')->count(),
-        ];
+        $buildings = Building::with('images')->get();
+        $availableRooms = Room::with(['building', 'images'])
+            ->where('status', 'vacant')
+            ->latest()
+            ->take(6)
+            ->get();
 
-        $featured_buildings = Building::with(['rooms' => function($query) {
-            $query->whereDoesntHave('rental')->take(3);
-        }])->take(3)->get();
+        return view('welcome', compact('buildings', 'availableRooms'));
+    }
 
-        return view('welcome', compact('stats', 'featured_buildings'));
+    public function search(Request $request)
+    {
+        $query = Room::query()->with(['building']);
+
+        if ($request->filled('price_min')) {
+            $query->where('monthly_rent', '>=', $request->price_min);
+        }
+
+        if ($request->filled('price_max')) {
+            $query->where('monthly_rent', '<=', $request->price_max);
+        }
+
+        if ($request->filled('building')) {
+            $query->whereHas('building', function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->building . '%');
+            });
+        }
+
+        // Only show vacant rooms
+        $query->where('status', Room::STATUS_VACANT);
+
+        $rooms = $query->latest()->paginate(12);
+
+        if ($request->ajax()) {
+            return response()->json([
+                'html' => view('partials.room-cards', compact('rooms'))->render(),
+                'hasMorePages' => $rooms->hasMorePages()
+            ]);
+        }
+
+        return view('welcome', compact('rooms'));
     }
 }

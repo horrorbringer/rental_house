@@ -19,6 +19,7 @@ class Tenant extends Model
         'name',
         'phone',
         'email',
+        'id_card_number',
         'id_card_front_path',
         'id_card_back_path',
     ];

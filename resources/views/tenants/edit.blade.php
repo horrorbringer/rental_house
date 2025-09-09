@@ -23,16 +23,17 @@
                     <label for="phone" class="block text-sm font-medium text-gray-300">Phone Number</label>
                     <div class="mt-1 relative rounded-md shadow-sm">
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3">
-                            <span class="text-gray-500 sm:text-sm">+62</span>
+                            <span class="text-gray-500 sm:text-sm">+855</span>
                         </div>
-                        <input type="tel" name="phone" id="phone" value="{{ old('phone', $tenant->phone) }}" required
+                        <input type="tel" name="phone" id="phone" value="{{ old('phone') }}" required
                             class="pl-12 block w-full rounded-md border-gray-700 bg-gray-900 text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                            pattern="[0-9]{9,12}"
-                            placeholder="812-3456-7890"
-                            title="Please enter a valid Indonesian phone number"
+                            pattern="[0-9-]{10,12}"
+                            placeholder="12-345-6789"
+                            title="Please enter a valid Cambodian phone number"
+                            maxlength="12"
                             oninput="formatPhoneNumber(this)">
                     </div>
-                    <p class="mt-1 text-xs text-gray-500">Format: 812-3456-7890 (without leading zeros)</p>
+                    <p class="mt-1 text-xs text-gray-500">Format: 12-345-6789 (no leading zero)</p>
                     @error('phone')
                         <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                     @enderror
@@ -43,6 +44,15 @@
                     <input type="email" name="email" id="email" value="{{ old('email', $tenant->email) }}"
                         class="mt-1 block w-full rounded-md border-gray-700 bg-gray-900 text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                     @error('email')
+                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div>
+                    <label for="id_card_number" class="block text-sm font-medium text-gray-300">ID Card Number</label>
+                    <input type="text" name="id_card_number" id="id_card_number" value="{{ old('id_card_number', $tenant->id_card_number) }}" required
+                        class="mt-1 block w-full rounded-md border-gray-700 bg-gray-900 text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                    @error('id_card_number')
                         <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                     @enderror
                 </div>

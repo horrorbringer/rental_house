@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+	<!-- Standard Meta -->
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<title>Khmer fonts — ​ពុម្ព​អក្សរ​ខ្មែរ — Polices khmères</title>
+
+	<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+	<link rel="manifest" href="site.webmanifest">
+	<link rel="mask-icon" href="safari-pinned-tab.svg" color="#5bbad5">
+	<meta name="msapplication-TileColor" content="#da532c">
+	<meta name="theme-color" content="#ffffff">
+
+	<style>
+		@font-face {
+			font-family: 'Mondulkiri';
+			src: url(fonts/mondulkiri-r.woff) format('woff'), url('fonts/mondulkiri-r.ttf') format('truetype');
+		}
+
+		@font-face {
+			font-family: "AndikaNewBasic";
+			src: url(fonts/AndikaNewBasic-R.woff) format('woff'), url("fonts/AndikaNewBasic-R.ttf") format('truetype');
+		}
+		@font-face {
+			font-family: "AndikaNewBasic";
+			src: url(fonts/AndikaNewBasic-B.woff) format('woff'), url("fonts/AndikaNewBasic-B.ttf") format('truetype');
+			font-weight: bold;
+		}
+		@font-face {
+			font-family: "AndikaNewBasic";
+			src: url(fonts/AndikaNewBasic-I.woff) format('woff'), url("fonts/AndikaNewBasic-I.ttf") format('truetype');
+			font-style: italic;
+		}
+		@font-face {
+			font-family: "AndikaNewBasic";
+			src: url(fonts/AndikaNewBasic-BI.woff) format('woff'), url("fonts/AndikaNewBasic-BI.ttf") format('truetype');
+			font-weight: bold;
+			font-style: italic;
+		}
+		@font-face {
+			font-family: 'Romnea';
+			src: url('fonts/romnea.woff2') format('woff2'), url('fonts/romnea.woff') format('woff');
+			font-weight: bold;
+			font-style: normal;
+		}
+	</style>
+
+	<link rel="stylesheet" type="text/css" href="semantic/components/reset.css">
+	<link rel="stylesheet" type="text/css" href="semantic/components/site.css">
+
+	<link rel="stylesheet" type="text/css" href="semantic/components/container.css">
+	<link rel="stylesheet" type="text/css" href="semantic/components/grid.css">
+	<link rel="stylesheet" type="text/css" href="semantic/components/header.css">
+	<link rel="stylesheet" type="text/css" href="semantic/components/form.css">
+	<link rel="stylesheet" type="text/css" href="semantic/components/button.css">
+	<link rel="stylesheet" type="text/css" href="semantic/components/label.css">
+	<link rel="stylesheet" type="text/css" href="semantic/components/item.css">
+	<link rel="stylesheet" type="text/css" href="semantic/components/image.css">
+	<link rel="stylesheet" type="text/css" href="semantic/components/menu.css">
+	<link rel="stylesheet" type="text/css" href="semantic/components/input.css">
+	<link rel="stylesheet" type="text/css" href="semantic/components/accordion.css">
+	<link rel="stylesheet" type="text/css" href="semantic/components/tab.css">
+	<link rel="stylesheet" type="text/css" href="semantic/components/table.css">
+
+	<link rel="stylesheet" type="text/css" href="semantic/components/divider.css">
+	<link rel="stylesheet" type="text/css" href="semantic/components/list.css">
+	<link rel="stylesheet" type="text/css" href="semantic/components/segment.css">
+	<link rel="stylesheet" type="text/css" href="semantic/components/dropdown.css">
+	<link rel="stylesheet" type="text/css" href="semantic/components/icon.css">
+	<link rel="stylesheet" type="text/css" href="semantic/components/transition.css">
+	<link rel="stylesheet" type="text/css" href="semantic/components/loader.css">
+	<link rel="stylesheet" type="text/css" href="responsive-semantic-ui.css">
+
+
+	<style>
+		body {
+			background-color: #FFFFFF;
+		}
+		.main.menu .item img.logo {
+			margin-right: 1.5em;
+		}
+		.main.menu.fixed {
+			background-color: #FFFFFF;
+			border: 1px solid #DDD;
+			box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
+		}
+		.xflow {
+			overflow-x: auto;
+			overflow-y: hidden;
+		}
+		.item > .content {
+			overflow-x: hidden;
+			overflow-y: hidden;
+		}
+		.ui.items > .item .extra {
+			margin-top: -0.5rem;
+		}
+		.field {
+			padding-left: 2em;
+			margin-right: 0em;
+		}
+		.ui.accordion {
+			margin-top: -1em;
+		}
+		.trans {
+			font-size: 16pt;
+			width: 3em;
+		}
+		.kh {
+			font-size: 22pt;
+			width: 3em;
+		}
+		.khom {
+			font-family: 'Khmer Surin-Scripts', 'Khmer Pen-Surin';
+			font-size: 22pt;
+			width: 3em;
+		}
+		.khu {
+			width: 10em;
+		}
+
+		.current {
+			opacity: 0.3;
+		}
+
+		.uniok {
+			text-align: center;
+			color: ForestGreen;
+		}
+
+		.langtag {
+			font-family: monospace;
+			color: gray;
+		}
+
+		.orn {
+			background-color: #0000FF;
+			color: #FFFFFF;
+		}
+
+		.niu {
+			background-color: #00FF00;
+			color: #FFFFFF;
+		}
+
+		.unk {
+			background-color: #FF0000;
+			color: #FFFFFF;
+		}
+		.ui.menu .right.menu .item:last-of-type:after { /* from https://github.com/Semantic-Org/Semantic-UI/issues/3332#issuecomment-156730375 */
+			position: absolute;
+			content: '';
+			top: 0%;
+			right: 0px;
+			height: 100%;
+			width: 1px;
+			background: rgba(34, 36, 38, 0.1);
+		}
+
+	.ui.navbar.menu{
+		margin-top: 0;
+	}
+	.ui.main.menu{
+		margin-top: 0;
+	}
+	.ui.vertical.menu{
+		margin-top: -15px !important;
+		width: 100%;
+		display: none;
+	}
+	</style>
+
+	<script src="jquery/jquery-3.1.1.min.js"></script>
+	<script src="semantic/components/tab.js"></script>
+	<script src="semantic/components/transition.js"></script>
+	<script src="semantic/components/dropdown.js"></script>
+	<script src="semantic/components/visibility.js"></script>
+	<script src="semantic/components/accordion.js"></script>
+	<script>
+		$(document)
+			.ready(function() {
+
+				// fix main menu to page on passing
+				$('.main.menu').visibility({
+					type: 'fixed'
+				});
+
+				// show dropdown on hover
+				$('.main.menu  .ui.dropdown').dropdown({
+					on: 'hover'
+				});
+
+				$('.menu.open').on("click",function(e){
+					e.preventDefault();
+					$('.ui.vertical.menu').toggle();
+				});
+
+				$('.ui.accordion').accordion({
+					exclusive: false
+				});
+
+				$('select.dropdown').dropdown();
+
+				$('.ui.input .remove.icon').on('click', function(e){
+					$(this).prev().val('');
+					e.stopPropagation();
+				});	
+			});
+	</script>
+
+</head>
+
+<body>
+
+<div class="ui main container tablet or lower hidden" style="background-image: url(logo-bg.png); background-repeat: repeat-x;display: flex; justify-content: space-between;">
+	<!--<img src="logo.png" alt="Khmer fonts — ​ពុម្ព​អក្សរ​ខ្មែរ — Polices khmères" />-->
+	<img src="logo-left.png" alt="Khmer fonts — ​ពុម្ព​អក្សរ​ខ្មែរ — Polices khmères" />
+	<img src="logo-middle.png" alt="Khmer fonts — ​ពុម្ព​អក្សរ​ខ្មែរ — Polices khmères" />
+	<img src="logo-right.png" alt="Khmer fonts — ​ពុម្ព​អក្សរ​ខ្មែរ — Polices khmères" />
+</div>
+
+<div class="ui main menu tablet or lower hidden">
+	<div class="ui container">
+		<a href="./" class="active item">Fonts</a>
+		<a href="wanted.php" class="item">Wanted fonts</a>
+		<div class="ui dropdown item">
+			About Khmer Script <i class="dropdown icon"></i>
+			<div class="menu">
+				<a href="styles.php" class="item">Typographic styles</a>
+				<a href="characterlist.php" class="item">Character list</a>
+				<a href="sources.php" class="item">Sources of khmer script</a>
+				<a href="unicode.php" class="item">The state of khmer unicode</a>
+			</div>
+		</div>
+		<a href="howto.php" class="item">How to make a khmer font</a>
+		<!--<a href="#" class="item">Test your font</a>-->
+		<!--<a href="#" class="item">"Unicodize" your font</a>-->
+		<!--<a href="#" class="item">Convert your documents</a>-->
+		<div class="right menu">
+			<div class="ui dropdown item">
+				<i class="info circle icon"></i>
+				<div class="menu">
+					<a href="about.php" class="item">About this website</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="ui container secondary navbar menu mobile tablet only">
+	<img src="logo.png" style="object-fit:contain;" alt="Khmer fonts — ​ពុម្ព​អក្សរ​ខ្មែរ — Polices khmères" />
+	<div class="menu open">
+		<a href="" class="menu item">
+			<i class="bars icon"></i>
+		</a>
+	</div>
+</div>
+<div class="ui vertical navbar menu">
+		<a href="./" class="active item">Fonts</a>
+		<a href="wanted.php" class="item">Wanted fonts</a>
+		<div class="ui item">
+			<div class="text">About Khmer Script</div>
+			<div class="menu">
+				<a href="styles.php" class="item">Typographic styles</a>
+				<a href="characterlist.php" class="item">Character list</a>
+				<a href="sources.php" class="item">Sources of khmer script</a>
+				<a href="unicode.php" class="item">The state of khmer unicode</a>
+			</div>
+		</div>
+		<a href="howto.php" class="item">How to make a khmer font</a>
+		<!--<a href="#" class="item">Test your font</a>-->
+		<!--<a href="#" class="item">"Unicodize" your font</a>-->
+		<!--<a href="#" class="item">Convert your documents</a>-->
+		<a href="about.php" class="item">About this website</a>
+</div>
+
+
+<div class="ui container">
+<div class="ui styled fluid accordion" style="margin-top: 1em;">
+  <div class="title">
+    <i class="dropdown icon"></i>
+    Options
+  </div>
+  <div class="content">
+    <form class="ui fluid form" method="get">
+      <div class="three fields">
+        <div class="field">
+          <label>Style</label>
+          <select name="style[]" multiple="" class="ui fluid dropdown">
+            <option value="">All</option>
+            <option value="0">អក្សរជ្រៀង (aksar chrieng)</option>
+            <option value="1">អក្សរខម (aksar khom)</option>
+            <option value="2">អក្សរមូល (aksar mul)</option>
+            <option value="3">អក្សរ​ឆ្លាក់ (aksar chhlak)</option>
+            <option value="9">hybrid</option>
+
+          </select>
+        </div>
+        <div class="field">
+          <label>Designer/Producer</label>
+          <select name="designer[]" multiple="" class="ui fluid search dropdown">
+            <option value="">All</option>
+            <option value="93">ABC Computers </option>
+            <option value="100">Abdulrohman Abdolgony </option>
+            <option value="135">Alain Daniel </option>
+            <option value="63">An Mouniridh (Rayuth HD) អន មុនីរឹទ្ធ</option>
+            <option value="14">Ang Rotanak </option>
+            <option value="88">Antioch Institute </option>
+            <option value="90">Apple </option>
+            <option value="92">APSARA Authority </option>
+            <option value="39">Arun Sok Nhep </option>
+            <option value="89">Buddhist Institute </option>
+            <option value="32">Bunly Soch ប៊ុនលី</option>
+            <option value="134">Bunno Lim </option>
+            <option value="94">Cambodia Information Center </option>
+            <option value="140">Cellcard </option>
+            <option value="101">Center for Khmer Studies (CKS) </option>
+            <option value="123">Center for Southeast Asian Studies, Northern Illinois University </option>
+            <option value="34">Chanbo Keo កែវ​ចន្ទ័បូរណ៍</option>
+            <option value="133">Chay Sengtha </option>
+            <option value="114">Chea Sothy </option>
+            <option value="62">Cheng Kim Aun (Sin Fu) </option>
+            <option value="117">Chhit WornNarith </option>
+            <option value="48">Chhoy Bun Sok Heng ឆូយ បុ៑នសុខហេង</option>
+            <option value="128">Chhoy C. Yam </option>
+            <option value="8">Chhun Keo កែវ ឈុន</option>
+            <option value="37">Chhunak Kao </option>
+            <option value="17">Chomreun Sok សុខ ចំរើន</option>
+            <option value="132">Chomrom DAAP-FAH-FEUN โดยชมรมดาบฟ้าฟื้น</option>
+            <option value="104">CINOTEC </option>
+            <option value="45">Dalton Maag Ltd </option>
+            <option value="1">Danh Hong ដាញ់ ហុង</option>
+            <option value="2">Diethelm Kanjahn </option>
+            <option value="105">Documentation Center of Cambodia </option>
+            <option value="108">FTC Engineers Group. ( Fox Training Center ) </option>
+            <option value="73">Google </option>
+            <option value="70">Hem Channli </option>
+            <option value="42">Heng Victorya  ហេង វិកតូរិយា</option>
+            <option value="43">Hong Vichith </option>
+            <option value="107">Hoy Peou </option>
+            <option value="46">Hul Houthhab ហ៊ុល ហ៊តហាប់ </option>
+            <option value="15">Huon Hien Vathana ហួន ហៀន​វឌ្ឍនា</option>
+            <option value="36">Huy Savy ហ៊ុយ សាវី</option>
+            <option value="102">Ieng Chhay / Ly Seng Chhay </option>
+            <option value="87">itCity Magazine </option>
+            <option value="29">ITKonKhmer អាយធី កូនខ្មែរ</option>
+            <option value="7">James Kass </option>
+            <option value="80">Jasper Habicht </option>
+            <option value="120">Jean-Yves Fusil </option>
+            <option value="11">Jong Siritan </option>
+            <option value="109">JSRC Printing House </option>
+            <option value="10">Kaʻōnohi Kai </option>
+            <option value="98">Kam San </option>
+            <option value="38">Kantol Khek </option>
+            <option value="149">Kbeung ក្បឿង</option>
+            <option value="146">Kelly Sor </option>
+            <option value="99">Keo Vuthy </option>
+            <option value="3">Khek Brothers </option>
+            <option value="113">Kheng Vantha </option>
+            <option value="147">Khim Sony ឃីម សុនី</option>
+            <option value="85">Khmer Culture Center in Switzerland </option>
+            <option value="115">Khy Tykea </option>
+            <option value="59">KitMai </option>
+            <option value="40">Koeuy Chetra កើយ ចិត្រា</option>
+            <option value="144">Koh Santepheap កោះសន្តិភាព</option>
+            <option value="51">Kon Sath (Pet Panhavisal) កូនសត្វ</option>
+            <option value="24">Lek Chumnor ឡឹក ជំនោរ</option>
+            <option value="50">Lim Piseth លឹម ពិសិដ្ឋ</option>
+            <option value="83">Lim Sovanvichet </option>
+            <option value="60">Lors Hanphy ល័ស ហាន់ភី</option>
+            <option value="16">Mao Piseth ម៉ៅ ពិសិដ្ឋ</option>
+            <option value="111">Mean Jay </option>
+            <option value="54">Meng Socheath ម៉េង សុជាតិ</option>
+            <option value="121">Michael Forgey </option>
+            <option value="13">Michel Antelme មីស្ហែល ឫទ្ធី អង់តែល្ម </option>
+            <option value="49">Microsoft </option>
+            <option value="44">Miech Chamnan មៀច ចំណាន</option>
+            <option value="75">Ministry of Economy and Finance of Cambodia </option>
+            <option value="12">Morn Mon ម៉ុន ម៉ន</option>
+            <option value="18">Muthu Nedumaran </option>
+            <option value="74">National ICT Development Authority (NiDA) </option>
+            <option value="106">Neang Hon </option>
+            <option value="139">Nguon Kimnin </option>
+            <option value="142">Nimol Phe ភេ និមល</option>
+            <option value="77">Nokia </option>
+            <option value="25">Norea Nuon </option>
+            <option value="69">Nou Sovannaroth នូ សុវណ្ណារ័ត្ន</option>
+            <option value="52">Nou Sovannarout / ASvadek នូ សុវណ្ណារោត / អាស្វាដែក</option>
+            <option value="30">Nouv Samnang / AKbalthom នៅ សំណាង / អាក្បាលធំ</option>
+            <option value="4">Om Mony / Theodore Rith Heng </option>
+            <option value="103">Om Yentieng </option>
+            <option value="82">Open Institute វិទ្យាស្ថាន​បើក​ទូលាយ</option>
+            <option value="21">Orn Sambovannak (Johnny) អន សំបូរ​វណ្ណៈ</option>
+            <option value="53">Ourom Sovirak អ៊ូរុំ សុវិរៈ</option>
+            <option value="86">Pan Asia Networking (PAN) </option>
+            <option value="96">Pen Sokha </option>
+            <option value="55">Peter Specht </option>
+            <option value="33">Phalla Hang Nop នភ ហង្សផលា</option>
+            <option value="122">Phan Ravi </option>
+            <option value="64">Phorn Sokny (Giant Design) ផន សុខនី</option>
+            <option value="57">Phourn Phearum </option>
+            <option value="119">Phylypo Tum </option>
+            <option value="22">Pierre Thivet </option>
+            <option value="145">Prudential </option>
+            <option value="65">Pu Phan ពូផាន</option>
+            <option value="118">Ry Leth </option>
+            <option value="28">Samady KS សាម៉ាឌី</option>
+            <option value="76">Samsung </option>
+            <option value="66">Sao Pheatra សៅ ភាត្រា</option>
+            <option value="116">Sath SokhaMony & Chhit WornNarith (Limon Group) </option>
+            <option value="112">Savun Neang </option>
+            <option value="81">Sean Masavang (CFC) </option>
+            <option value="141">Sek Channa សេក ចាន់ណា</option>
+            <option value="35">Seng Phireak </option>
+            <option value="138">Seng Ratanakvisay </option>
+            <option value="136">Seng Sopheap Kim </option>
+            <option value="110">Serey Sorphorn </option>
+            <option value="78">SIL International </option>
+            <option value="67">Sim Uy </option>
+            <option value="125">Sipar </option>
+            <option value="97">Society for Better Books in Cambodia (SBBIC) </option>
+            <option value="26">Sophal Phok </option>
+            <option value="72">Sophorth Yos </option>
+            <option value="126">Sort Borort </option>
+            <option value="56">Sours Sarann សួស សារ៉ាន់</option>
+            <option value="23">Sovandy Mok </option>
+            <option value="124">Sovanna Tim </option>
+            <option value="20">Sovichet Tep ទេព សុវិចិត្រ</option>
+            <option value="58">Suonmay Sophanith (Jun Ho) សួនម៉ៃ សុផានិត</option>
+            <option value="68">Suonmay Sophanna សួនម៉ៃ សុផាន់ណា</option>
+            <option value="6">Thy Bun </option>
+            <option value="19">Tim Boeun ទឹម បឿន</option>
+            <option value="84">Tim Chan Rithy </option>
+            <option value="143">Tin Bun Heng ទិន ប៊ុនហេង</option>
+            <option value="95">Top Rithy </option>
+            <option value="27">Top Siden </option>
+            <option value="131">TPS </option>
+            <option value="127">Ty Sophat </option>
+            <option value="31">Um Chansanith អ៊ុំ ច័ន្ទ​សា​និត</option>
+            <option value="9">Vanthy Suon </option>
+            <option value="71">Vin Monney វិន មុន្នី</option>
+            <option value="129">Vipassana Research Institute (VRI) </option>
+            <option value="47">Vong Sotheara វង់ សុធារ៉ា</option>
+            <option value="130">Watt Srisawang </option>
+            <option value="137">Worawut Thanawatanawanich </option>
+            <option value="5">Xavier Dupré </option>
+            <option value="91">XenoType </option>
+            <option value="148">Yeun PhalLuch យឺន ផល្លុច</option>
+            <option value="41">Yeun Savuth យឺន សាវុទ្ធ</option>
+            <option value="79">Yong Yeang (Ang Penh / Ang Yeang / Ang Peanorent) យ៉ុង យាង (អង្គ ពានរេន្ទ្រ)</option>
+            <option value="61">You Lana យូ​ ឡាណា</option>
+
+          </select>
+        </div>
+        <div class="field">
+          <label>Keyword</label>
+          <div class="ui icon input">
+          <input name="keyword" type="text" placeholder="Keyword">
+          <i class="remove link icon"></i>
+          </div>
+        </div>
+      </div>
+      <div class="three fields">
+        <div class="field">
+          <select name="slanted[]" multiple="" class="ui fluid dropdown">
+            <option value="">All</option>
+            <option value="0">upright</option>
+            <option value="1">slanted</option>
+
+          </select>
+        </div>
+        <div class="field"></div>
+        <div class="field">
+          <div class="ui checkbox">
+            <input name="legacy" tabindex="0" class="hidden" type="checkbox">
+            <label>Include legacy fonts</label>
+          </div>
+        </div>
+      </div>
+      <div class="three fields">
+        <div class="field">
+          <label>Order by:</label>
+          <select name="order" class="ui dropdown" id="select">
+            <option value="date" selected="">Last updated</option>
+            <option value="old">Oldest first</option>
+            <option value="name">Name</option>
+
+          </select>
+        </div>
+        <div class="field">
+          <label>Sample:</label>
+          <select name="sample" class="ui dropdown" id="select">
+            <option value="0" selected="">Random</option>
+            <option value="1">ជាតិ​ពាល​មិន​ដឹង​គួរ គ្មាន​គេ​សួរ​សោក​ចង់​ជាក់ ឆ្លើយ​ឆ្លង​ផង​រាក់​ទាក់​ ក្បួន​ហិន​លក្ខណ៍​ធ្លាក់​លើ​ខ្លួន ។</option>
+            <option value="2">ចង​អ្វី​មិន​ជាប់​ស្មើ​សង្សារ ការ​អ្វី​មិន​ស្មើ​ការ​ប្រតិបត្តិ ស្ងាត់​អ្វី​មិន​ស្មើ​​ចិត្ត​អរហត្ត​ កាច​អ្វី​មិន​ស្មើ​ចិត្ត​ពាលា ។</option>
+            <option value="3">ចំណេះ​វិជ្ជា​លោក​ចែង​ចាត់ ទុក​ជា​សម្បត្តិ​សំបូរ​បាន ទោះ​បី​ក្រក្សត់​អត់​ប៉ុន្មាន គង់​តែ​បាន​គ្រាន់​អាស្រ័យ ។</option>
+            <option value="4">ឈ្លោះ​គ្នា​ក្នុង​គ្រួសារ ដូច​ស្រាត​កាយា​បង្ហាញ​ញាតិ ឈ្លោះគ្នាក្នុង​សង្គមជាតិ ដូច​លាត​កំណប់​បង្ហាញ​ចោរ ។</option>
+            <option value="5">ជាប់​ជ្រួល​ច្រវាក់​ភក្ត្រ​ស្រស់ស្រាយ គួរ​ខ្លាច​ខ្លួន​ក្លាយ​ជា​ក្លៀវក្លា វង្វេង​ផ្លូវ​មិន​សួរន​រណា តនឹងបច្ចា​ឥត​អាវុធ ។</option>
+            <option value="6">កុំ​គិត​តែ​រៀន​ចង់ធ្វើ​មន្ត្រី ស្អប់​ខ្ពើម​ភក់ដី​នាំអោយ​ក្រ ត្រូវ​រៀន​ធ្វើ​ជា​កសិករ ទើប​មានទ្រព្យ​ត​ទៅ​ខាង​ក្រោយ ។</option>
+            <option value="7">ជនណា​ទ្រាំអត់ ខន្តី​សង្កត់ រក្សា​មាយាទ មិន​ខឹង​ផ្ដេសផ្ដាស ពួក​បណ្ឌិតជាតិ សរសើរ​ជា​អាទ៍ ថា​អ្នក​ធ្ងន់​ធ្ងរ ។</option>
+            <option value="8">ជនពាល​ដល់​ពេល​កើត​កលិយុគ ទេវតា​ឲ្យ​ទុក្ខ​ចាំ​ផ្ដន្ទា ពួក​ប្រាជ្ញ​សប្បរស​កាន់​ធម្មា ដល់​ពេល​ទុក្ខា​ទេវតា​ជួយ ។</option>
+            <option value="9">ចង់​ល្អ​ហួស​មាឌ ចង់​បាន​ហួស​ខ្នាត​កំរិត​មាត្រា មិន​បាន​ដូច​ប៉ង បំណង​ប្រាថ្នា ខូច​ទាំងទ្រព្យា គួរ​បាន​ក៏បង់ ។</option>
+            <option value="10">ជាតិ​មនុស្ស​ពាល​ពោល​មិន​ពិត កុំ​យក​ធ្វើ​មិត្ត​ខាត​របស់ មនុស្ស​សុចរិត​ចិត្ត​សប្បុរស ស្រឡាញ់​ស្មោះ​ចិត្ត​ឲ្យ​ស្មើ ។</option>
+
+          </select>
+        </div>
+        <div class="field">
+          <label>&nbsp;</label>
+          <button class="ui right floated button" type="submit">OK</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div><div class="ui divided items">
+	<div class="item">
+		<div class="content">
+			<a href="fontinfo.php?font=2972"><img src="preview.php?font=2972" alt="Loopadoople Hairy Italic"/></a>
+			<div class="extra">
+				<strong>Loopadoople Hairy Italic</strong> by <a href="designer.php?id=146">Kelly Sor</a>
+			</div>
+		</div>
+	</div>	<div class="item">
+		<div class="content">
+			<a href="fontinfo.php?font=2971"><img src="preview.php?font=2971" alt="Kasaet"/></a>
+			<div class="extra">
+				<strong>Kasaet</strong> by <a href="designer.php?id=146">Kelly Sor</a>
+			</div>
+		</div>
+	</div>	<div class="item">
+		<div class="content">
+			<a href="fontinfo.php?font=2969"><img src="preview.php?font=2969" alt="Kasaet Light"/></a>
+			<div class="extra">
+				<strong>Kasaet Light</strong> by <a href="designer.php?id=146">Kelly Sor</a>
+			</div>
+		</div>
+	</div>	<div class="item">
+		<div class="content">
+			<a href="fontinfo.php?font=2970"><img src="preview.php?font=2970" alt="Kasaet Light Italic"/></a>
+			<div class="extra">
+				<strong>Kasaet Light Italic</strong> by <a href="designer.php?id=146">Kelly Sor</a>
+			</div>
+		</div>
+	</div>	<div class="item">
+		<div class="content">
+			<a href="fontinfo.php?font=2966"><img src="preview.php?font=2966" alt="Kasaet Black Italic"/></a>
+			<div class="extra">
+				<strong>Kasaet Black Italic</strong> by <a href="designer.php?id=146">Kelly Sor</a>
+			</div>
+		</div>
+	</div>	<div class="item">
+		<div class="content">
+			<a href="fontinfo.php?font=2967"><img src="preview.php?font=2967" alt="Kasaet Bold"/></a>
+			<div class="extra">
+				<strong>Kasaet Bold</strong> by <a href="designer.php?id=146">Kelly Sor</a>
+			</div>
+		</div>
+	</div>	<div class="item">
+		<div class="content">
+			<a href="fontinfo.php?font=2968"><img src="preview.php?font=2968" alt="Kasaet Bold Italic"/></a>
+			<div class="extra">
+				<strong>Kasaet Bold Italic</strong> by <a href="designer.php?id=146">Kelly Sor</a>
+			</div>
+		</div>
+	</div>	<div class="item">
+		<div class="content">
+			<a href="fontinfo.php?font=2965"><img src="preview.php?font=2965" alt="Kasaet Black"/></a>
+			<div class="extra">
+				<strong>Kasaet Black</strong> by <a href="designer.php?id=146">Kelly Sor</a>
+			</div>
+		</div>
+	</div>	<div class="item">
+		<div class="content">
+			<a href="fontinfo.php?font=2964"><img src="preview.php?font=2964" alt="Anakut Bold Italic"/></a>
+			<div class="extra">
+				<strong>Anakut Bold Italic</strong> by <a href="designer.php?id=146">Kelly Sor</a>
+			</div>
+		</div>
+	</div>	<div class="item">
+		<div class="content">
+			<a href="fontinfo.php?font=2954"><img src="preview.php?font=2954" alt="SN KH RANGERFORCE Bold"/></a>
+			<div class="extra">
+				<strong>SN KH RANGERFORCE Bold</strong> by <a href="designer.php?id=147">Khim Sony ឃីម សុនី</a>
+			</div>
+		</div>
+	</div>	<div class="item">
+		<div class="content">
+			<a href="fontinfo.php?font=2937"><img src="preview.php?font=2937" alt="KST Orn Ey Srey Orn"/></a>
+			<div class="extra">
+				<strong>KST Orn Ey Srey Orn</strong> by <a href="designer.php?id=139">Nguon Kimnin</a>
+			</div>
+		</div>
+	</div>	<div class="item">
+		<div class="content">
+			<a href="fontinfo.php?font=2956"><img src="preview.php?font=2956" alt="SN KH SIMPLE-HAIR Bold"/></a>
+			<div class="extra">
+				<strong>SN KH SIMPLE-HAIR Bold</strong> by <a href="designer.php?id=147">Khim Sony ឃីម សុនី</a>
+			</div>
+		</div>
+	</div>	<div class="item">
+		<div class="content">
+			<a href="fontinfo.php?font=2955"><img src="preview.php?font=2955" alt="SN KH SIMPLE Bold"/></a>
+			<div class="extra">
+				<strong>SN KH SIMPLE Bold</strong> by <a href="designer.php?id=147">Khim Sony ឃីម សុនី</a>
+			</div>
+		</div>
+	</div>	<div class="item">
+		<div class="content">
+			<a href="fontinfo.php?font=2908"><img src="preview.php?font=2908" alt="Kh Pixel Retro 8-bit Display"/></a>
+			<div class="extra">
+				<strong>Kh Pixel Retro 8-bit Display</strong> by <a href="designer.php?id=146">Kelly Sor</a>
+			</div>
+		</div>
+	</div>	<div class="item">
+		<div class="content">
+			<a href="fontinfo.php?font=2909"><img src="preview.php?font=2909" alt="Kh Pixel Retro 8-bit UI"/></a>
+			<div class="extra">
+				<strong>Kh Pixel Retro 8-bit UI</strong> by <a href="designer.php?id=146">Kelly Sor</a>
+			</div>
+		</div>
+	</div>	<div class="item">
+		<div class="content">
+			<a href="fontinfo.php?font=2952"><img src="preview.php?font=2952" alt="Kh Ang Toathmor Kbach"/></a>
+			<div class="extra">
+				<strong>Kh Ang Toathmor Kbach</strong> by <a href="designer.php?id=79">Yong Yeang (Ang Penh / Ang Yeang / Ang Peanorent) យ៉ុង យាង (អង្គ ពានរេន្ទ្រ)</a>
+			</div>
+		</div>
+	</div>	<div class="item">
+		<div class="content">
+			<a href="fontinfo.php?font=2953"><img src="preview.php?font=2953" alt="Kh Ang Vassa"/></a>
+			<div class="extra">
+				<strong>Kh Ang Vassa</strong> by <a href="designer.php?id=79">Yong Yeang (Ang Penh / Ang Yeang / Ang Peanorent) យ៉ុង យាង (អង្គ ពានរេន្ទ្រ)</a>
+			</div>
+		</div>
+	</div>	<div class="item">
+		<div class="content">
+			<a href="fontinfo.php?font=2907"><img src="preview.php?font=2907" alt="Kh Pixel Retro 8-bit Text"/></a>
+			<div class="extra">
+				<strong>Kh Pixel Retro 8-bit Text</strong> by <a href="designer.php?id=146">Kelly Sor</a>
+			</div>
+		</div>
+	</div>	<div class="item">
+		<div class="content">
+			<a href="fontinfo.php?font=2959"><img src="preview.php?font=2959" alt="SN-Kh-Menghorn"/></a>
+			<div class="extra">
+				<strong>SN-Kh-Menghorn</strong> by <a href="designer.php?id=147">Khim Sony ឃីម សុនី</a>
+			</div>
+		</div>
+	</div>	<div class="item">
+		<div class="content">
+			<a href="fontinfo.php?font=2920"><img src="preview.php?font=2920" alt="Mie Banjok Italic"/></a>
+			<div class="extra">
+				<strong>Mie Banjok Italic</strong> by <a href="designer.php?id=146">Kelly Sor</a>
+			</div>
+		</div>
+	</div><div class="ui large centered inline text loader">
+    Loading more...
+  </div></div>
+<script>
+var page = 2;
+var donnees = $('form').serialize();
+window.loadMoreFonts = function() {
+  // load more fonts
+  var
+    $segment = $('.divided.items'),
+    $loader  = $segment.find('.inline.loader')
+  ;
+  $loader.addClass('active');
+  $.get(
+    '/', // Le fichier cible côté serveur.
+    donnees + '&page=' + page,
+    function(code_html, statut){
+      $('.inline.loader').replaceWith(code_html);
+      $('.divided.items').visibility('refresh');
+    },
+    'html' // Format des données reçues.
+  );
+  page++;
+}
+
+$('.divided.items')
+  .visibility({
+    once: false,
+    // update size when new content loads
+    observeChanges: true,
+    // load content on bottom edge visible
+    onBottomVisible: function() {
+      // load more fonts
+      window.loadMoreFonts();
+    }
+  })
+;
+$('.ui.dropdown').dropdown({ fullTextSearch: "exact" });
+</script>
+</div>
+<p>&nbsp;</p>
+</body>
+</html>

@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Rental extends Model
 {
@@ -17,11 +16,40 @@ class Rental extends Model
      *
      * @var array<string>
      */
+    /**
+     * Rental status constants
+     */
+    public const STATUS_ACTIVE = 'active';
+    public const STATUS_TERMINATED = 'terminated';
+    public const STATUS_EXPIRED = 'expired';
+
+    /**
+     * Available rental statuses
+     */
+    public static $statuses = [
+        self::STATUS_ACTIVE,
+        self::STATUS_TERMINATED,
+        self::STATUS_EXPIRED,
+    ];
+
     protected $fillable = [
         'room_id',
         'tenant_id',
+        'deposit',
         'start_date',
         'end_date',
+        'status',
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'start_date' => 'date',
+        'end_date' => 'date',
+        'deposit' => 'decimal:2',
     ];
 
     /**
@@ -41,11 +69,11 @@ class Rental extends Model
     }
 
     /**
-     * Get the utility usage record associated with the rental.
+     * Get the utility usages for the rental.
      */
-    public function utilityUsage(): HasOne
+    public function utilityUsages(): HasMany
     {
-        return $this->hasOne(UtilityUsage::class);
+        return $this->hasMany(UtilityUsage::class);
     }
 
     /**

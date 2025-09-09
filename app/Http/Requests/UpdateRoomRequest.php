@@ -28,6 +28,8 @@ class UpdateRoomRequest extends FormRequest
             'water_fee' => ['required', 'numeric', 'min:0'],
             'electric_fee' => ['required', 'numeric', 'min:0'],
             'status' => ['required', 'in:vacant,occupied'],
+            'image' => ['nullable', 'image', 'max:10240'], // 10MB max
+            'additional_images.*' => ['nullable', 'image', 'max:10240'], // 10MB max
         ];
     }
 }

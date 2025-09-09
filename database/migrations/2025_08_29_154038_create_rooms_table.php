@@ -18,6 +18,7 @@ return new class extends Migration
             $table->decimal('monthly_rent', 10, 2);
             $table->decimal('water_fee', 10, 2)->default(0);
             $table->decimal('electric_fee', 10, 2)->default(0);
+            $table->string('image')->nullable(); // main image for the room
             $table->enum('status', ['vacant', 'occupied'])->default('vacant');
             $table->timestamps();
         });

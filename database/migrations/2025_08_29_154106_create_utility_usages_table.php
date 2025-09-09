@@ -14,11 +14,10 @@ return new class extends Migration
         Schema::create('utility_usages', function (Blueprint $table) {
             $table->id();
             $table->foreignId('rental_id')->constrained()->onDelete('cascade');
-            $table->date('billing_month');
             $table->decimal('water_usage', 10, 2)->default(0);
             $table->decimal('electric_usage', 10, 2)->default(0);
-            $table->decimal('water_price', 10, 2);
-            $table->decimal('electric_price', 10, 2);
+            $table->date('reading_date');
+            $table->text('notes')->nullable();
             $table->timestamps();
         });
     }
