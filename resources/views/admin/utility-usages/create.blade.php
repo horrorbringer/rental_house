@@ -107,7 +107,7 @@
                                     <option value="">Select a rental</option>
                                     @foreach($rentals as $rental)
                                         <option value="{{ $rental->id }}" {{ old('rental_id') == $rental->id ? 'selected' : '' }}>
-                                            {{ $rental->room->name }} - {{ $rental->tenant->name }}
+                                            {{ $rental->room->name }} - {{ $rental->tenant->name }} / #{{ $rental->room->room_number }}
                                         </option>
                                     @endforeach
                                 </select>

@@ -45,7 +45,7 @@
                     <div class="text-right">
                         <p class="text-sm text-gray-500 dark:text-gray-400">Monthly Rent</p>
                         <p class="mt-1 text-2xl font-semibold text-gray-900 dark:text-white">
-                            ฿{{ number_format($rental->room->price) }}
+                            ${{ number_format($rental->room->monthly_rent) }}
                         </p>
                     </div>
                 </div>
