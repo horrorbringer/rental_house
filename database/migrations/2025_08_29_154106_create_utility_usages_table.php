@@ -18,8 +18,9 @@ return new class extends Migration
             $table->decimal('electric_usage', 10, 2)->default(0);
             $table->date('reading_date');
             $table->text('notes')->nullable();
+            $table->boolean('is_initial_reading')->default(false);
             $table->timestamps();
-        });
+            });
     }
 
     /**
