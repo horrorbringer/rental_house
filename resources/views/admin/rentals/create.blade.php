@@ -26,10 +26,10 @@
                                         data-monthly-rent="{{ $room->monthly_rent }}"
                                         data-has-active-rental="{{ $room->hasActiveRental ? 'true' : 'false' }}"
                                         {{ old('room_id') == $room->id ? 'selected' : '' }}>
-                                        Room {{ $room->room_number }} - {{ $room->building->name }} 
-                                        (Monthly: ${{ number_format($room->monthly_rent, 2) }}, 
-                                        Water: ${{ number_format($room->water_fee, 2) }}/m³, 
-                                        Electric: ${{ number_format($room->electric_fee, 2) }}/kWh)
+                                        Room {{ $room->room_number }}  
+                                        (Monthly: ៛{{ number_format($room->monthly_rent, 2) }}, 
+                                        Water: ៛{{ number_format($room->water_fee, 2) }}/m³, 
+                                        Electric: ៛{{ number_format($room->electric_fee, 2) }}/kWh)
                                         @if($room->activeRentals->count() > 0)
                                             <span class="text-blue-500"> - Shared with {{ $room->activeRentals->count() }} tenant(s)</span>
                                         @endif
