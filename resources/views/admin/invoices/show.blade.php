@@ -16,12 +16,22 @@
                         Edit
                     </a>
                 @endif
-                <a href="{{ route('invoices.download-pdf', $invoice) }}" class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                {{-- cuz pdf render not correct with unicode khmer --}}
+                {{-- <a href="{{ route('invoices.download-pdf', $invoice) }}" class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
                     <svg class="-ml-0.5 mr-1.5 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd" />
                     </svg>
                     Download PDF
+                </a> --}}
+                <a href="{{ route('invoices.download-pdf-en', $invoice) }}"
+                    class="flex-1 inline-flex justify-center items-center px-3 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600"
+                    >
+                    <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    </svg>
+                    PDF-EN
                 </a>
+
                 @if($invoice->status === 'draft')
                     <form action="{{ route('invoices.destroy', $invoice) }}" method="POST" class="inline">
                         @csrf
@@ -87,34 +97,86 @@
                 <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Charges Breakdown</h3>
                 <div class="mt-6 border-t border-gray-200 dark:border-gray-600">
                     <dl class="divide-y divide-gray-200 dark:divide-gray-600">
-                        <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4">
-                            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Room Rent</dt>
-                            <dd class="mt-1 text-sm text-gray-900 dark:text-white sm:col-span-2">៛{{ number_format($invoice->rent_amount, 2) }}</dd>
+                        <!-- Room Rent -->
+                        <div class="py-4">
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4">
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Room Rent</dt>
+                                <dd class="mt-1 text-sm text-gray-900 dark:text-white sm:col-span-2">
+                                    ៛{{ number_format($invoice->rent_amount, 2) }}
+                                </dd>
+                            </div>
                         </div>
                         
-                        <!-- Water Charges -->
-                        <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4">
-                            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Water Usage</dt>
-                            <dd class="mt-1 text-sm text-gray-900 dark:text-white sm:col-span-2">
-                                ៛{{ number_format($invoice->total_water_fee, 2) }}
-                            </dd>
+                        <!-- Water Usage Details -->
+                        <div class="py-4">
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 mb-2">
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Water Usage</dt>
+                                <dd class="mt-1 text-sm text-gray-900 dark:text-white sm:col-span-2">
+                                    <div class="space-y-2">
+                                        <div class="flex justify-between">
+                                            <span>Current Reading:</span>
+                                            <span>{{ number_format($invoice->utilityUsage->water_usage, 2) }} m³</span>
+                                        </div>
+                                        <div class="flex justify-between text-gray-500 dark:text-gray-400">
+                                            <span>Previous Reading:</span>
+                                            <span>{{ $previousUsage ? number_format($previousUsage->water_usage, 2) : '0.00' }} m³</span>
+                                        </div>
+                                        <div class="flex justify-between font-medium border-t border-gray-200 dark:border-gray-600 pt-2">
+                                            <span>Usage:</span>
+                                            <span>{{ number_format($invoice->utilityUsage->water_usage - ($previousUsage ? $previousUsage->water_usage : 0), 2) }} m³</span>
+                                        </div>
+                                        <div class="flex justify-between text-sm">
+                                            <span>Rate per m³:</span>
+                                            <span>៛{{ number_format($invoice->rental->room->water_fee, 2) }}</span>
+                                        </div>
+                                        <div class="flex justify-between font-medium text-indigo-600 dark:text-indigo-400">
+                                            <span>Total Water Charge:</span>
+                                            <span>៛{{ number_format($invoice->total_water_fee, 2) }}</span>
+                                        </div>
+                                    </div>
+                                </dd>
+                            </div>
                         </div>
                         
-                        <!-- Electric Charges -->
-                        <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4">
-                            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Electric Usage</dt>
-                            <dd class="mt-1 text-sm text-gray-900 dark:text-white sm:col-span-2">
-                                ៛{{ number_format($invoice->total_electric_fee, 2) }}
-                            </dd>
+                        <!-- Electric Usage Details -->
+                        <div class="py-4">
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 mb-2">
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Electric Usage</dt>
+                                <dd class="mt-1 text-sm text-gray-900 dark:text-white sm:col-span-2">
+                                    <div class="space-y-2">
+                                        <div class="flex justify-between">
+                                            <span>Current Reading:</span>
+                                            <span>{{ number_format($invoice->utilityUsage->electric_usage, 2) }} kWh</span>
+                                        </div>
+                                        <div class="flex justify-between text-gray-500 dark:text-gray-400">
+                                            <span>Previous Reading:</span>
+                                            <span>{{ $previousUsage ? number_format($previousUsage->electric_usage, 2) : '0.00' }} kWh</span>
+                                        </div>
+                                        <div class="flex justify-between font-medium border-t border-gray-200 dark:border-gray-600 pt-2">
+                                            <span>Usage:</span>
+                                            <span>{{ number_format($invoice->utilityUsage->electric_usage - ($previousUsage ? $previousUsage->electric_usage : 0), 2) }} kWh</span>
+                                        </div>
+                                        <div class="flex justify-between text-sm">
+                                            <span>Rate per kWh:</span>
+                                            <span>៛{{ number_format($invoice->rental->room->electric_fee, 2) }}</span>
+                                        </div>
+                                        <div class="flex justify-between font-medium text-indigo-600 dark:text-indigo-400">
+                                            <span>Total Electric Charge:</span>
+                                            <span>៛{{ number_format($invoice->total_electric_fee, 2) }}</span>
+                                        </div>
+                                    </div>
+                                </dd>
+                            </div>
                         </div>
 
                         <!-- Total -->
-                        <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4 bg-gray-50 dark:bg-gray-600">
+                        <div class="py-4 px-2 sm:grid sm:grid-cols-3 sm:gap-4 bg-gray-100 dark:bg-gray-600 rounded-lg mt-4">
                             <dt class="text-base font-semibold text-gray-900 dark:text-white">Total Amount</dt>
-                            <dd class="mt-1 text-base font-semibold text-gray-900 dark:text-white sm:col-span-2">
+                            <dd class="mt-1 text-base font-semibold text-gray-900 dark:text-white sm:col-span-2 text-right">
                                 ៛{{ number_format($invoice->total_amount, 2) }}
                             </dd>
                         </div>
+
                     </dl>
                 </div>
             </div>

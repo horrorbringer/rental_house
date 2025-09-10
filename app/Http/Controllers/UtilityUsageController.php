@@ -193,8 +193,6 @@ class UtilityUsageController extends Controller
             $waterAmount = $waterUsage * ($rental->room->water_fee ?? 0);
             $electricAmount = $electricUsage * ($rental->room->electric_fee ?? 0);
 
-            // dd($waterUsage, $electricUsage, $waterAmount, $electricAmount);
-
             // Prepare the usage notes
             $notes = sprintf(
                 "Water Usage: %.2fm³ (Current: %.2fm³ - Previous: %.2fm³) at ₱%.2f/m³ = ₱%.2f\n" .

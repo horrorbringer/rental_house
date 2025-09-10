@@ -207,16 +207,15 @@ class RentalController extends Controller
                 'after:' . $rental->start_date,
                 'before_or_equal:' . now()->addDays(1)->format('Y-m-d')
             ],
-            'status' => [
-                'required',
-                'in:' . implode(',', Rental::$statuses)
-            ],
         ]);
 
         DB::beginTransaction();
         try {
             // Update the rental with end date
-            $rental->update($validated);
+            $rental->update([
+                'end_date' => $validated['end_date'],
+                'status' => 'terminated'
+            ]);
 
             // Get the room and its current active tenants count
             // When ending a rental

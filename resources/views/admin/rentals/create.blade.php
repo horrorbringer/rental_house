@@ -26,10 +26,10 @@
                                         data-monthly-rent="{{ $room->monthly_rent }}"
                                         data-has-active-rental="{{ $room->hasActiveRental ? 'true' : 'false' }}"
                                         {{ old('room_id') == $room->id ? 'selected' : '' }}>
-                                        Room {{ $room->room_number }} - {{ $room->building->name }} 
-                                        (Monthly: ${{ number_format($room->monthly_rent, 2) }}, 
-                                        Water: ${{ number_format($room->water_fee, 2) }}/m³, 
-                                        Electric: ${{ number_format($room->electric_fee, 2) }}/kWh)
+                                        Room {{ $room->room_number }}  
+                                        (Monthly: ៛{{ number_format($room->monthly_rent, 2) }}, 
+                                        Water: ៛{{ number_format($room->water_fee, 2) }}/m³, 
+                                        Electric: ៛{{ number_format($room->electric_fee, 2) }}/kWh)
                                         @if($room->activeRentals->count() > 0)
                                             <span class="text-blue-500"> - Shared with {{ $room->activeRentals->count() }} tenant(s)</span>
                                         @endif
@@ -160,7 +160,7 @@
                         <!-- Reading Date -->
                         <div class="space-y-2">
                             <div class="relative">
-                                <input type="date" name="reading_date" id="reading_date" required
+                                <input type="date" name="reading_date" id="reading_date" 
                                     class="block w-full pl-10 border-gray-300 dark:border-gray-700 dark:bg-gray-900 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 @error('reading_date') border-red-300 dark:border-red-600 text-red-900 dark:text-red-300 placeholder-red-300 focus:border-red-500 focus:ring-red-500 @enderror">
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <svg class="h-5 w-5 @error('reading_date') text-red-400 @else text-gray-400 @enderror" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -184,7 +184,7 @@
                             <!-- Water Usage -->
                             <div class="space-y-2">
                                 <div class="relative">
-                                    <input type="number" step="0.01" name="water_usage" id="water_usage" required
+                                    <input type="number" step="0.01" name="water_usage" id="water_usage" 
                                         value="{{ old('water_usage') }}"
                                         placeholder="Enter water meter reading"
                                         class="block w-full pl-10 pr-16 border-gray-300 dark:border-gray-700 dark:bg-gray-900 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 @error('water_usage') border-red-300 dark:border-red-600 text-red-900 dark:text-red-300 placeholder-red-300 focus:border-red-500 focus:ring-red-500 @enderror">
@@ -210,7 +210,7 @@
                             <!-- Electric Usage -->
                             <div class="space-y-2">
                                 <div class="relative">
-                                    <input type="number" step="0.01" name="electric_usage" id="electric_usage" required
+                                    <input type="number" step="0.01" name="electric_usage" id="electric_usage" 
                                         value="{{ old('electric_usage') }}"
                                         placeholder="Enter electric meter reading"
                                         class="block w-full pl-10 pr-16 border-gray-300 dark:border-gray-700 dark:bg-gray-900 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 @error('electric_usage') border-red-300 dark:border-red-600 text-red-900 dark:text-red-300 placeholder-red-300 focus:border-red-500 focus:ring-red-500 @enderror">
@@ -304,11 +304,17 @@
 
             function handleRoomSelection() {
                 const selectedOption = roomSelect.options[roomSelect.selectedIndex];
-                if (!selectedOption.value) return;
+                if (!selectedOption.value) {
+                    utilitySection.style.display = 'block';
+                    readingDateInput.disabled = true;
+                    waterUsageInput.disabled = true;
+                    electricUsageInput.disabled = true;
+                    return;
+                }
 
                 const hasActiveRental = selectedOption.dataset.hasActiveRental === 'true';
                 
-                // If room has active rentals, hide utility initialization section
+                // If room has active rentals, hide utility initialization section and show info message
                 if (hasActiveRental) {
                     utilitySection.style.display = 'none';
                     readingDateInput.disabled = true;
@@ -322,14 +328,24 @@
                     let infoMsg = document.querySelector('.utility-info');
                     if (!infoMsg) {
                         infoMsg = document.createElement('div');
-                        infoMsg.className = 'utility-info text-blue-600 dark:text-blue-400 text-sm mt-2 flex items-center bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg';
+                        infoMsg.className = 'utility-info mt-4 p-4 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 rounded-lg';
                         infoMsg.innerHTML = `
-                            <svg class="h-5 w-5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                            </svg>
-                            <span>This room already has active rentals. Utilities are being tracked and will be shared among all tenants. No need for initialization.</span>
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0">
+                                    <svg class="h-5 w-5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                </div>
+                                <div class="ml-3">
+                                    <h3 class="text-sm font-medium text-blue-800 dark:text-blue-300">Shared Utilities</h3>
+                                    <div class="mt-2 text-sm text-blue-700 dark:text-blue-400">
+                                        <p>This room already has active rentals. Utilities are being tracked and will be shared among all tenants. No initialization required.</p>
+                                    </div>
+                                </div>
+                            </div>
                         `;
-                        utilitySection.parentNode.insertBefore(infoMsg, utilitySection);
+                        const roomInfoSection = roomSelect.closest('.space-y-4');
+                        roomInfoSection.insertAdjacentElement('afterend', infoMsg);
                     }
                 } else {
                     // Show and enable utility initialization for new rentals

@@ -10,73 +10,13 @@ use Illuminate\Support\Facades\Validator;
 
 class TenantController extends Controller
 {
-    // public function __construct()
-    // {
-    //     // Only apply auth middleware to owner management routes
-    //     $this->middleware('auth')->except(['search', 'showPublic', 'register']);
-    // }
-
-    /**
-     * Handle tenant registration from public room page
-     */
-    public function register(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'room_id' => 'required|exists:rooms,id',
-            'name' => 'required|string|max:100',
-            'phone' => 'required|string|max:20',
-            'email' => 'nullable|email|max:100|unique:tenants',
-            'id_card_number' => 'required|string|max:20',
-            'id_card_front' => 'required|image|max:2048',
-            'id_card_back' => 'required|image|max:2048',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
-        }
-
-        $room = Room::findOrFail($request->room_id);
-
-        // Check if room is still available
-        if ($room->status !== 'vacant') {
-            return redirect()->back()
-                ->withInput()
-                ->with('error', 'Sorry, this room is no longer available.');
-        }
-
-        // Create tenant
-        $tenant = Tenant::create([
-            'name' => $request->name,
-            'phone' => $request->phone,
-            'email' => $request->email,
-            'id_card_number' => $request->id_card_number,
-            'id_card_front_path' => $request->file('id_card_front')?->store('id-cards', 'public'),
-            'id_card_back_path' => $request->file('id_card_back')?->store('id-cards', 'public'),
-        ]);
-
-        // Create rental
-        $rental = $room->rentals()->create([
-            'tenant_id' => $tenant->id,
-            'start_date' => now(),
-        ]);
-        $room->update(['status' => 'occupied']);
-
-        // Send notification to owner
-        // TODO: Implement notification system
-
-        return redirect()->route('rooms.public.show', $room)
-            ->with('success', 'Thank you for your registration! We will contact you shortly.');
-    }
-
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
         $tenants = Tenant::withCount('rentals')->latest()->paginate(10);
-        return view('tenants.index', compact('tenants'));
+        return view('admin.tenants.index', compact('tenants'));
     }
 
     /**
@@ -84,7 +24,7 @@ class TenantController extends Controller
      */
     public function create()
     {
-        return view('tenants.create');
+        return view('admin.tenants.create');
     }
 
     /**
@@ -131,7 +71,7 @@ class TenantController extends Controller
     public function show(Tenant $tenant)
     {
         $tenant->load('rentals.room.building');
-        return view('tenants.show', compact('tenant'));
+        return view('admin.tenants.show', compact('tenant'));
     }
 
     /**
@@ -139,7 +79,7 @@ class TenantController extends Controller
      */
     public function edit(Tenant $tenant)
     {
-        return view('tenants.edit', compact('tenant'));
+        return view('admin.tenants.edit', compact('tenant'));
     }
 
     /**
@@ -205,45 +145,6 @@ class TenantController extends Controller
 
         return redirect()->route('tenants.index')
             ->with('success', 'Tenant deleted successfully.');
-    }
-
-    /**
-     * Public search page for available rooms
-     */
-    public function search(Request $request)
-    {
-        $query = Room::with('building')
-            ->where('status', 'vacant');
-
-        if ($request->filled('price_min')) {
-            $query->where('price', '>=', $request->price_min);
-        }
-
-        if ($request->filled('price_max')) {
-            $query->where('price', '<=', $request->price_max);
-        }
-
-        if ($request->filled('building')) {
-            $query->whereHas('building', function($q) use ($request) {
-                $q->where('name', 'like', '%' . $request->building . '%');
-            });
-        }
-
-        $rooms = $query->latest()->paginate(12);
-
-        return view('tenants.search', compact('rooms'));
-    }
-
-    /**
-     * Public room details page
-     */
-    public function showPublic(Room $room)
-    {
-        if ($room->status !== 'vacant') {
-            abort(404);
-        }
-
-        return view('tenants.room', compact('room'));
     }
 
 }

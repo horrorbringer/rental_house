@@ -404,7 +404,7 @@
                     </label>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <span class="text-gray-500 dark:text-gray-400">₱</span>
+                            <span class="text-gray-500 dark:text-gray-400">៛</span>
                         </div>
                         <input type="number" 
                             name="monthly_rent" 
@@ -419,7 +419,9 @@
                                    focus:border-indigo-500 dark:focus:border-indigo-400 
                                    placeholder-gray-400 dark:placeholder-gray-500
                                    transition-colors duration-200"
-                            placeholder="0.00"                    <!-- Water Fee -->
+                            placeholder="0.00" />
+                        </div>
+                {{-- Water Fee  --}}
                     <div class="relative group">
                         <label for="water_fee" class="block text-sm font-medium text-gray-300 mb-1">
                             Water Fee
@@ -427,12 +429,12 @@
                         </label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <span class="text-gray-400">₱</span>
+                                <span class="text-gray-400">៛</span>
                             </div>
                             <input type="number" name="water_fee" id="water_fee" required step="0.01"
                                 value="{{ old('water_fee', $room->water_fee ?? '') }}"
                                 class="pl-8 block w-full h-10 rounded-lg bg-white dark:bg-gray-700/50 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 transition-all duration-200"
-                                placeholder="0.00">
+                                placeholder="000">
                         </div>
                         @error('water_fee')
                             <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
@@ -447,12 +449,12 @@
                         </label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <span class="text-gray-500 dark:text-gray-400">₱</span>
+                                <span class="text-gray-500 dark:text-gray-400">៛</span>
                             </div>
                             <input type="number" name="electric_fee" id="electric_fee" required step="0.01"
                                 value="{{ old('electric_fee', $room->electric_fee ?? '') }}"
                                 class="pl-8 block w-full h-10 rounded-lg bg-white dark:bg-gray-700/50 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 transition-all duration-200"
-                                placeholder="0.00">
+                                placeholder="000">
                         </div>
                         @error('electric_fee')
                             <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
@@ -464,7 +466,6 @@
                 <div class="relative group" x-data="{ preview: '{{ isset($room) && $room->image ? asset('storage/' . $room->image) : '' }}' }">
                     <label for="image" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                         Main Room Image
-                        <span class="text-red-500">*</span>
                     </label>
                     <div class="relative space-y-4">
                         <template x-if="preview">

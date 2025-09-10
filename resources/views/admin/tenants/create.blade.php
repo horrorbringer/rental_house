@@ -10,7 +10,7 @@
         <div class="bg-gray-800 px-4 py-5 shadow sm:rounded-lg sm:p-6">
             <div class="space-y-6">
                 <div>
-                    <label for="name" class="block text-sm font-medium text-gray-300">Full Name</label>
+                    <label for="name" class="block text-sm font-medium text-gray-300">Full Name <span class="text-red-500">*</span></label>
                     <input type="text" name="name" id="name" value="{{ old('name') }}" required
                         class="mt-1 block w-full rounded-md border-gray-700 bg-gray-900 text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                     @error('name')
@@ -19,10 +19,10 @@
                 </div>
 
                 <div>
-                    <label for="phone" class="block text-sm font-medium text-gray-300">Phone Number</label>
+                    <label for="phone" class="block text-sm font-medium text-gray-300">Phone Number <span class="text-red-500">*</span></label>
                     <div class="mt-1 relative rounded-md shadow-sm">
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3">
-                            <span class="text-gray-500 sm:text-sm">+855</span>
+                            <span class="text-gray-500 sm:text-sm">+855 </span>
                         </div>
                         <input type="tel" name="phone" id="phone" value="{{ old('phone') }}" required
                             class="pl-12 block w-full rounded-md border-gray-700 bg-gray-900 text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
@@ -48,7 +48,7 @@
                 </div>
 
                 <div>
-                    <label for="id_card_number" class="block text-sm font-medium text-gray-300">ID Card Number</label>
+                    <label for="id_card_number" class="block text-sm font-medium text-gray-300">ID Card Number <span class="text-red-500">*</span></label>
                     <input type="text" name="id_card_number" id="id_card_number" value="{{ old('id_card_number') }}" required
                         class="mt-1 block w-full rounded-md border-gray-700 bg-gray-900 text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                     @error('id_card_number')
@@ -58,7 +58,7 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label for="id_card_front" class="block text-sm font-medium text-gray-300">ID Card (Front)</label>
+                        <label for="id_card_front" class="block text-sm font-medium text-gray-300">ID Card (Front) <span class="text-red-500">*</span></label>
                         <div class="mt-2 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-700 border-dashed rounded-md hover:border-indigo-500 transition-colors">
                             <div class="space-y-2 text-center">
                                 <div id="preview_front" class="hidden mb-4">
@@ -85,7 +85,7 @@
                     </div>
 
                     <div>
-                        <label for="id_card_back" class="block text-sm font-medium text-gray-300">ID Card (Back)</label>
+                        <label for="id_card_back" class="block text-sm font-medium text-gray-300">ID Card (Back) <span class="text-red-500">*</span></label>
                         <div class="mt-2 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-700 border-dashed rounded-md hover:border-indigo-500 transition-colors">
                             <div class="space-y-2 text-center">
                                 <div id="preview_back" class="hidden mb-4">

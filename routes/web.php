@@ -3,24 +3,11 @@
 use App\Http\Controllers\BuildingController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoomController;
-use App\Http\Controllers\RoomPublicController;
 use App\Http\Controllers\RentalController;
 use App\Http\Controllers\TenantController;
 use App\Http\Controllers\UtilityUsageController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
-
-// Public Routes
-Route::get('/w', [WelcomeController::class, 'index'])->name('welcome');
-
-// Public Room Routes (must be defined before the admin routes to prevent conflicts)
-Route::prefix('public/rooms')->group(function () {
-    Route::get('/', [RoomPublicController::class, 'index'])->name('tenant.rooms.index');
-    Route::get('/search', [RoomPublicController::class, 'search'])->name('tenant.rooms.search');
-    Route::get('/{room}', [RoomPublicController::class, 'show'])->name('tenant.rooms.show');
-    Route::post('/register', [TenantController::class, 'register'])->name('tenants.register');
-});
 
 // Admin Routes
 Route::middleware(['auth','verified'])->group(function () {

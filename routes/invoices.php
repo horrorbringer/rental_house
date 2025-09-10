@@ -15,6 +15,7 @@ Route::middleware(['auth'])->group(function () {
         
         // Additional invoice actions
         Route::get('/{invoice}/pdf', [InvoiceController::class, 'generatePdf'])->name('invoices.download-pdf');
+        Route::get('/{invoice}/pdf-en', [InvoiceController::class, 'generatePdfEn'])->name('invoices.download-pdf-en');
         Route::post('/bulk-generate', [InvoiceController::class, 'bulkGenerate'])->name('invoices.bulk-generate');
     });
 });

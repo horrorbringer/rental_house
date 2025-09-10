@@ -2,25 +2,41 @@
 @push('styles')
 <style>
     .stat-card {
-        @apply bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-lg transition-all duration-300 hover:border-primary-200 dark:hover:border-primary-700;
+        @apply bg-white dark:bg-gray-800/90 rounded-2xl p-6 border border-gray-100 dark:border-gray-700/50 
+        shadow-sm hover:shadow-lg transition-all duration-300 
+        hover:border-primary-200 dark:hover:border-primary-600/50
+        backdrop-blur-sm dark:backdrop-blur-lg;
     }
     .stat-card {
-        @apply bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700/50 shadow-lg transition-all duration-200 hover:border-gray-300 dark:hover:border-gray-600 hover:shadow-xl;
+        @apply bg-white/90 dark:bg-gray-800/90 rounded-xl p-6 
+        border border-gray-200/80 dark:border-gray-700/30 
+        shadow-lg transition-all duration-200 
+        hover:border-gray-300 dark:hover:border-gray-600/50 hover:shadow-xl
+        backdrop-blur-sm dark:backdrop-blur-lg;
     }
     .stat-icon {
-        @apply p-3 rounded-full transition-transform duration-200 hover:scale-110;
+        @apply p-3 rounded-full transition-all duration-200 
+        hover:scale-110 shadow-sm dark:shadow-lg;
     }
     .stat-icon-primary {
-        @apply bg-primary-100/80 dark:bg-primary-900/80 text-primary-600 dark:text-primary-400;
+        @apply bg-primary-100/80 dark:bg-primary-900/50 
+        text-primary-600 dark:text-primary-300
+        shadow-primary-500/20 dark:shadow-primary-500/10;
     }
     .stat-icon-success {
-        @apply bg-emerald-100/80 dark:bg-emerald-900/80 text-emerald-600 dark:text-emerald-400;
+        @apply bg-emerald-100/80 dark:bg-emerald-900/50 
+        text-emerald-600 dark:text-emerald-300
+        shadow-emerald-500/20 dark:shadow-emerald-500/10;
     }
     .stat-icon-warning {
-        @apply bg-amber-100/80 dark:bg-amber-900/80 text-amber-600 dark:text-amber-400;
+        @apply bg-amber-100/80 dark:bg-amber-900/50 
+        text-amber-600 dark:text-amber-300
+        shadow-amber-500/20 dark:shadow-amber-500/10;
     }
     .stat-icon-info {
-        @apply bg-blue-100/80 dark:bg-blue-900/80 text-blue-600 dark:text-blue-400;
+        @apply bg-blue-100/80 dark:bg-blue-900/50 
+        text-blue-600 dark:text-blue-300
+        shadow-blue-500/20 dark:shadow-blue-500/10;
     }
     .activity-item {
         @apply relative pb-8 last:pb-0;
@@ -30,25 +46,56 @@
         @apply absolute left-4 top-8 bottom-0 w-px bg-gray-200 dark:bg-gray-700;
     }
     .dashboard-action {
-        @apply flex items-center gap-4 px-6 py-5 rounded-2xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 hover:border-primary-200 dark:hover:border-primary-700 transition-all duration-300 group hover:-translate-y-1 hover:shadow-lg;
+        @apply flex items-center gap-4 px-6 py-5 rounded-2xl 
+        bg-white/90 dark:bg-gray-800/90 
+        border border-gray-100/80 dark:border-gray-700/30 
+        hover:border-primary-200 dark:hover:border-primary-600/50 
+        transition-all duration-300 group hover:-translate-y-1 
+        hover:shadow-lg hover:shadow-primary-500/5 dark:hover:shadow-primary-400/10
+        backdrop-blur-sm dark:backdrop-blur-lg;
     }
-        .dashboard-action-icon {
-        @apply w-14 h-14 rounded-xl flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-600 text-gray-600 dark:text-gray-300 group-hover:scale-110 group-hover:from-primary-50 group-hover:to-primary-100 dark:group-hover:from-primary-900/40 dark:group-hover:to-primary-800/40 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-all duration-300;
+    .dashboard-action-icon {
+        @apply w-14 h-14 rounded-xl flex items-center justify-center 
+        bg-gradient-to-br from-gray-50/90 to-gray-100/90 
+        dark:from-gray-700/60 dark:to-gray-600/60 
+        text-gray-600 dark:text-gray-300 
+        group-hover:scale-110 
+        group-hover:from-primary-50/90 group-hover:to-primary-100/90 
+        dark:group-hover:from-primary-900/40 dark:group-hover:to-primary-800/40 
+        group-hover:text-primary-600 dark:group-hover:text-primary-300
+        transition-all duration-300
+        shadow-sm dark:shadow-lg dark:shadow-gray-900/30;
     }
     .quick-stat {
-        @apply flex items-center justify-between p-5 rounded-2xl bg-gradient-to-br from-gray-50 to-white dark:from-gray-800/50 dark:to-gray-700/50 border border-gray-100 dark:border-gray-700/50 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300;
+        @apply flex items-center justify-between p-5 rounded-2xl 
+        bg-gradient-to-br from-gray-50/90 to-white/90 
+        dark:from-gray-800/40 dark:to-gray-700/40 
+        border border-gray-100/80 dark:border-gray-700/30 
+        hover:shadow-md hover:shadow-primary-500/5 dark:hover:shadow-primary-400/10
+        hover:-translate-y-0.5 transition-all duration-300
+        backdrop-blur-sm dark:backdrop-blur-lg;
     }
     .quick-stat-icon {
-        @apply w-14 h-14 rounded-xl flex items-center justify-center text-2xl font-semibold transition-transform duration-200 hover:scale-110;
+        @apply w-14 h-14 rounded-xl flex items-center justify-center 
+        text-2xl font-semibold transition-all duration-200 
+        hover:scale-110 hover:shadow-lg 
+        shadow-sm dark:shadow-lg dark:shadow-gray-900/30
+        bg-white/50 dark:bg-gray-800/50;
     }
     .stat-value {
-        @apply text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary-600 to-primary-400 dark:from-primary-400 dark:to-primary-300;
+        @apply text-3xl font-bold bg-clip-text text-transparent 
+        bg-gradient-to-r from-primary-600 to-primary-400 
+        dark:from-primary-300 dark:to-primary-400
+        drop-shadow-sm dark:drop-shadow-[0_0_0.3rem_rgba(79,70,229,0.3)];
     }
     .progress-bar {
-        @apply relative w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden;
+        @apply relative w-full h-2.5 bg-gray-200/70 dark:bg-gray-700/50 
+        rounded-full overflow-hidden backdrop-blur-sm;
     }
     .progress-bar-fill {
-        @apply absolute top-0 left-0 h-full rounded-full transition-all duration-1000 ease-out;
+        @apply absolute top-0 left-0 h-full rounded-full 
+        transition-all duration-1000 ease-out
+        shadow-[0_0_8px_rgba(59,130,246,0.5)] dark:shadow-[0_0_8px_rgba(147,197,253,0.5)];
     }
     [x-cloak] {
         display: none !important;

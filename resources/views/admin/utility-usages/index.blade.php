@@ -90,9 +90,9 @@
                                 <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
                                     <div class="text-sm font-medium mb-1">Water Usage</div>
                                     <div class="text-lg font-semibold">{{ number_format($usage->water_usage, 2) }} m³</div>
-                                    <div class="text-xs text-gray-500">Rate: ៛{{ number_format($usage->rental->room->water_rate, 0) }}/m³</div>
+                                    <div class="text-xs text-gray-500">Rate: ៛{{ number_format($usage->rental->room->water_fee, 0) }}/m³</div>
                                     <div class="text-sm font-medium text-gray-900 dark:text-gray-100 mt-1">
-                                        ៛{{ number_format($usage->water_usage * $usage->rental->room->water_rate, 0) }}
+                                        ៛{{ number_format($usage->water_usage * $usage->rental->room->water_fee, 0) }}
                                     </div>
                                 </div>
 
@@ -100,15 +100,15 @@
                                 <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
                                     <div class="text-sm font-medium mb-1">Electric Usage</div>
                                     <div class="text-lg font-semibold">{{ number_format($usage->electric_usage, 2) }} kWh</div>
-                                    <div class="text-xs text-gray-500">Rate: ៛{{ number_format($usage->rental->room->electric_rate, 0) }}/kWh</div>
+                                    <div class="text-xs text-gray-500">Rate: ៛{{ number_format($usage->rental->room->electric_fee, 0) }}/kWh</div>
                                     <div class="text-sm font-medium text-gray-900 dark:text-gray-100 mt-1">
-                                        ៛{{ number_format($usage->electric_usage * $usage->rental->room->electric_rate, 0) }}
+                                        ៛{{ number_format($usage->electric_usage * $usage->rental->room->electric_fee, 0) }}
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Total Charges -->
-                            <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg mb-4">
+                            {{-- <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg mb-4">
                                 <div class="grid grid-cols-2 gap-2 text-sm mb-2">
                                     <div class="text-gray-600 dark:text-gray-400">Water:</div>
                                     <div class="text-right">៛{{ number_format($usage->water_usage * $usage->rental->room->water_rate, 0) }}</div>
@@ -130,7 +130,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
 
                             <!-- Actions -->
                             <div class="flex gap-2">
@@ -180,9 +180,6 @@
                                     Electric Usage
                                 </th>
                                 <th scope="col" class="px-6 py-4">
-                                    Monthly Rent
-                                </th>
-                                <th scope="col" class="px-6 py-4">
                                     Actions
                                 </th>
                             </tr>
@@ -220,13 +217,6 @@
                                         </div>
                                         <div class="text-xs text-gray-500">
                                             Rate: ៛{{ number_format($usage->rental->room->electric_fee, 0) }}/kWh
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <div class="space-y-1">
-                                            <div class="text-sm text-gray-600 dark:text-gray-400">
-                                                Rent: ៛{{ number_format($usage->rental->room->monthly_rent, 0) }}
-                                            </div>
                                         </div>
                                     </td>
                                     <td class="px-6 py-4">

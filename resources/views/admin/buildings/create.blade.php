@@ -89,7 +89,7 @@
             @endif
 
         <!-- Form Container -->
-        <div class="bg-gray-800 shadow-xl rounded-xl overflow-hidden">
+        <div class="bg-white dark:bg-gray-800 shadow-xl rounded-xl overflow-hidden">
             <form action="{{ route('buildings.store') }}" 
                   method="POST" 
                   enctype="multipart/form-data"
@@ -277,13 +277,6 @@
                 </div>
 
                 <div class="flex flex-col sm:flex-row items-center justify-between gap-4 px-6 py-4 bg-gradient-to-b from-white to-gray-50 dark:from-gray-800 dark:to-gray-800/50 border-t border-gray-200 dark:border-gray-700">
-                    <span class="text-sm text-gray-600 dark:text-gray-400 order-2 sm:order-1 flex items-center">
-                        <svg class="w-4 h-4 mr-1.5 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                        All fields marked with <span class="text-red-500 font-medium">*</span> are required
-                    </span>
-                    
                     <div class="flex items-center gap-3 w-full sm:w-auto order-1 sm:order-2">
                         <a href="{{ route('buildings.index') }}"
                             class="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2.5 
@@ -323,7 +316,7 @@
                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
                                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
                             </svg>
-                            <span class="button-text">Create Building</span>
+                            <span class="button-text">Create</span>
                         </button>
                     </div>
                 </div>

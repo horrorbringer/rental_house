@@ -43,7 +43,7 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bg-gray-50 dark:bg-gray-750 rounded-lg p-6">
+                <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
                     <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Room Details</h3>
                     <div class="space-y-3">
                         <div class="flex justify-between">
@@ -62,7 +62,7 @@
                 </div>
 
                 @if($room->rental)
-                    <div class="bg-gray-50 dark:bg-gray-750 rounded-lg p-6">
+                    <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
                         <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Current Tenant</h3>
                         <div class="space-y-3">
                             <div class="flex justify-between">
@@ -85,7 +85,7 @@
             </div>
 
             @if($room->rental && $room->rental->utilityUsage)
-                <div class="mt-6 bg-gray-50 dark:bg-gray-750 rounded-lg p-6">
+                <div class="mt-6 bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
                     <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Utility Usage</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
@@ -158,7 +158,7 @@
             </div>
         </div>
 
-        <div class="bg-gray-50 dark:bg-gray-750 px-6 py-4 border-t border-gray-200 dark:border-gray-700">
+        <div class="bg-gray-50 dark:bg-gray-700 px-6 py-4 border-t border-gray-200 dark:border-gray-700">
             <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
                 <a href="{{ route('rooms.index') }}"
                     class="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-transparent hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 dark:focus:ring-offset-gray-800 focus:ring-indigo-500 transition-all duration-200">

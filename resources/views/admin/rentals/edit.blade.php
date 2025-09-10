@@ -97,6 +97,7 @@
             <!-- End Date Form -->
             <form x-data="{ 
                 endDate: '{{ old('end_date', date('Y-m-d')) }}',
+                status: '{{ old('status', 'terminated') }}',
                 minDate: '{{ $rental->start_date }}',
                 maxDate: '{{ now()->addDays(1)->format('Y-m-d') }}',
                 isSubmitting: false

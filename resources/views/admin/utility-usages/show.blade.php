@@ -36,7 +36,7 @@
                                 <div>
                                     <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Monthly Rent</dt>
                                     <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100">
-                                        ฿{{ number_format($utilityUsage->rental->room->monthly_rent, 2) }}
+                                        ៛{{ number_format($utilityUsage->rental->room->monthly_rent, 2) }}
                                     </dd>
                                 </div>
                             </dl>
@@ -83,11 +83,7 @@
                                 <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100 sm:mt-0 sm:col-span-2">
                                     {{ number_format($utilityUsage->water_usage, 2) }} units
                                     <span class="text-gray-500 dark:text-gray-400">
-                                        (Rate: ฿{{ number_format($utilityUsage->rental->room->water_rate, 2) }}/unit)
-                                    </span>
-                                    <br>
-                                    <span class="font-medium">
-                                        Total: ฿{{ number_format($utilityUsage->water_usage * $utilityUsage->rental->room->water_rate, 2) }}
+                                        (Rate: ៛{{ number_format($utilityUsage->rental->room->water_fee, 2) }}/unit)
                                     </span>
                                 </dd>
                             </div>
@@ -98,11 +94,7 @@
                                 <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100 sm:mt-0 sm:col-span-2">
                                     {{ number_format($utilityUsage->electric_usage, 2) }} units
                                     <span class="text-gray-500 dark:text-gray-400">
-                                        (Rate: ฿{{ number_format($utilityUsage->rental->room->electric_rate, 2) }}/unit)
-                                    </span>
-                                    <br>
-                                    <span class="font-medium">
-                                        Total: ฿{{ number_format($utilityUsage->electric_usage * $utilityUsage->rental->room->electric_rate, 2) }}
+                                        (Rate: ៛{{ number_format($utilityUsage->rental->room->electric_fee, 2) }}/unit)
                                     </span>
                                 </dd>
                             </div>
@@ -110,55 +102,6 @@
                     </div>
                 </div>
 
-                @if($utilityUsage->rental->invoices->where('billing_month', $utilityUsage->billing_month)->first())
-                    @php
-                        $invoice = $utilityUsage->rental->invoices->where('billing_month', $utilityUsage->billing_month)->first();
-                    @endphp
-                    <div class="mt-6 bg-white dark:bg-gray-800 shadow overflow-hidden sm:rounded-lg">
-                        <div class="px-4 py-5 sm:px-6 flex justify-between items-center">
-                            <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-gray-100">
-                                Invoice Summary
-                            </h3>
-                        </div>
-                        <div class="border-t border-gray-200 dark:border-gray-700">
-                            <dl>
-                                <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Monthly Rent</dt>
-                                    <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100 sm:mt-0 sm:col-span-2">
-                                        ฿{{ number_format($invoice->rent_amount, 2) }}
-                                    </dd>
-                                </div>
-                                <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 bg-gray-50 dark:bg-gray-700">
-                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Water Charges</dt>
-                                    <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100 sm:mt-0 sm:col-span-2">
-                                        ฿{{ number_format($invoice->water_usage_amount, 2) }}
-                                    </dd>
-                                </div>
-                                <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Electric Charges</dt>
-                                    <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100 sm:mt-0 sm:col-span-2">
-                                        ฿{{ number_format($invoice->electric_usage_amount, 2) }}
-                                    </dd>
-                                </div>
-                                <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 bg-gray-50 dark:bg-gray-700">
-                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Amount</dt>
-                                    <dd class="mt-1 text-sm font-semibold text-gray-900 dark:text-gray-100 sm:mt-0 sm:col-span-2">
-                                        ฿{{ number_format($invoice->total, 2) }}
-                                    </dd>
-                                </div>
-                                <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Payment Status</dt>
-                                    <dd class="mt-1 text-sm sm:mt-0 sm:col-span-2">
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                            {{ $invoice->status === 'paid' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
-                                            {{ ucfirst($invoice->status) }}
-                                        </span>
-                                    </dd>
-                                </div>
-                            </dl>
-                        </div>
-                    </div>
-                @endif
             </div>
         </div>
     </div>
