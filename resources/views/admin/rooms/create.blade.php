@@ -113,7 +113,7 @@
 @endpush
 
 @section('content')
-<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<div class="mx-auto">
     <!-- Breadcrumb -->
     <nav class="mb-6 flex" aria-label="Breadcrumb">
         <ol class="inline-flex items-center space-x-1 md:space-x-3">
@@ -284,7 +284,7 @@
                             </div>
                             <input type="text" name="room_number" id="room_number" required
                                 value="{{ old('room_number', $room->room_number ?? '') }}"
-                                class="block w-full h-10 pl-10 rounded-lg bg-gray-700/50 border border-gray-600 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 text-white transition-all duration-200"
+                                class="block w-full h-10 pl-10 rounded-lg bg-white dark:bg-gray-700 border border-gray-600 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 text-white transition-all duration-200"
                                 placeholder="e.g., 101">
                         </div>
                         @error('room_number')
@@ -292,46 +292,9 @@
                         @enderror
                     </div>
 
-                    <!-- Status -->
-                    <div class="relative group">
-                        <label for="status" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                            Room Status
-                            <span class="text-red-500">*</span>
-                        </label>
-                        <div class="relative">
-                            <select name="status" 
-                                id="status" 
-                                required
-                                class="block w-full rounded-lg bg-white dark:bg-gray-700 
-                                       border border-gray-300 dark:border-gray-600 
-                                       text-gray-900 dark:text-gray-100 
-                                       focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 
-                                       focus:border-indigo-500 dark:focus:border-indigo-400 
-                                       transition-colors duration-200"
-                                class="block w-full h-10 pl-3 pr-10 rounded-lg bg-gray-700/50 border border-gray-600 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 text-white transition-all duration-200">
-                                <option value="{{ App\Models\Room::STATUS_VACANT }}"
-                                    {{ (old('status', $room->status ?? '') == App\Models\Room::STATUS_VACANT) ? 'selected' : '' }}>
-                                    Vacant
-                                </option>
-                                <option value="{{ App\Models\Room::STATUS_OCCUPIED }}"
-                                    {{ (old('status', $room->status ?? '') == App\Models\Room::STATUS_OCCUPIED) ? 'selected' : '' }}>
-                                    Occupied
-                                </option>
-                            </select>
-                            <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-                                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                                </svg>
-                            </div>
-                        </div>
-                        @error('status')
-                            <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
-                        @enderror
-                    </div>
-
 
                     <!-- Additional Room Images -->
-                    <div class="relative group md:col-span-2" 
+                    {{-- <div class="relative group md:col-span-2" 
                         x-data="{ 
                             previews: [], 
                             maxFiles: 5,
@@ -389,7 +352,7 @@
                             </svg>
                             <p class="text-xs text-gray-400">Supported formats: JPG, PNG, WEBP. Max file size: 5MB each.</p>
                         </div>
-                    </div>
+                    </div> --}}
 
                 </div>
 
