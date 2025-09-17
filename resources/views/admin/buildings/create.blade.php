@@ -17,8 +17,8 @@
                     </svg>
                 </div>
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Create New Building</h1>
-                    <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">Add a new building to your property management system</p>
+                    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">បង្កើតអគារ​ថ្មី</h1>
+                    <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">បន្ថែមអគារថ្មីទៅក្នុងប្រព័ន្ធគ្រប់គ្រងអចលនទ្រព្យរបស់អ្នក</p>
                 </div>
             </div>
 
@@ -36,7 +36,7 @@
                     </li>
                     <li>
                         <a href="{{ route('buildings.index') }}" class="hover:text-gray-200 transition-colors duration-150">
-                            Buildings
+                            អគារ
                         </a>
                     </li>
                     <li>
@@ -45,7 +45,7 @@
                         </svg>
                     </li>
                     <li>
-                        <span class="text-gray-200">Create New</span>
+                        <span class="text-gray-200">បង្កើតអគារ</span>
                     </li>
                 </ol>
             </nav>
@@ -104,7 +104,7 @@
                         <!-- Name -->
                         <div class="col-span-2 sm:col-span-1">
                             <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                Building Name <span class="text-red-500">*</span>
+                                ឈ្មោះអគារ <span class="text-red-500">*</span>
                             </label>
                             <div class="mt-1 relative rounded-lg shadow-sm">
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -123,7 +123,7 @@
                                            focus:border-indigo-500 dark:focus:border-indigo-400
                                            placeholder-gray-400 dark:placeholder-gray-500
                                            sm:text-sm transition-colors duration-200"
-                                    placeholder="Enter building name">
+                                    placeholder="បញ្ចូលឈ្មោះអគារ">
                                 @error('name')
                                     <p class="mt-2 text-sm text-red-600 dark:text-red-400 flex items-center">
                                         <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -138,7 +138,7 @@
                         <!-- Contact Information -->
                         <div class="col-span-2 sm:col-span-1">
                             <label for="contact_info" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                Contact Information
+                                ព័ត៌មានទំនាក់ទំនង
                             </label>
                             <div class="mt-1 relative rounded-lg shadow-sm">
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -157,7 +157,7 @@
                                            focus:border-indigo-500 dark:focus:border-indigo-400
                                            placeholder-gray-400 dark:placeholder-gray-500
                                            sm:text-sm transition-colors duration-200"
-                                    placeholder="Enter contact information">
+                                    placeholder="បញ្ចូលព័ត៌មានទំនាក់ទំនង​ (អត់បញ្ចូលក៏បាន)">
                                 @error('contact_info')
                                     <p class="mt-2 text-sm text-red-600 dark:text-red-400 flex items-center">
                                         <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -172,7 +172,7 @@
                         <!-- Address -->
                         <div class="col-span-2">
                             <label for="address" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                Address <span class="text-red-500">*</span>
+                                អាសយដ្ឋាន <span class="text-red-500">*</span>
                             </label>
                             <div class="mt-1 relative rounded-lg shadow-sm">
                                 <div class="absolute top-3 left-3 flex items-start pointer-events-none">
@@ -194,7 +194,7 @@
                                            placeholder-gray-400 dark:placeholder-gray-500
                                            sm:text-sm transition-colors duration-200
                                            resize-none"
-                                    placeholder="Enter complete building address">{{ old('address') }}</textarea>
+                                    placeholder="បញ្ចូលអាសយដ្ឋានអគារយ៉ាងពេញលេញ">{{ old('address') }}</textarea>
                                 @error('address')
                                     <p class="mt-2 text-sm text-red-600 dark:text-red-400 flex items-center">
                                         <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -206,7 +206,7 @@
                             </div>
                         </div>                <!-- Description -->
                 <div class="col-span-2">
-                    <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Description</label>
+                    <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-300">ការពិពណ៌នា</label>
                     <div class="mt-1 relative rounded-lg shadow-sm">
                         <div class="absolute top-3 left-3 flex items-start pointer-events-none">
                             <svg class="h-5 w-5 text-gray-400 dark:text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -239,7 +239,7 @@
                 <!-- Building Images -->
                 <div class="col-span-2">
                     <label class="block text-sm font-medium text-gray-300 mb-2">
-                        Building Images 
+                        រសភាពអគារ
                         <span class="text-xs text-gray-400">(Max 5 images, 5MB each)</span>
                     </label>
 
@@ -251,7 +251,7 @@
                             </svg>
                             <div class="flex flex-col sm:flex-row items-center justify-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                                 <label class="relative cursor-pointer rounded-md font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300 focus-within:outline-none">
-                                    <span>Upload images</span>
+                                    <span>បញ្ចូលរូបភាព</span>
                                     <input type="file" 
                                            name="images[]" 
                                            class="sr-only" 
@@ -292,7 +292,7 @@
                             <svg class="w-4 h-4 mr-1.5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                             </svg>
-                            Cancel
+                            បោះបង់
                         </a>
                         <button type="submit"
                             id="submitButton"
@@ -316,7 +316,7 @@
                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
                                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
                             </svg>
-                            <span class="button-text">Create</span>
+                            <span class="button-text">បង្កើត</span>
                         </button>
                     </div>
                 </div>

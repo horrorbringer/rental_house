@@ -17,13 +17,13 @@
             <li>
                 <div class="flex items-center">
                     <svg class="w-6 h-6 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
-                    <a href="{{ route('rooms.index') }}" class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white ml-1 md:ml-2 transition-colors duration-200">Rooms</a>
+                    <a href="{{ route('rooms.index') }}" class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white ml-1 md:ml-2 transition-colors duration-200">បន្ទប់</a>
                 </div>
             </li>
             <li aria-current="page">
                 <div class="flex items-center">
                     <svg class="w-6 h-6 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
-                    <span class="text-gray-700 dark:text-gray-300 ml-1 md:ml-2">Add rental</span>
+                    <span class="text-gray-700 dark:text-gray-300 ml-1 md:ml-2">បន្ថែមការជួល</span>
                 </div>
             </li>
         </ol>
@@ -36,7 +36,7 @@
             <div class="space-y-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label for="name" class="block text-sm font-medium text-gray-600 dark:text-white">Full Name <span class="text-red-500">*</span></label>
+                        <label for="name" class="block text-sm font-medium text-gray-600 dark:text-white">ឈ្មោះពេញ<span class="text-red-500">*</span></label>
                         <input type="text" name="name" id="name" value="{{ old('name') }}" required
                             class="mt-1 block w-full bg-gray-50 rounded-md dark:border-gray-700 dark:bg-gray-900 border-gray-300 dark:text-gray-300 text-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                         @error('name')
@@ -46,7 +46,7 @@
 
                     {{-- deposit --}}
                     <div>
-                        <label for="deposit" class="block text-sm font-medium text-gray-600 dark:text-white">Deposit Amount <span class="text-red-500">*</span></label>
+                        <label for="deposit" class="block text-sm font-medium text-gray-600 dark:text-white">កម្រៃដាក់ប្រាក់កក់<span class="text-red-500">*</span></label>
                         <input type="number" name="deposit" id="deposit" value="{{ old('deposit') }}" required
                             class="mt-1 block w-full bg-gray-50 rounded-md dark:border-gray-700 dark:bg-gray-900 border-gray-300 dark:text-gray-300 text-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                         @error('deposit')
@@ -58,7 +58,7 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                    <label for="phone" class="block text-sm font-medium text-gray-600 dark:text-white">Phone Number <span class="text-red-500">*</span></label>
+                    <label for="phone" class="block text-sm font-medium text-gray-600 dark:text-white">លេខទូរស័ព្ទ<span class="text-red-500">*</span></label>
                     <div class="mt-1 relative rounded-md shadow-sm">
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3">
                             <span class="text-gray-500 sm:text-sm">+855 </span>
@@ -71,7 +71,7 @@
                             maxlength="12"
                             oninput="formatPhoneNumber(this)">
                     </div>
-                    <p class="mt-1 text-xs text-gray-500">Format: 12-345-6789 (no leading zero)</p>
+                    <p class="mt-1 text-xs text-gray-500">Format: 12-345-6789 (គ្មានសូន្យដើម)</p>
                     @error('phone')
                         <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                     @enderror
@@ -79,7 +79,7 @@
 
                     {{-- start date --}}
                     <div>
-                        <label for="start_date" class="block text-sm font-medium text-gray-600 dark:text-white">Start Date <span class="text-red-500">*</span></label>
+                        <label for="start_date" class="block text-sm font-medium text-gray-600 dark:text-white">ថ្ងៃចាប់ផ្តើម <span class="text-red-500">*</span></label>
                         <input type="date" name="start_date" id="start_date" value="{{ old('start_date') }}" required
                             class="mt-1 block w-full bg-gray-50 rounded-md dark:border-gray-700 dark:bg-gray-900 border-gray-300 dark:text-gray-300 text-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                         @error('start_date')
@@ -89,7 +89,7 @@
                 </div>
 
                 <div>
-                    <label for="email" class="block text-sm font-medium text-gray-600 dark:text-white">Email (Optional)</label>
+                    <label for="email" class="block text-sm font-medium text-gray-600 dark:text-white">Email (អាចមិនបញ្ចូល)</label>
                     <input type="email" name="email" id="email" value="{{ old('email') }}"
                         class="mt-1 block w-full bg-gray-50 rounded-md dark:border-gray-700 dark:bg-gray-900 border-gray-300 dark:text-gray-300 text-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                     @error('email')
@@ -98,7 +98,7 @@
                 </div>
 
                 <div>
-                    <label for="id_card_number" class="block text-sm font-medium text-gray-600 dark:text-white">ID Card Number <span class="text-red-500">*</span></label>
+                    <label for="id_card_number" class="block text-sm font-medium text-gray-600 dark:text-white">លេខកូដអត្តសញ្ញាណ<span class="text-red-500">*</span></label>
                     <input type="text" name="id_card_number" id="id_card_number" value="{{ old('id_card_number') }}" required
                         class="mt-1 block w-full bg-gray-50 rounded-md dark:border-gray-700 dark:bg-gray-900 border-gray-300 dark:text-gray-300 text-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                     @error('id_card_number')
@@ -108,7 +108,7 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label for="id_card_front" class="block text-sm font-medium text-gray-600 dark:text-white">ID Card (Front) <span class="text-red-500">*</span></label>
+                        <label for="id_card_front" class="block text-sm font-medium text-gray-600 dark:text-white">រូបភាពអត្តសញ្ញាណ (មុខ) <span class="text-red-500">*</span></label>
                         <div class="mt-2 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-700 border-dashed rounded-md hover:border-indigo-500 transition-colors">
                             <div class="space-y-2 text-center">
                                 <div id="preview_front" class="hidden mb-4">
@@ -121,10 +121,10 @@
                                 </div>
                                 <div class="flex text-sm text-gray-400">
                                     <label for="id_card_front" class="relative cursor-pointer rounded-md font-medium text-indigo-500 hover:text-indigo-400 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-                                        <span>Upload a file</span>
+                                        <span>បញ្ចូលឯកសារ</span>
                                         <input id="id_card_front" name="id_card_front" type="file" accept="image/*" class="sr-only" onchange="previewImage(this, 'preview_front', 'icon_front')">
                                     </label>
-                                    <p class="pl-1">or drag and drop</p>
+                                    <p class="pl-1">ឬ បញ្ចូលដោយការព្យាយាម និងទាញយក</p>
                                 </div>
                                 <p class="text-xs text-gray-500">PNG, JPG, GIF up to 2MB</p>
                             </div>
@@ -135,7 +135,7 @@
                     </div>
 
                     <div>
-                        <label for="id_card_back" class="block text-sm font-medium text-gray-300">ID Card (Back) <span class="text-red-500">*</span></label>
+                        <label for="id_card_back" class="block text-sm font-medium text-gray-300">រូបភាពអត្តសញ្ញាណ (ក្រោយ) <span class="text-red-500">*</span></label>
                         <div class="mt-2 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-700 border-dashed rounded-md hover:border-indigo-500 transition-colors">
                             <div class="space-y-2 text-center">
                                 <div id="preview_back" class="hidden mb-4">
@@ -148,10 +148,10 @@
                                 </div>
                                 <div class="flex text-sm text-gray-400">
                                     <label for="id_card_back" class="relative cursor-pointer rounded-md font-medium text-indigo-500 hover:text-indigo-400 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-                                        <span>Upload a file</span>
+                                        <span>បញ្ចូលឯកសារ</span>
                                         <input id="id_card_back" name="id_card_back" type="file" accept="image/*" class="sr-only" onchange="previewImage(this, 'preview_back', 'icon_back')">
                                     </label>
-                                    <p class="pl-1">or drag and drop</p>
+                                    <p class="pl-1">ឬ បញ្ចូលដោយការព្យាយាម និងទាញយក</p>
                                 </div>
                                 <p class="text-xs text-gray-500">PNG, JPG, GIF up to 2MB</p>
                             </div>
@@ -167,7 +167,7 @@
                     <div class="space-y-6">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <label for="electric_usage" class="block text-sm font-medium text-gray-600 dark:text-white">Initial Electricity Reading (kWh) <span class="text-red-500">*</span></label>
+                                <label for="electric_usage" class="block text-sm font-medium text-gray-600 dark:text-white">ការប្រើប្រាស់អគ្គិសនី (kWh) <span class="text-red-500">*</span></label>
                                 <input type="number" name="electric_usage" id="electric_usage" value="{{ old('electric_usage') }}" required
                                     class="mt-1 block w-full bg-gray-50 rounded-md dark:border-gray-700 dark:bg-gray-900 border-gray-300 dark:text-gray-300 text-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                                 @error('electric_usage')
@@ -176,7 +176,7 @@
                             </div>
 
                             <div>
-                                <label for="water_usage" class="block text-sm font-medium text-gray-600 dark:text-white">Initial Water Reading (m³) <span class="text-red-500">*</span></label>
+                                <label for="water_usage" class="block text-sm font-medium text-gray-600 dark:text-white">ការប្រើប្រាស់ទឹក (m³) <span class="text-red-500">*</span></label>
                                 <input type="number" name="water_usage" id="water_usage" value="{{ old('water_usage') }}" required
                                     class="mt-1 block w-full bg-gray-50 rounded-md dark:border-gray-700 dark:bg-gray-900 border-gray-300 dark:text-gray-300 text-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                                 @error('water_usage')
@@ -186,7 +186,7 @@
                         </div>
 
                     <div>
-                        <label for="reading_date" class="block text-sm font-medium text-gray-600 dark:text-white">Start Date <span class="text-red-500">*</span></label>
+                        <label for="reading_date" class="block text-sm font-medium text-gray-600 dark:text-white">ថ្ងៃចាប់ផ្តើម <span class="text-red-500">*</span></label>
                         <input type="date" name="reading_date" id="reading_date" value="{{ old('reading_date') }}" required
                             class="mt-1 block w-full bg-gray-50 rounded-md dark:border-gray-700 dark:bg-gray-900 border-gray-300 dark:text-gray-300 text-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                         @error('reading_date')
@@ -201,11 +201,11 @@
         <div class="flex justify-end gap-3">
             <a href="{{ route('rooms.index') }}"
                 class="inline-flex justify-center rounded-md border border-gray-700 bg-gray-800 py-2 px-4 text-sm font-medium text-gray-300 shadow-sm hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                Cancel
+                បោះបង់
             </a>
             <button type="submit"
                 class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                Create Tenant
+                រក្សាទុក
             </button>
         </div>
     </form>
