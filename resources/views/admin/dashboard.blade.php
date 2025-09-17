@@ -2,100 +2,85 @@
 @push('styles')
 <style>
     .stat-card {
-        @apply bg-white dark:bg-gray-800/90 rounded-2xl p-6 border border-gray-100 dark:border-gray-700/50 
-        shadow-sm hover:shadow-lg transition-all duration-300 
-        hover:border-primary-200 dark:hover:border-primary-600/50
-        backdrop-blur-sm dark:backdrop-blur-lg;
-    }
-    .stat-card {
-        @apply bg-white/90 dark:bg-gray-800/90 rounded-xl p-6 
-        border border-gray-200/80 dark:border-gray-700/30 
-        shadow-lg transition-all duration-200 
-        hover:border-gray-300 dark:hover:border-gray-600/50 hover:shadow-xl
-        backdrop-blur-sm dark:backdrop-blur-lg;
+        @apply bg-white/95 dark:bg-gray-800/95 rounded-xl p-5
+        border border-gray-100/90 dark:border-gray-700/20
+        shadow-sm hover:shadow-md transition-all duration-200
+        hover:bg-white hover:border-gray-200/80 dark:hover:border-gray-600/30
+        backdrop-blur-sm;
     }
     .stat-icon {
-        @apply p-3 rounded-full transition-all duration-200 
-        hover:scale-110 shadow-sm dark:shadow-lg;
+        @apply p-2.5 rounded-lg transition-all duration-200
+        hover:scale-105;
     }
     .stat-icon-primary {
-        @apply bg-primary-100/80 dark:bg-primary-900/50 
-        text-primary-600 dark:text-primary-300
-        shadow-primary-500/20 dark:shadow-primary-500/10;
+        @apply bg-indigo-50/80 dark:bg-indigo-500/10
+        text-indigo-600 dark:text-indigo-400
+        ring-1 ring-indigo-100 dark:ring-indigo-500/20;
     }
     .stat-icon-success {
-        @apply bg-emerald-100/80 dark:bg-emerald-900/50 
-        text-emerald-600 dark:text-emerald-300
-        shadow-emerald-500/20 dark:shadow-emerald-500/10;
+        @apply bg-emerald-50/80 dark:bg-emerald-500/10
+        text-emerald-600 dark:text-emerald-400
+        ring-1 ring-emerald-100 dark:ring-emerald-500/20;
     }
     .stat-icon-warning {
-        @apply bg-amber-100/80 dark:bg-amber-900/50 
-        text-amber-600 dark:text-amber-300
-        shadow-amber-500/20 dark:shadow-amber-500/10;
+        @apply bg-amber-50/80 dark:bg-amber-500/10
+        text-amber-600 dark:text-amber-400
+        ring-1 ring-amber-100 dark:ring-amber-500/20;
     }
     .stat-icon-info {
-        @apply bg-blue-100/80 dark:bg-blue-900/50 
-        text-blue-600 dark:text-blue-300
-        shadow-blue-500/20 dark:shadow-blue-500/10;
+        @apply bg-blue-50/80 dark:bg-blue-500/10
+        text-blue-600 dark:text-blue-400
+        ring-1 ring-blue-100 dark:ring-blue-500/20;
     }
     .activity-item {
-        @apply relative pb-8 last:pb-0;
+        @apply relative pb-4 last:pb-0;
     }
     .activity-item:not(:last-child):before {
         content: '';
-        @apply absolute left-4 top-8 bottom-0 w-px bg-gray-200 dark:bg-gray-700;
+        @apply absolute left-3 top-6 bottom-0 w-px bg-gray-100 dark:bg-gray-700/50;
     }
     .dashboard-action {
-        @apply flex items-center gap-4 px-6 py-5 rounded-2xl 
-        bg-white/90 dark:bg-gray-800/90 
-        border border-gray-100/80 dark:border-gray-700/30 
-        hover:border-primary-200 dark:hover:border-primary-600/50 
-        transition-all duration-300 group hover:-translate-y-1 
-        hover:shadow-lg hover:shadow-primary-500/5 dark:hover:shadow-primary-400/10
-        backdrop-blur-sm dark:backdrop-blur-lg;
+        @apply flex items-center gap-3 px-4 py-3 rounded-lg
+        bg-white/95 dark:bg-gray-800/95
+        border border-gray-100/90 dark:border-gray-700/20
+        hover:border-indigo-200/80 dark:hover:border-indigo-500/30
+        transition-all duration-200 group
+        hover:shadow-sm;
     }
     .dashboard-action-icon {
-        @apply w-14 h-14 rounded-xl flex items-center justify-center 
-        bg-gradient-to-br from-gray-50/90 to-gray-100/90 
-        dark:from-gray-700/60 dark:to-gray-600/60 
-        text-gray-600 dark:text-gray-300 
-        group-hover:scale-110 
-        group-hover:from-primary-50/90 group-hover:to-primary-100/90 
-        dark:group-hover:from-primary-900/40 dark:group-hover:to-primary-800/40 
-        group-hover:text-primary-600 dark:group-hover:text-primary-300
-        transition-all duration-300
-        shadow-sm dark:shadow-lg dark:shadow-gray-900/30;
+        @apply w-10 h-10 rounded-lg flex items-center justify-center
+        bg-gradient-to-br from-gray-50 to-white
+        dark:from-gray-700/60 dark:to-gray-800/60
+        text-gray-500 dark:text-gray-400
+        group-hover:scale-105
+        group-hover:text-indigo-600 dark:group-hover:text-indigo-400
+        transition-all duration-200
+        ring-1 ring-gray-100 dark:ring-gray-700/50;
     }
     .quick-stat {
-        @apply flex items-center justify-between p-5 rounded-2xl 
-        bg-gradient-to-br from-gray-50/90 to-white/90 
-        dark:from-gray-800/40 dark:to-gray-700/40 
-        border border-gray-100/80 dark:border-gray-700/30 
-        hover:shadow-md hover:shadow-primary-500/5 dark:hover:shadow-primary-400/10
-        hover:-translate-y-0.5 transition-all duration-300
-        backdrop-blur-sm dark:backdrop-blur-lg;
+        @apply flex items-center justify-between p-4 rounded-lg
+        bg-white/95 dark:bg-gray-800/95
+        border border-gray-100/90 dark:border-gray-700/20
+        hover:border-gray-200/80 dark:hover:border-gray-600/30
+        transition-all duration-200
+        hover:shadow-sm;
     }
     .quick-stat-icon {
-        @apply w-14 h-14 rounded-xl flex items-center justify-center 
-        text-2xl font-semibold transition-all duration-200 
-        hover:scale-110 hover:shadow-lg 
-        shadow-sm dark:shadow-lg dark:shadow-gray-900/30
-        bg-white/50 dark:bg-gray-800/50;
+        @apply w-10 h-10 rounded-lg flex items-center justify-center
+        text-lg font-semibold transition-all duration-200
+        ring-1 ring-gray-100 dark:ring-gray-700/50
+        bg-gray-50/80 dark:bg-gray-800/80;
     }
     .stat-value {
-        @apply text-3xl font-bold bg-clip-text text-transparent 
-        bg-gradient-to-r from-primary-600 to-primary-400 
-        dark:from-primary-300 dark:to-primary-400
-        drop-shadow-sm dark:drop-shadow-[0_0_0.3rem_rgba(79,70,229,0.3)];
+        @apply text-2xl font-bold text-gray-900 dark:text-white;
     }
     .progress-bar {
-        @apply relative w-full h-2.5 bg-gray-200/70 dark:bg-gray-700/50 
-        rounded-full overflow-hidden backdrop-blur-sm;
+        @apply relative w-full h-2 bg-gray-100/80 dark:bg-gray-700/40
+        rounded-full overflow-hidden;
     }
     .progress-bar-fill {
-        @apply absolute top-0 left-0 h-full rounded-full 
-        transition-all duration-1000 ease-out
-        shadow-[0_0_8px_rgba(59,130,246,0.5)] dark:shadow-[0_0_8px_rgba(147,197,253,0.5)];
+        @apply absolute top-0 left-0 h-full rounded-full
+        transition-all duration-700 ease-out;
     }
     [x-cloak] {
         display: none !important;
@@ -104,69 +89,75 @@
 @endpush
 
 @section('content')
-    <div class="p-6">
+    <div class="">
         <!-- Welcome Section -->
         <div class="mb-8">
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-                <div class="mb-4 sm:mb-0">
-                    <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
-                        Good morning, {{ Auth::user()->name }}!
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                    <div class="flex items-center gap-2 text-gray-600 dark:text-gray-400 mb-1">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                        <span class="text-sm font-medium">{{ now()->format('l, F j, Y') }}</span>
+                    </div>
+                    <h1 class="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                        Welcome back, {{ Auth::user()->name }}
+                        <span class="inline-flex items-center px-2 py-0.5 text-xs font-medium bg-indigo-50 text-indigo-600 dark:bg-indigo-500/10 dark:text-indigo-400 rounded">
+                            Admin
+                        </span>
                     </h1>
-                    <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                        {{ now()->format('l, F j, Y') }} · Today's overview
-                    </p>
                 </div>
                 <div class="flex flex-wrap items-center gap-3">
-                    <button type="button" class="flex items-center px-4 py-2 bg-primary-50 text-primary-700 rounded-lg hover:bg-primary-100 dark:bg-primary-900/50 dark:text-primary-300 dark:hover:bg-primary-900 transition-all duration-200">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <button type="button" 
+                            class="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-200">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                         </svg>
-                        Refresh Data
+                        Refresh
                     </button>
-                    <div class="inline-flex rounded-lg shadow-sm">
-                        <a href="{{ route('buildings.create') }}" 
-                           class="inline-flex items-center px-4 py-2 rounded-l-lg border border-primary-600 bg-primary-600 text-white hover:bg-primary-700 hover:border-primary-700 transition-colors duration-200">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                            </svg>
-                            New Property
-                        </a>
-                        <a href="{{ route('rentals.create') }}" 
-                           class="inline-flex items-center px-4 py-2 rounded-r-lg border border-l-0 border-primary-600 bg-primary-600 text-white hover:bg-primary-700 hover:border-primary-700 transition-colors duration-200">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
-                            </svg>
-                            Add Tenant
-                        </a>
-                    </div>
+                    <a href="{{ route('buildings.create') }}" 
+                       class="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 rounded-lg transition-colors duration-200">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                        </svg>
+                        Add Property
+                    </a>
+                    <a href="{{ route('rentals.create') }}" 
+                       class="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 rounded-lg transition-colors duration-200">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
+                        </svg>
+                        Add Tenant
+                    </a>
                 </div>
             </div>
         </div>
 
         <!-- Stats Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             <!-- Total Revenue -->
-            <div class="stat-card group">
-                <div class="flex items-center justify-between mb-4">
+            <div class="stat-card">
+                <div class="flex items-start gap-4">
                     <div class="stat-icon stat-icon-primary">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
                     </div>
-                    <div class="flex items-center text-sm text-gray-500 dark:text-gray-400">
-                        vs last month
-                        <span class="ml-2 text-emerald-500 dark:text-emerald-400">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
-                            </svg>
-                        </span>
-                        <span class="font-medium text-emerald-500 dark:text-emerald-400">12%</span>
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between mb-1">
+                            <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Total Revenue</p>
+                            <span class="inline-flex items-center gap-0.5 text-xs font-medium text-emerald-600 dark:text-emerald-400">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                                </svg>
+                                12%
+                            </span>
+                        </div>
+                        <div class="flex items-baseline gap-2">
+                            <span class="text-2xl font-bold text-gray-900 dark:text-white">៛123,456</span>
+                            <span class="text-xs text-gray-500 dark:text-gray-400">this month</span>
+                        </div>
                     </div>
-                </div>
-                <p class="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Total Revenue</p>
-                <div class="flex items-baseline">
-                    <span class="stat-value">₱123,456</span>
-                    <span class="ml-2 text-sm text-gray-500 dark:text-gray-400">this month</span>
                 </div>
             </div>
 
@@ -233,46 +224,6 @@
                     <span class="ml-2 text-sm text-amber-500 dark:text-amber-400">₱45,678 total</span>
                 </div>
             </div>
-        </div>
-
-        <!-- Quick Actions Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Record Payment -->
-            <a href="{{ route('utility-usages.index') }}" class="group relative overflow-hidden dashboard-action bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-700/90">
-                <div class="absolute inset-0 bg-gradient-to-br from-emerald-400/0 to-emerald-400/0 group-hover:from-emerald-400/5 group-hover:to-emerald-400/10 dark:group-hover:from-emerald-400/10 dark:group-hover:to-emerald-400/20 transition-all duration-300"></div>
-                <span class="dashboard-action-icon bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
-                    </svg>
-                </span>
-                <div>
-                    <span class="font-semibold text-gray-900 dark:text-white text-lg">Record Usage</span>
-                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Update utility readings</p>
-                </div>
-                <div class="absolute bottom-4 right-4 opacity-0 transform translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
-                    <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-                    </svg>
-                </div>
-            </a>
-
-            <a href="{{ route('tenants.create') }}" class="group relative overflow-hidden dashboard-action bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-700/90">
-                <div class="absolute inset-0 bg-gradient-to-br from-blue-400/0 to-blue-400/0 group-hover:from-blue-400/5 group-hover:to-blue-400/10 dark:group-hover:from-blue-400/10 dark:group-hover:to-blue-400/20 transition-all duration-300"></div>
-                <span class="dashboard-action-icon bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
-                    </svg>
-                </span>
-                <div>
-                    <span class="font-semibold text-gray-900 dark:text-white text-lg">Add Tenant</span>
-                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Register new tenants</p>
-                </div>
-                <div class="absolute bottom-4 right-4 opacity-0 transform translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
-                    <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-                    </svg>
-                </div>
-            </a>
         </div>
 
         <!-- Stats Grid -->
@@ -402,28 +353,38 @@
                         </div>
                     </div>
 
-                    <div class="space-y-4">
+                    <div class="space-y-3">
                         @foreach($recentActivities as $activity)
-                            <div class="flex items-start gap-4">
+                            <div class="flex items-start gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors duration-200">
                                 <div class="flex-shrink-0">
-                                    <span class="inline-flex items-center justify-center w-8 h-8 rounded-full {{ $activity['color'] === 'blue' ? 'bg-blue-100 text-blue-600' : 'bg-emerald-100 text-emerald-600' }}">
+                                    <span class="inline-flex items-center justify-center w-7 h-7 rounded-md {{ 
+                                        $activity['color'] === 'blue' ? 
+                                        'bg-blue-50 text-blue-600 ring-1 ring-blue-100 dark:bg-blue-500/10 dark:text-blue-400 dark:ring-blue-500/20' : 
+                                        'bg-emerald-50 text-emerald-600 ring-1 ring-emerald-100 dark:bg-emerald-500/10 dark:text-emerald-400 dark:ring-emerald-500/20' 
+                                    }}">
                                         @if($activity['type'] === 'tenant')
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                             </svg>
                                         @endif
                                     </span>
                                 </div>
                                 <div class="flex-1 min-w-0">
-                                    <p class="text-sm font-medium text-gray-900 dark:text-white">
+                                    <p class="text-sm font-medium text-gray-900 dark:text-white leading-5">
                                         {{ $activity['message'] }}: {{ $activity['subject'] }}
                                     </p>
                                     @if($activity['type'] === 'tenant')
-                                        <p class="text-sm text-gray-500 dark:text-gray-400">
+                                        <p class="mt-0.5 text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1">
+                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                                            </svg>
                                             Room {{ $activity['room'] }}, {{ $activity['building'] }}
                                         </p>
                                     @endif
-                                    <p class="text-xs text-gray-500 dark:text-gray-400">
+                                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1">
+                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                        </svg>
                                         {{ $activity['date']->diffForHumans() }}
                                     </p>
                                 </div>

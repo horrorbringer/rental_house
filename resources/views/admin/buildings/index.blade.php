@@ -67,7 +67,7 @@
 @endpush
 
 @section('content')
-<div class="px-6 py-8 smooth-scroll hardware-accelerated" x-data="buildingList()">
+<div class="smooth-scroll hardware-accelerated" x-data="buildingList()">
     <div class="space-y-6 optimize-paint">
         <!-- Header Section -->
         <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">

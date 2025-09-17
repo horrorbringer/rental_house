@@ -27,7 +27,7 @@ class StoreRoomRequest extends FormRequest
             'monthly_rent' => ['required', 'numeric', 'min:0'],
             'water_fee' => ['required', 'numeric', 'min:0'],
             'electric_fee' => ['required', 'numeric', 'min:0'],
-            'status' => ['required', 'in:vacant,occupied,full'],
+            'status' => ['nullable', 'in:vacant,occupied,full'],
             'image' => ['nullable', 'image', 'max:2048'],
             'additional_images.*' => ['nullable', 'image', 'max:2048'],
             'additional_images' => ['nullable', 'array', 'max:5'],

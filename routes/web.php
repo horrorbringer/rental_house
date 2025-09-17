@@ -22,13 +22,15 @@ Route::middleware(['auth','verified'])->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // Building and Room management
     Route::resource('buildings', BuildingController::class);
     Route::resource('rooms', RoomController::class);
     Route::resource('rentals', RentalController::class);
-
-    // Tenant management
     Route::resource('tenants', TenantController::class);
+
+    Route::get('/rooms/{room}/quick-add-rental', [RoomController::class, 'quickAddRental'])->name('rooms.quick-add-rental');
+    Route::post('/rooms/{room}/quick-add-rental', [RoomController::class, 'storeQuickAddRental'])->name('rooms.store-quick-add-rental');
+    Route::get('/rooms/quick-utility/{rental}', [RoomController::class, 'quickUtility'])->name('rooms.quick-utility');
+    Route::post('/rooms/quick-utility/{rental}', [RoomController::class, 'storeQuickUtility'])->name('rooms.store-quick-utility');
 });
 
 // Include other route files
