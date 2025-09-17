@@ -6,10 +6,10 @@
         <div class="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
                 <h2 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
-                    Invoices
+                    វិក្ក័យបត្រ
                 </h2>
                 <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                    Manage all invoices and track payments
+                    គ្របគ្រងវិក្ក័យបត្រទាំអស់
                 </p>
             </div>
         </div>
@@ -18,26 +18,26 @@
         <div class="mb-6 bg-white dark:bg-gray-800 rounded-lg shadow p-4">
             <form action="{{ route('invoices.index') }}" method="GET" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div>
-                    <label for="status" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Status</label>
+                    <label for="status" class="block text-sm font-medium text-gray-700 dark:text-gray-300">ស្ថានភាព</label>
                     <select name="status" id="status" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white sm:text-sm">
-                        <option value="">All Status</option>
-                        <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Pending</option>
-                        <option value="paid" {{ request('status') === 'paid' ? 'selected' : '' }}>Paid</option>
-                        <option value="overdue" {{ request('status') === 'overdue' ? 'selected' : '' }}>Overdue</option>
+                        <option value="">ទាំងអស់</option>
+                        <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>កំពុងរង់ចាំ</option>
+                        <option value="paid" {{ request('status') === 'paid' ? 'selected' : '' }}>បានបង់ប្រាក់</option>
+                        <option value="overdue" {{ request('status') === 'overdue' ? 'selected' : '' }}>លើកំណត់</option>
                     </select>
                 </div>
                 <div>
-                    <label for="date_range" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Date Range</label>
+                    <label for="date_range" class="block text-sm font-medium text-gray-700 dark:text-gray-300">កាលបរិច្ឆេទ</label>
                     <select name="date_range" id="date_range" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white sm:text-sm">
-                        <option value="all" {{ request('date_range') === 'all' ? 'selected' : '' }}>All Time</option>
-                        <option value="today" {{ request('date_range') === 'today' ? 'selected' : '' }}>Today</option>
-                        <option value="this_week" {{ request('date_range') === 'this_week' ? 'selected' : '' }}>This Week</option>
-                        <option value="this_month" {{ request('date_range') === 'this_month' ? 'selected' : '' }}>This Month</option>
-                        <option value="last_month" {{ request('date_range') === 'last_month' ? 'selected' : '' }}>Last Month</option>
+                        <option value="all" {{ request('date_range') === 'all' ? 'selected' : '' }}>ទាំងអស់</option>
+                        <option value="today" {{ request('date_range') === 'today' ? 'selected' : '' }}>ថ្ងៃនេះ</option>
+                        <option value="this_week" {{ request('date_range') === 'this_week' ? 'selected' : '' }}>សប្តាហ៍នេះ</option>
+                        <option value="this_month" {{ request('date_range') === 'this_month' ? 'selected' : '' }}>ខែនេះ</option>
+                        <option value="last_month" {{ request('date_range') === 'last_month' ? 'selected' : '' }}>ខែមុន</option>
                     </select>
                 </div>
                 <div>
-                    <label for="search" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Search</label>
+                    <label for="search" class="block text-sm font-medium text-gray-700 dark:text-gray-300">ស្វែងរក</label>
                     <input type="text" name="search" id="search" value="{{ request('search') }}" 
                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white sm:text-sm"
                            placeholder="Invoice #, Tenant name...">
@@ -92,7 +92,7 @@
                         <div class="ml-5 w-0 flex-1">
                             <dl>
                                 <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
-                                    Overdue
+                                    Overdue​
                                 </dt>
                                 <dd class="flex items-baseline">
                                     <div class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
@@ -120,7 +120,7 @@
                         <div class="ml-5 w-0 flex-1">
                             <dl>
                                 <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
-                                    Paid
+                                    បានបង់ប្រាក់
                                 </dt>
                                 <dd class="flex items-baseline">
                                     <div class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
@@ -145,7 +145,7 @@
                         <div class="ml-5 w-0 flex-1">
                             <dl>
                                 <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
-                                    This Month
+                                    ខែនេះ
                                 </dt>
                                 <dd class="flex items-baseline">
                                     <div class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
@@ -167,19 +167,19 @@
                         <thead class="bg-gray-50 dark:bg-gray-700">
                             <tr>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                    Invoice Details
+                                    វិក្ក័យបត្រលម្អិត
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                    Tenant & Room
+                                    អ្នកជួល & បន្ទប់
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                    Amount & Status
+                                    ចំនួនទឹកប្រាក់ & នឹងស្ថានភាព
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                    Due Date
+                                    ថ្ងៃផុតកំណត់
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                    Actions
+                                    សកម្មភាព
                                 </th>
                             </tr>
                         </thead>
@@ -199,7 +199,7 @@
                                             {{ $invoice->rental->tenant->name }}
                                         </div>
                                         <div class="text-sm text-gray-500 dark:text-gray-400">
-                                            {{ $invoice->rental->room->building->name }} - Room {{ $invoice->rental->room->room_number }}
+                                            {{ $invoice->rental->room->building->name }} - បន្ទប់ {{ $invoice->rental->room->room_number }}
                                         </div>
                                     </td>
                                     <td class="px-6 py-4">
@@ -209,15 +209,15 @@
                                         <div class="mt-1">
                                             @if($invoice->status === 'paid')
                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100">
-                                                    Paid
+                                                    បានបង់ប្រាក់
                                                 </span>
                                             @elseif($invoice->status === 'overdue')
                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100">
-                                                    Overdue
+                                                    ផុតកំណត់
                                                 </span>
                                             @else
                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100">
-                                                    Pending
+                                                    កំពុងរង់ចាំ
                                                 </span>
                                             @endif
                                         </div>
@@ -283,15 +283,15 @@
                             <div>
                                 @if($invoice->status === 'paid')
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100">
-                                        Paid
+                                        បានបង់ប្រាក់
                                     </span>
                                 @elseif($invoice->status === 'overdue')
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100">
-                                        Overdue
+                                        ផុតកំណត់
                                     </span>
                                 @else
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100">
-                                        Pending
+                                        កំពុងរង់ចាំ
                                     </span>
                                 @endif
                             </div>
@@ -303,20 +303,20 @@
                                 {{ $invoice->rental->tenant->name }}
                             </div>
                             <div class="text-sm text-gray-500 dark:text-gray-400">
-                                {{ $invoice->rental->room->building->name }} - Room {{ $invoice->rental->room->room_number }}
+                                {{ $invoice->rental->room->building->name }} - បន្ទប់ {{ $invoice->rental->room->room_number }}
                             </div>
                         </div>
 
                         <!-- Amount & Dates -->
                         <div class="grid grid-cols-2 gap-4 mb-4">
                             <div>
-                                <div class="text-xs text-gray-500 dark:text-gray-400">Amount</div>
+                                <div class="text-xs text-gray-500 dark:text-gray-400">ចំនួនទឹកប្រាក់</div>
                                 <div class="text-sm font-medium text-gray-900 dark:text-white">
                                     ៛{{ number_format($invoice->total_amount, 2) }}
                                 </div>
                             </div>
                             <div>
-                                <div class="text-xs text-gray-500 dark:text-gray-400">Due Date</div>
+                                <div class="text-xs text-gray-500 dark:text-gray-400">ថ្ងៃផុតកំណត់</div>
                                 <div class="text-sm font-medium text-gray-900 dark:text-white">
                                     {{ $invoice->due_date->format('M j, Y') }}
                                 </div>
@@ -334,7 +334,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                                 </svg>
-                                View
+                                មើស
                             </a>
                             {{-- cuz pdf render not correct with unicode khmer --}}
                             {{-- <a href="{{ route('invoices.download-pdf', $invoice) }}" 

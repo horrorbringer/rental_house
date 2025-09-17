@@ -128,13 +128,13 @@
             <li>
                 <div class="flex items-center">
                     <svg class="w-6 h-6 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
-                    <a href="{{ route('rooms.index') }}" class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white ml-1 md:ml-2 transition-colors duration-200">Rooms</a>
+                    <a href="{{ route('rooms.index') }}" class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white ml-1 md:ml-2 transition-colors duration-200">បន្ទប់</a>
                 </div>
             </li>
             <li aria-current="page">
                 <div class="flex items-center">
                     <svg class="w-6 h-6 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
-                    <span class="text-gray-700 dark:text-gray-300 ml-1 md:ml-2">{{ isset($room) ? 'Edit Room' : 'Create Room' }}</span>
+                    <span class="text-gray-700 dark:text-gray-300 ml-1 md:ml-2">{{ isset($room) ? 'Edit Room' : 'បង្កើត' }}</span>
                 </div>
             </li>
         </ol>
@@ -149,8 +149,8 @@
                 </svg>
             </div>
             <div>
-                <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{{ isset($room) ? 'Edit Room' : 'Create New Room' }}</h1>
-                <p class="text-gray-600 dark:text-gray-400 mt-1">Fill in the details below to {{ isset($room) ? 'update' : 'create' }} a room</p>
+                <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{{ isset($room) ? 'Edit Room' : 'បង្កើតបន្ទប់ថ្មី' }}</h1>
+                <p class="text-gray-600 dark:text-gray-400 mt-1">បំពេញព័ត៌មានខាងក្រោមដើម្បី {{ isset($room) ? 'update' : 'បង្កើត' }} បន្ទប់</p>
             </div>
         </div>
     </div>
@@ -163,9 +163,9 @@
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-indigo-500 dark:text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
-                    Room Information
+                    ពត៌មានបន្ទប់
                 </h3>
-                <p class="text-sm text-gray-500 dark:text-gray-400">Basic details about the room and its location</p>
+                <p class="text-sm text-gray-500 dark:text-gray-400">ព័ត៌មានមូលដ្ឋានអំពីបន្ទប់ និងទីតាំងរបស់វា</p>
             </div>
             <!-- Pricing Section -->
             <div class="space-y-2">
@@ -173,9 +173,9 @@
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-indigo-500 dark:text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
-                    Pricing & Fees
+                    តម្លៃ និងកម្រៃ
                 </h3>
-                <p class="text-sm text-gray-500 dark:text-gray-400">Set the room's rental rates and utility fees</p>
+                <p class="text-sm text-gray-500 dark:text-gray-400">កំណត់អត្រាការជួល និងកម្រៃប្រើប្រាស់របស់បន្ទប់</p>
             </div>
         </div>
 
@@ -233,7 +233,7 @@
                     <!-- Building Selection -->
                     <div class="relative group">
                         <label for="building_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                            Building Location
+                            អគារស្នាក់នៅ
                             <span class="text-red-500">*</span>
                         </label>
                         <div class="relative">
@@ -252,7 +252,7 @@
                                        focus:border-indigo-500 dark:focus:border-indigo-400 
                                        transition-colors duration-200"
                                 class="block w-full h-10 pl-3 pr-10 rounded-lg bg-gray-700/50 border border-gray-600 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 text-white transition-all duration-200">
-                                <option value="">Select a building</option>
+                                <option value="">ជ្រើសរើសអគារ</option>
                                 @foreach($buildings as $building)
                                     <option value="{{ $building->id }}" {{ (old('building_id', $room->building_id ?? '') == $building->id) ? 'selected' : '' }}>
                                         {{ $building->name }}
@@ -273,7 +273,7 @@
                     <!-- Room Number -->
                     <div class="relative group">
                         <label for="room_number" class="block text-sm font-medium text-gray-300 mb-1">
-                            Room Number
+                            លេខបន្ទប់
                             <span class="text-red-500">*</span>
                         </label>
                         <div class="relative">
@@ -362,7 +362,7 @@
                 <!-- Monthly Rent -->
                 <div class="relative group">
                     <label for="monthly_rent" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Monthly Rent
+                        ថ្លៃជួលប្រចាំខែ
                         <span class="text-red-500">*</span>
                     </label>
                     <div class="relative">
@@ -387,7 +387,7 @@
                 {{-- Water Fee  --}}
                     <div class="relative group">
                         <label for="water_fee" class="block text-sm font-medium text-gray-300 mb-1">
-                            Water Fee
+                            កម្រៃទឹក
                             <span class="text-red-500">*</span>
                         </label>
                         <div class="relative">
@@ -407,7 +407,7 @@
                     <!-- Electric Fee -->
                     <div class="relative group">
                         <label for="electric_fee" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                            Electric Fee
+                            កម្រៃអគ្គិសនី
                             <span class="text-red-500">*</span>
                         </label>
                         <div class="relative">
@@ -428,7 +428,8 @@
 
                 <div class="relative group" x-data="{ preview: '{{ isset($room) && $room->image ? asset('storage/' . $room->image) : '' }}' }">
                     <label for="image" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Main Room Image
+                        រូបភាពបន្ទប់
+                        <span class="text-gray-400 text-xs ml-1">(Optional)</span>
                     </label>
                     <div class="relative space-y-4">
                         <template x-if="preview">
@@ -464,7 +465,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                     </svg>
-                    Back
+                    ត្រលប់ក្រោយ 
                 </a>
                 <div class="flex gap-4">
                     <button type="reset"
@@ -472,14 +473,14 @@
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                         </svg>
-                        Reset
+                        លុបមិនចង់បាន
                     </button>
                     <button type="submit"
                         class="inline-flex items-center px-6 py-2 bg-indigo-600 border border-transparent rounded-lg text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 dark:focus:ring-offset-gray-800 focus:ring-indigo-500 transition-colors duration-200">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                         </svg>
-                        {{ isset($room) ? 'Update Room' : 'Create' }}
+                        {{ isset($room) ? 'Update Room' : 'បង្កើតបន្ទប់' }}
                     </button>
                 </div>
             </div>

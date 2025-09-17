@@ -186,8 +186,8 @@ class RoomController extends Controller
         ]);
 
         // adjust if your column names differ (rate vs fee)
-        $waterRate   = $rental->room->water_rate   ?? 0;
-        $electricRate= $rental->room->electric_rate?? 0;
+        $waterRate   = $rental->room->water_fee   ?? 0;
+        $electricRate= $rental->room->electric_fee?? 0;
 
         $waterAmount   = $waterUsed   * $waterRate;
         $electricAmount= $electricUsed* $electricRate;

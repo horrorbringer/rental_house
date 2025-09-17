@@ -60,7 +60,7 @@
         <div class="stat-card rounded-xl p-6 border border-gray-200/20 dark:border-gray-700/50 hardware-accelerated">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Total Rooms</p>
+                    <p class="text-sm font-medium text-gray-600 dark:text-gray-400">បន្ទប់សរុប</p>
                     <h3 class="text-2xl font-bold text-gray-900 dark:text-white mt-1">{{ $building->rooms->count() }}</h3>
                 </div>
                 <div class="p-3 bg-indigo-100 dark:bg-indigo-500/10 rounded-lg">
@@ -74,7 +74,7 @@
         <div class="stat-card rounded-xl p-6 border border-gray-200/20 dark:border-gray-700/50 hardware-accelerated">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Available Rooms</p>
+                    <p class="text-sm font-medium text-gray-600 dark:text-gray-400">បន្ទប់ទំនេរ</p>
                     <h3 class="text-2xl font-bold text-emerald-600 dark:text-emerald-400 mt-1">
                         {{ $building->rooms->where('status', 'vacant')->count() }}
                     </h3>
@@ -90,7 +90,7 @@
         <div class="stat-card rounded-xl p-6 border border-gray-200/20 dark:border-gray-700/50 hardware-accelerated">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Occupancy Rate</p>
+                    <p class="text-sm font-medium text-gray-600 dark:text-gray-400">អត្រាអ្នកជួល</p>
                     <h3 class="text-2xl font-bold text-orange-600 dark:text-orange-400 mt-1">
                         {{ $building->rooms->count() > 0 
                             ? round(($building->rooms->where('status', 'occupied')->count() / $building->rooms->count()) * 100)
@@ -112,7 +112,7 @@
             <div class="flex space-x-3">
                 <a href="{{ route('buildings.edit', $building) }}"
                     class="bg-indigo-500 hover:bg-indigo-600 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200">
-                    Edit 
+                    កែប្រែ
                 </a>
                 <form action="{{ route('buildings.destroy', $building) }}" method="POST" class="inline">
                     @csrf
@@ -120,7 +120,7 @@
                     <button type="submit"
                         class="bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200"
                         onclick="return confirm('Are you sure you want to delete this building?')">
-                        Delete 
+                        លុប
                     </button>
                 </form>
             </div>
@@ -163,7 +163,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                                           d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                                 </svg>
-                                <p class="mt-2 text-sm text-gray-400">No images available</p>
+                                <p class="mt-2 text-sm text-gray-400">គ្មានរូបភាព</p>
                             </div>
                         </div>
                     @endif
@@ -171,19 +171,19 @@
 
                 <!-- Building Details -->
                 <div class="bg-white dark:bg-gray-700/50 rounded-xl p-6 border border-gray-200 dark:border-gray-700/50 shadow-sm">
-                    <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Building Information</h3>
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">ព័ត៌មានអគារ</h3>
                     <div class="space-y-4">
                         <div>
-                            <span class="text-sm text-gray-500 dark:text-gray-400">Owner</span>
+                            <span class="text-sm text-gray-500 dark:text-gray-400">ម្ចាស់</span>
                             <p class="mt-1 text-gray-900 dark:text-white font-medium">{{ $building->owner->name }}</p>
                         </div>
                         <div>
-                            <span class="text-sm text-gray-500 dark:text-gray-400">Contact Information</span>
-                            <p class="mt-1 text-gray-900 dark:text-white font-medium">{{ $building->contact_info ?? 'Not provided' }}</p>
+                            <span class="text-sm text-gray-500 dark:text-gray-400">ព័ត៌មានទំនាក់ទំនង</span>
+                            <p class="mt-1 text-gray-900 dark:text-white font-medium">{{ $building->contact_info ?? 'មិនបានផ្តល់' }}</p>
                         </div>
                         @if($building->description)
                             <div>
-                                <span class="text-sm text-gray-500 dark:text-gray-400">Description</span>
+                                <span class="text-sm text-gray-500 dark:text-gray-400">ការពិពណ៌នា</span>
                                 <p class="mt-1 text-gray-700 dark:text-gray-300">{{ $building->description }}</p>
                             </div>
                         @endif
@@ -192,7 +192,7 @@
 
                 <!-- Quick Actions -->
                 <div class="bg-white dark:bg-gray-700/50 rounded-xl p-6 border border-gray-200 dark:border-gray-700/50 shadow-sm">
-                    <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Quick Actions</h3>
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">សកម្មភាពឆាប់រហ័ស</h3>
                     <div class="space-y-3">
                         <a href="{{ route('rooms.create', ['building' => $building->id]) }}"
                            class="flex items-center justify-between w-full p-3 bg-gray-50 dark:bg-gray-600/50 
@@ -201,7 +201,7 @@
                                   hover:border-indigo-200 dark:hover:border-gray-500
                                   transition-all duration-200">
                             <span class="text-gray-700 dark:text-gray-200 group-hover:text-indigo-600 dark:group-hover:text-white font-medium">
-                                Add New Room
+                                បន្ថែមបន្ទប់ថ្មី
                             </span>
                             <svg class="w-5 h-5 text-gray-400 group-hover:text-indigo-600 dark:group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
@@ -214,7 +214,7 @@
                                   hover:border-indigo-200 dark:hover:border-gray-500
                                   transition-all duration-200">
                             <span class="text-gray-700 dark:text-gray-200 group-hover:text-indigo-600 dark:group-hover:text-white font-medium">
-                                Manage Utilities
+                                គ្រប់គ្រងអគ្គិសនី និងទឹក
                             </span>
                             <svg class="w-5 h-5 text-gray-400 group-hover:text-indigo-600 dark:group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
@@ -229,13 +229,13 @@
                 <div class="bg-gray-700/50 rounded-xl border border-gray-700/50 overflow-hidden">
                     <div class="p-6 border-b border-gray-600/50">
                         <div class="flex items-center justify-between">
-                            <h3 class="text-lg font-medium text-white">Rooms</h3>
+                            <h3 class="text-lg font-medium text-white">បន្ទប់</h3>
                             <a href="{{ route('rooms.create', ['building' => $building->id]) }}"
                                class="inline-flex items-center px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg transition-all duration-200">
                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                                 </svg>
-                                Add Room
+                                បន្ថែមបន្ទប់ថ្មី
                             </a>
                         </div>
                     </div>
@@ -253,7 +253,7 @@
                                                 'bg-gray-400' => $room->status === 'maintenance'
                                             ])></div>
                                             <div>
-                                                <h4 class="text-lg font-medium text-white">Room {{ $room->room_number }}</h4>
+                                                <h4 class="text-lg font-medium text-white">បន្ទប់ {{ $room->room_number }}</h4>
                                                 <p class="text-sm text-gray-400">{{ ucfirst($room->type) }}</p>
                                             </div>
                                         </div>
@@ -284,14 +284,14 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                                 </svg>
                             </div>
-                            <h3 class="text-lg font-medium text-white mb-2">No Rooms Added Yet</h3>
-                            <p class="text-gray-400 mb-6">Start adding rooms to this building to manage them.</p>
+                            <h3 class="text-lg font-medium text-white mb-2">មិនមានបន្ទប់បានបន្ថែមនៅឡើយទេ</h3>
+                            <p class="text-gray-400 mb-6">ចាប់ផ្តើមបន្ថែមបន្ទប់ទៅអគារនេះដើម្បីគ្រប់គ្រងវា។</p>
                             <a href="{{ route('rooms.create', ['building' => $building->id]) }}"
                                class="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition-all duration-200">
                                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                                 </svg>
-                                Add Your First Room
+                                បន្ថែមបន្ទប់ដំបូងរបស់អ្នក
                             </a>
                         </div>
                     @endif
@@ -305,7 +305,7 @@
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                 </svg>
-                Back to Buildings
+                ត្រឡប់ក្រោយ
             </a>
         </div>
 
@@ -339,11 +339,11 @@
                                 </svg>
                             </div>
                             <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                                <h3 class="text-lg font-medium leading-6 text-white">Delete Building</h3>
+                                <h3 class="text-lg font-medium leading-6 text-white">លុបអគារ</h3>
                                 <div class="mt-2">
                                     <p class="text-sm text-gray-400">
-                                        Are you sure you want to delete this building? This action cannot be undone.
-                                        All associated rooms and data will be permanently removed.
+                                        តើអ្នកប្រាកដជាចង់លុបអគារនេះមែនទេ? សកម្មភាពនេះមិនអាចត្រឡប់មកវិញបានទេ។
+                                        ទិន្នន័យនិងបន្ទប់ទាំងអស់ដែលពាក់ព័ន្ធនឹងអគារនេះនឹងត្រូវលុបចោលយ៉ាងស្ថាពរ។
                                     </p>
                                 </div>
                             </div>
@@ -354,13 +354,13 @@
                                 @method('DELETE')
                                 <button type="submit" 
                                         class="inline-flex justify-center w-full px-4 py-2 text-base font-medium text-white bg-red-600 border border-transparent rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:w-auto sm:text-sm">
-                                    Delete Building
+                                    លុបអគារ
                                 </button>
                             </form>
                             <button type="button" 
                                     @click="showDeleteModal = false"
                                     class="mt-3 inline-flex justify-center w-full px-4 py-2 text-base font-medium text-gray-300 bg-gray-700 border border-gray-600 rounded-md shadow-sm hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm">
-                                Cancel
+                                បោះបង់
                             </button>
                         </div>
                     </div>

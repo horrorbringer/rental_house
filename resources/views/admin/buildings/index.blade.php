@@ -73,25 +73,25 @@
         <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
             <div class="flex flex-col md:flex-row justify-between items-center gap-4">
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Buildings</h1>
-                    <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">Manage your rental properties and units</p>
+                    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">អគារ</h1>
+                    <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">គ្រប់គ្រងអគារនិងឯកតារបស់អ្នក</p>
                 </div>
                 <div class="flex items-center gap-4">
                     <!-- Stats Summary -->
                     <div class="hidden md:grid grid-cols-3 gap-4 items-center bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-lg px-4 py-3 border border-gray-200 dark:border-gray-700 shadow-sm">
                         <div class="text-center px-4">
                             <span class="block text-2xl font-bold text-indigo-600 dark:text-indigo-400">{{ $buildings->count() }}</span>
-                            <span class="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wider font-medium">Buildings</span>
+                            <span class="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wider font-medium">អគារ</span>
                         </div>
                         <div class="text-center px-4 border-l border-r border-gray-200 dark:border-gray-700">
                             <span class="block text-2xl font-bold text-emerald-600 dark:text-emerald-400">{{ $buildings->sum('vacant_rooms_count') }}</span>
-                            <span class="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wider font-medium">Available</span>
+                            <span class="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wider font-medium">ទំនេរ</span>
                         </div>
                         <div class="text-center px-4">
                             <span class="block text-2xl font-bold text-orange-600 dark:text-orange-400">{{ $buildings->sum('rooms_count') > 0 
                                 ? round(($buildings->sum('rooms_count') - $buildings->sum('vacant_rooms_count')) / $buildings->sum('rooms_count') * 100) 
                                 : 0 }}%</span>
-                            <span class="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wider font-medium">Occupied</span>
+                            <span class="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wider font-medium">មានអ្នកជួល</span>
                         </div>
                     </div>
 
@@ -101,7 +101,7 @@
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                         </svg>
-                        Add New Building
+                        បង្កើតអគារថ្មី
                     </a>
                 </div>
             </div>
@@ -134,7 +134,7 @@
             <div class="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-all duration-200">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Total Buildings</p>
+                        <p class="text-sm font-medium text-gray-600 dark:text-gray-400">អគារសរុប</p>
                         <h3 class="text-2xl font-bold text-purple-600 dark:text-purple-400 mt-1">{{ $buildings->count() }}</h3>
                     </div>
                     <div class="p-3 bg-purple-100 dark:bg-purple-900/20 rounded-lg">
@@ -149,7 +149,7 @@
             <div class="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-all duration-200">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Total Rooms</p>
+                        <p class="text-sm font-medium text-gray-600 dark:text-gray-400">បន្ទប់សរុប</p>
                         <h3 class="text-2xl font-bold text-blue-600 dark:text-blue-400 mt-1">{{ $buildings->sum('rooms_count') }}</h3>
                     </div>
                     <div class="p-3 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
@@ -164,7 +164,7 @@
             <div class="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-all duration-200">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Available Rooms</p>
+                        <p class="text-sm font-medium text-gray-600 dark:text-gray-400">ទំនេរ</p>
                         <h3 class="text-2xl font-bold text-emerald-600 dark:text-emerald-400 mt-1">{{ $buildings->sum('vacant_rooms_count') }}</h3>
                     </div>
                     <div class="p-3 bg-emerald-100 dark:bg-emerald-900/20 rounded-lg">
@@ -179,7 +179,7 @@
             <div class="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-all duration-200">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Occupancy Rate</p>
+                        <p class="text-sm font-medium text-gray-600 dark:text-gray-400">អត្រាអ្នកជួល</p>
                         <h3 class="text-2xl font-bold text-orange-600 dark:text-orange-400 mt-1">
                             {{ $buildings->sum('rooms_count') > 0 
                                 ? round(($buildings->sum('rooms_count') - $buildings->sum('vacant_rooms_count')) / $buildings->sum('rooms_count') * 100) 
@@ -221,9 +221,9 @@
                     <select x-model="filter" 
                             @change="filterBuildings()"
                             class="w-full bg-gray-50 dark:bg-gray-900/50 text-gray-900 dark:text-gray-200 rounded-lg py-2 px-3 border border-gray-300 dark:border-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-500 focus:border-transparent transition-colors duration-200">
-                        <option value="all">All Buildings</option>
-                        <option value="with_vacant">With Vacant Rooms</option>
-                        <option value="fully_occupied">Fully Occupied</option>
+                        <option value="all">អគារទាំងអស់</option>
+                        <option value="with_vacant">មានបន្ទប់ទំនេរ</option>
+                        <option value="fully_occupied">មានអ្នកជួលពេញ</option>
                     </select>
                 </div>
             </div>
@@ -324,7 +324,7 @@
                                                 <span class="block text-2xl font-bold" 
                                                       :class="building.vacant_rooms_count > 0 ? 'text-emerald-400' : 'text-gray-400'" 
                                                       x-text="building.vacant_rooms_count"></span>
-                                                <span class="text-xs text-gray-400">Available</span>
+                                                <span class="text-xs text-gray-400">ទំនេរ</span>
                                             </div>
                                         </div>
                                     </div>
@@ -332,7 +332,7 @@
                                     <div class="flex items-center space-x-2">
                                         <a :href="`/buildings/${building.id}`"
                                            class="inline-flex items-center px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg">
-                                            <span>View</span>
+                                            <span>មើល</span>
                                             <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                                             </svg>

@@ -4,30 +4,18 @@
 
 @section('content')
 <div class="max-w-4xl mx-auto">
-    <!-- Header -->
-    <div class="mb-6">
-        <div class="flex items-center justify-between">
-            <h1 class="text-2xl font-bold text-gray-100">Edit Building</h1>
-            <a href="{{ route('buildings.index') }}" class="flex items-center text-sm text-gray-400 hover:text-white transition-colors duration-150">
-                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-                </svg>
-                Back to Buildings
-            </a>
-        </div>
-    </div>
 
     <div class="bg-gray-800 shadow-xl rounded-xl p-6">
     
     <!-- Header -->
     <div class="mb-6">
         <div class="flex items-center justify-between">
-            <h1 class="text-2xl font-bold text-gray-100">Edit Building</h1>
+            <h1 class="text-2xl font-bold text-gray-100">កែប្រែអគារ</h1>
             <a href="{{ route('buildings.index') }}" class="flex items-center text-sm text-gray-400 hover:text-white transition-colors duration-150">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                 </svg>
-                Back to Buildings
+                ត្រឡប់ទៅអគារ
             </a>
         </div>
     </div>
@@ -58,7 +46,7 @@
 
         <!-- Name -->
         <div>
-            <label for="name" class="block text-sm font-medium text-gray-300">Building Name</label>
+            <label for="name" class="block text-sm font-medium text-gray-300">ឈ្មោះអគារ</label>
             <input type="text" 
                    name="name" 
                    id="name" 
@@ -69,7 +57,7 @@
 
         <!-- Address -->
         <div>
-            <label for="address" class="block text-sm font-medium text-gray-300">Address</label>
+            <label for="address" class="block text-sm font-medium text-gray-300">អាសយដ្ឋាន</label>
             <textarea name="address" 
                       id="address" 
                       rows="2"
@@ -79,7 +67,7 @@
 
         <!-- Description -->
         <div>
-            <label for="description" class="block text-sm font-medium text-gray-300">Description</label>
+            <label for="description" class="block text-sm font-medium text-gray-300">ការពិពណ៌នា</label>
             <textarea name="description" 
                       id="description" 
                       rows="3"
@@ -88,7 +76,7 @@
 
         <!-- Contact Info -->
         <div>
-            <label for="contact_info" class="block text-sm font-medium text-gray-300">Contact Info</label>
+            <label for="contact_info" class="block text-sm font-medium text-gray-300">ព័ត៌មានទំនាក់ទំនង</label>
             <input type="text" name="contact_info" id="contact_info" 
                 value="{{ old('contact_info', $building->contact_info) }}"
                 class="mt-1 block w-full rounded-lg bg-gray-700 text-white">
@@ -126,7 +114,7 @@
         <!-- Upload New Images -->
         <div class="mt-4">
             <label class="block text-sm font-medium text-gray-300 mb-2">
-                Add New Images <span class="text-xs text-gray-400">(Max 5 images, 5MB each)</span>
+                បន្ថែមរូបភាពថ្មី <span class="text-xs text-gray-400">(Max 5 images, 5MB each)</span>
             </label>
             <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-600 border-dashed rounded-lg 
                         hover:border-indigo-500 transition-colors duration-200">
@@ -138,7 +126,7 @@
                     <div class="flex text-sm text-gray-400">
                         <label class="relative cursor-pointer bg-gray-800 rounded-md font-medium text-indigo-500 
                                     hover:text-indigo-400 focus-within:outline-none">
-                            <span>Upload new images</span>
+                            <span></span>
                             <input type="file" 
                                    name="new_images[]" 
                                    accept="image/jpeg,image/png,image/webp" 
@@ -186,11 +174,11 @@
         <div class="flex items-center justify-end space-x-3 mt-6 pt-6 border-t border-gray-700">
             <a href="{{ route('buildings.index') }}" 
                class="px-4 py-2 text-sm font-medium text-gray-400 hover:text-white transition-colors">
-                Cancel
+                បោះបង់
             </a>
             <button type="submit" 
                     class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                Update Building
+                កែប្រែអគារ
             </button>
         </div>
     </form>

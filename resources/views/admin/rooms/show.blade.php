@@ -12,10 +12,10 @@
                 <svg class="w-4 h-4 mx-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
             </li>
             <li class="flex items-center">
-                <a href="{{ route('rooms.index') }}" class="hover:text-gray-700 dark:hover:text-white transition-colors duration-200">Rooms</a>
+                <a href="{{ route('rooms.index') }}" class="hover:text-gray-700 dark:hover:text-white transition-colors duration-200">បន្ទប់</a>
                 <svg class="w-4 h-4 mx-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
             </li>
-            <li><span class="text-gray-700 dark:text-gray-300">Room {{ $room->room_number }}</span></li>
+            <li><span class="text-gray-700 dark:text-gray-300">បន្ទប់ {{ $room->room_number }}</span></li>
         </ol>
     </nav>
 
@@ -30,13 +30,13 @@
                     </div>
                     <div class="flex-grow">
                         <div class="flex items-center gap-3 mb-1">
-                            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Room {{ $room->room_number }}</h1>
+                            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">បន្ទប់ {{ $room->room_number }}</h1>
                             <span @class([
                                 'px-3 py-1 text-sm font-medium rounded-full shadow-sm',
                                 'bg-green-100 dark:bg-green-500/10 text-green-600 dark:text-green-500' => $room->status === App\Models\Room::STATUS_VACANT,
                                 'bg-red-100 dark:bg-red-500/10 text-red-600 dark:text-red-500' => $room->status === App\Models\Room::STATUS_OCCUPIED,
                             ])>
-                                {{ ucfirst($room->status) }}
+                                {{ ucfirst($room->status === App\Models\Room::STATUS_VACANT ? 'ទំនេរ' : 'មានអ្នកជួល') }}
                             </span>
                         </div>
                         <div class="flex flex-col sm:flex-row sm:items-center gap-3">
@@ -50,14 +50,14 @@
                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                 </svg>
-                                <span>៛{{ number_format($room->monthly_rent, 2) }}/month</span>
+                                <span>៛{{ number_format($room->monthly_rent, 2) }} ក្នុងមួយខែ</span>
                             </div>
                             @if($room->status === App\Models\Room::STATUS_OCCUPIED)
                             <div class="flex items-center text-gray-500 dark:text-gray-400">
                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                                 </svg>
-                                <span>{{ $room->rentals->count() }} {{ Str::plural('Tenant', $room->rentals->count()) }}</span>
+                                <span>{{ $room->rentals->count() }} {{ Str::plural('អ្នកជួល', $room->rentals->count()) }}</span>
                             </div>
                             @endif
                         </div>
@@ -70,14 +70,14 @@
                             <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
                             <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
                         </svg>
-                        Edit Room
+                        កែប្រែបន្ទប់
                     </a>
                     <a href="{{ route('rooms.quick-add-rental',$room) }}"
                         class="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200">
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                         </svg>
-                        Add Rental
+                        បន្ថែមអ្នកជួលថ្មី
                     </a>
                 </div>
             </div>
@@ -86,7 +86,7 @@
                 {{-- Room Information --}}
                 <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
                     <div class="flex items-center justify-between mb-6">
-                        <h3 class="text-lg font-medium text-gray-900 dark:text-white">Room Details</h3>
+                        <h3 class="text-lg font-medium text-gray-900 dark:text-white">ព័ត៌មានបន្ទប់</h3>
                         <span class="text-xs font-medium text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-600 px-2.5 py-1 rounded-full">
                             ID: {{ $room->id }}
                         </span>
@@ -94,7 +94,7 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <div class="space-y-4">
                             <div class="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
-                                <div class="text-sm text-gray-500 dark:text-gray-400 mb-1">Monthly Rent</div>
+                                <div class="text-sm text-gray-500 dark:text-gray-400 mb-1">កថ្លៃជួលប្រចាំខែ</div>
                                 <div class="text-xl font-semibold text-gray-900 dark:text-white flex items-center">
                                     <span class="text-2xl mr-1">៛</span>
                                     {{ number_format($room->monthly_rent, 2) }}
@@ -102,14 +102,14 @@
                             </div>
                             <div class="flex space-x-4">
                                 <div class="flex-1 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
-                                    <div class="text-sm text-gray-500 dark:text-gray-400 mb-1">Water Fee</div>
+                                    <div class="text-sm text-gray-500 dark:text-gray-400 mb-1">កម្រៃទឹក</div>
                                     <div class="text-lg font-medium text-gray-900 dark:text-white flex items-center">
                                         <span class="text-lg mr-1">៛</span>
                                         {{ number_format($room->water_fee, 2) }}
                                     </div>
                                 </div>
                                 <div class="flex-1 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
-                                    <div class="text-sm text-gray-500 dark:text-gray-400 mb-1">Electric Fee</div>
+                                    <div class="text-sm text-gray-500 dark:text-gray-400 mb-1">កម្រៃអគ្គិសនី</div>
                                     <div class="text-lg font-medium text-gray-900 dark:text-white flex items-center">
                                         <span class="text-lg mr-1">៛</span>
                                         {{ number_format($room->electric_fee, 2) }}
@@ -118,19 +118,19 @@
                             </div>
                         </div>
                         <div class="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
-                            <div class="text-sm text-gray-500 dark:text-gray-400 mb-3">Additional Information</div>
+                            <div class="text-sm text-gray-500 dark:text-gray-400 mb-3">ព័ត៌មានបន្ថែម</div>
                             <div class="space-y-3">
                                 <div class="flex items-center text-gray-700 dark:text-gray-300">
                                     <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                                     </svg>
-                                    <span>Created: {{ $room->created_at->format('M d, Y') }}</span>
+                                    <span>បានបង្កើត: {{ $room->created_at->format('M d, Y') }}</span>
                                 </div>
                                 <div class="flex items-center text-gray-700 dark:text-gray-300">
                                     <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                     </svg>
-                                    <span>Last Updated: {{ $room->updated_at->format('M d, Y') }}</span>
+                                    <span>បានកែប្រែចុងក្រោយ: {{ $room->updated_at->format('M d, Y') }}</span>
                                 </div>
                             </div>
                         </div>
@@ -141,12 +141,12 @@
                 <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
                     <div class="flex items-center justify-between mb-6">
                         <div>
-                            <h3 class="text-lg font-medium text-gray-900 dark:text-white">Rental Information</h3>
+                            <h3 class="text-lg font-medium text-gray-900 dark:text-white">ព័ត៌មានជួល</h3>
                             <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
                                 @if($room->status === App\Models\Room::STATUS_OCCUPIED)
-                                    Managing {{ $room->rentals->count() }} {{ Str::plural('tenant', $room->rentals->count()) }}
+                                    Managing​ {{ $room->rentals->count() }} {{ Str::plural('tenant', $room->rentals->count()) }}
                                 @else
-                                    Room available for rent
+                                    បន្ទប់មានស្រាប់សម្រាប់ជួល
                                 @endif
                             </p>
                         </div>
@@ -156,7 +156,7 @@
                                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                                 </svg>
-                                <span class="font-medium">Add New Rental</span>
+                                <span class="font-medium">បន្ថែមការជួលថ្មី</span>
                             </a>
                         @endif
                     </div>
@@ -173,12 +173,12 @@
                                             </div>
                                             <div>
                                                 <h4 class="text-md font-semibold text-gray-900 dark:text-white">{{ $rental->tenant->name }}</h4>
-                                                <p class="text-sm text-gray-500 dark:text-gray-400">Tenant ID: {{ $rental->tenant->id }}</p>
+                                                <p class="text-sm text-gray-500 dark:text-gray-400">អ្នកជួល ID: {{ $rental->tenant->id }}</p>
                                             </div>
                                         </div>
                                         <a href="{{ route('rentals.show', $rental) }}"
                                             class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors duration-200">
-                                            <span class="mr-1">View Details</span>
+                                            <span class="mr-1">មើល</span>
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                                             </svg>
@@ -186,17 +186,17 @@
                                     </div>
                                     <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 text-sm">
                                         <div>
-                                            <span class="block text-gray-500 dark:text-gray-400">Start Date</span>
+                                            <span class="block text-gray-500 dark:text-gray-400">ថ្ងៃចាប់ផ្តើម</span>
                                             <span class="font-medium text-gray-900 dark:text-white">{{ $rental->created_at->format('M d, Y') }}</span>
                                         </div>
                                         <div>
-                                            <span class="block text-gray-500 dark:text-gray-400">Duration</span>
+                                            <span class="block text-gray-500 dark:text-gray-400">រយៈពេល</span>
                                             <span class="font-medium text-gray-900 dark:text-white">{{ $rental->created_at->diffForHumans(null, true) }}</span>
                                         </div>
                                         <div>
-                                            <span class="block text-gray-500 dark:text-gray-400">Status</span>
+                                            <span class="block text-gray-500 dark:text-gray-400">ស្ថានភាព</span>
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 dark:bg-green-500/10 text-green-700 dark:text-green-500">
-                                                Active
+                                                សកម្ម
                                             </span>
                                         </div>
                                     </div>
@@ -210,13 +210,13 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                                 </svg>
                             </div>
-                            <p class="text-gray-500 dark:text-gray-400 mb-4">This room is currently vacant and ready for new tenants.</p>
+                            <p class="text-gray-500 dark:text-gray-400 mb-4">បន្ទប់នេះមានស្រាប់សម្រាប់ជួល។</p>
                             <a href="{{ route('rooms.quick-add-rental',$room) }}"
                                 class="inline-flex items-center px-4 py-2 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 rounded-lg hover:bg-indigo-100 dark:hover:bg-indigo-500/20 transition-colors duration-200">
                                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                                 </svg>
-                                <span class="font-medium">Add New Rental</span>
+                                <span class="font-medium">បន្ថែមការជួលថ្មី</span>
                             </a>
                         </div>
                     @endif
@@ -227,9 +227,9 @@
                 <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
                     <div class="flex items-center justify-between mb-6">
                         <div>
-                            <h3 class="text-lg font-medium text-gray-900 dark:text-white">Utility Readings</h3>
+                            <h3 class="text-lg font-medium text-gray-900 dark:text-white">ការអានអគ្គិសនី</h3>
                             <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                                Record monthly meter readings for billing
+                                កំណត់ការអានម៉ែត្រប្រចាំខែសម្រាប់ការបូកបញ្ចូល
                             </p>
                         </div>
                         <button type="button" onclick="document.getElementById('quickUtilityModal').classList.remove('hidden')"
@@ -237,7 +237,7 @@
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                             </svg>
-                            <span class="font-medium">Record Reading</span>
+                            <span class="font-medium">កំណត់ការប្រើប្រាស់</span>
                         </button>
                     </div>
 
@@ -246,7 +246,7 @@
                         <div class="relative top-20 mx-auto p-5 border w-full max-w-xl shadow-lg rounded-lg bg-white dark:bg-gray-800">
                             <div class="flex items-center justify-between mb-4">
                                 <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                                    Record Utility Reading
+                                    កំណត់ការប្រើប្រាស់
                                 </h3>
                                 <button type="button" onclick="document.getElementById('quickUtilityModal').classList.add('hidden')"
                                     class="text-gray-400 hover:text-gray-500 focus:outline-none">
@@ -263,7 +263,7 @@
                                     <div class="grid grid-cols-2 gap-4">
                                         <div>
                                             <label for="water_usage" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                                Water Meter Reading
+                                                កុងត័រទឹក
                                             </label>
                                             <input type="number" name="water_usage" id="water_usage" step="0.01" min="0"
                                                 class="mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white sm:text-sm"
@@ -275,7 +275,7 @@
 
                                         <div>
                                             <label for="electric_usage" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                                Electric Meter Reading
+                                                កុងត័រអគ្គិសនី
                                             </label>
                                             <input type="number" name="electric_usage" id="electric_usage" step="0.01" min="0"
                                                 class="mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white sm:text-sm"
@@ -288,7 +288,7 @@
 
                                     <div>
                                         <label for="reading_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                            Reading Date
+                                            ថ្ងៃទី
                                         </label>
                                         <input type="date" name="reading_date" id="reading_date"
                                             class="mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white sm:text-sm"
@@ -300,7 +300,7 @@
 
                                     <div>
                                         <label for="notes" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                            Notes
+                                            កំណត់ចំណាំ​ (អាចមិនបំពេញ)​
                                         </label>
                                         <textarea name="notes" id="notes" rows="3"
                                             class="mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white sm:text-sm"
@@ -314,25 +314,25 @@
                                         <button type="button"
                                             onclick="document.getElementById('quickUtilityModal').classList.add('hidden')"
                                             class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">
-                                            Cancel
+                                            បោះបង់
                                         </button>
                                         <button type="submit"
                                             class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">
-                                            Record Reading
+                                            រក្សាទុក
                                         </button>
                                     </div>
                                 </form>
 
                                 {{-- Previous Readings --}}
                                 <div class="mt-6">
-                                    <h4 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Previous Readings</h4>
+                                    <h4 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">ការអប្រើប្រាស់មុន</h4>
                                     <div class="overflow-x-auto">
                                         <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                                             <thead class="bg-gray-50 dark:bg-gray-700">
                                                 <tr>
-                                                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Date</th>
-                                                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Water</th>
-                                                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Electric</th>
+                                                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">ថ្ងៃខែ</th>
+                                                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">កុងត័រទឹក</th>
+                                                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">កុងត័រអគ្គិសនី</th>
                                                 </tr>
                                             </thead>
                                             <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
@@ -367,7 +367,7 @@
                                 <div class="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
                                     <div class="flex items-center justify-between mb-4">
                                         <div>
-                                            <h4 class="text-sm font-medium text-gray-900 dark:text-white">Latest Reading</h4>
+                                            <h4 class="text-sm font-medium text-gray-900 dark:text-white">ការអានថ្មីបំផុត</h4>
                                             <p class="text-xs text-gray-500 dark:text-gray-400">
                                                 {{ $latestUsage->reading_date->format('F d, Y') }}
                                             </p>
@@ -375,13 +375,13 @@
                                     </div>
                                     <div class="grid grid-cols-2 gap-4">
                                         <div>
-                                            <span class="block text-sm text-gray-500 dark:text-gray-400">Water Usage</span>
+                                            <span class="block text-sm text-gray-500 dark:text-gray-400">កុងត័រទឹក</span>
                                             <span class="text-lg font-medium text-gray-900 dark:text-white">
                                                 {{ number_format($latestUsage->water_usage, 2) }}m³
                                             </span>
                                         </div>
                                         <div>
-                                            <span class="block text-sm text-gray-500 dark:text-gray-400">Electric Usage</span>
+                                            <span class="block text-sm text-gray-500 dark:text-gray-400">កុងត័រអគ្គិសនី</span>
                                             <span class="text-lg font-medium text-gray-900 dark:text-white">
                                                 {{ number_format($latestUsage->electric_usage, 2) }}kWh
                                             </span>
@@ -390,7 +390,7 @@
                                 </div>
                             @else
                                 <div class="text-center py-4 text-gray-500 dark:text-gray-400">
-                                    No utility readings recorded yet
+                                    គ្មានការអានអគ្គិសនីទេសម្រាប់អ្នកជួល {{ $rental->tenant->name }}។
                                 </div>
                             @endif
                         @endforeach
@@ -403,16 +403,16 @@
                 <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
                     <div class="flex items-center justify-between mb-6">
                         <div>
-                            <h3 class="text-lg font-medium text-gray-900 dark:text-white">Room Images</h3>
+                            <h3 class="text-lg font-medium text-gray-900 dark:text-white">រូបភាពបន្ទប់</h3>
                             <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                                {{ $room->images->count() + 1 }} {{ Str::plural('photo', $room->images->count() + 1) }} available
+                                {{ $room->images->count() + 1 }} {{ Str::plural('រូបភាព', $room->images->count() + 1) }} មានស្រាប់
                             </p>
                         </div>
                         <button type="button" class="inline-flex items-center px-4 py-2 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 rounded-lg hover:bg-indigo-100 dark:hover:bg-indigo-500/20 transition-colors duration-200">
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                             </svg>
-                            <span class="font-medium">Add Photos</span>
+                            <span class="font-medium">បន្ថែមរូបភាព</span>
                         </button>
                     </div>
 
@@ -478,7 +478,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M19 12H5M12 19l-7-7 7-7"/>
                     </svg>
-                    Back to Rooms
+                    ត្រប់ទៅបញ្ជីបន្ទប់
                 </a>
                 <div class="flex flex-col sm:flex-row w-full sm:w-auto gap-3">
                     <a href="{{ route('rooms.edit', $room) }}"
@@ -487,7 +487,7 @@
                             <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
                             <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
                         </svg>
-                        Edit Room
+                        កែប្រែបន្ទប់
                     </a>
                     <form action="{{ route('rooms.destroy', $room) }}" method="POST" class="w-full sm:w-auto"
                         onsubmit="return confirm('Are you sure you want to delete this room? This action cannot be undone.')">
@@ -498,7 +498,7 @@
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                             </svg>
-                            Delete Room
+                            លុបបន្ទប់
                         </button>
                     </form>
                 </div>
