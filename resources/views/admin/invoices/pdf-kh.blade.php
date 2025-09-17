@@ -28,50 +28,15 @@
             box-sizing: border-box;
         }
         body {
-            font-family: 'Hanuman' !important;
             font-size: 1rem;
             line-height: 1.4;
             margin-left: 40px;
             margin-right: 40px;
             color: #000;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-        .header {
-            position: relative;
-            text-align: center;
-            margin-bottom: 8px;
-            height: 50px;
         }
         .header-title{
             font-size: 3rem;
             font-weight: bold;
-        }
-        .td-logo {
-            width: 20%;
-            border: none;
-            padding: 0;
-            text-align: center;
-        }
-        .td-title {
-            width: 80%;
-            border: none;
-            padding: 0;
-            text-align: center;
-        }
-        .logo {
-            position: absolute;
-            left: 0;
-            top: 50%;
-            margin-top: -25px; /* Half of logo height */
-            width: 80px;
-            height: auto;
-        }
-        h2 {
-            font-size: 24px;
-            font-weight: bold;
-            margin: 0;
-            line-height: 50px; /* Same as header height */
         }
         table {
             border-collapse: collapse;
@@ -87,27 +52,10 @@
             border: none;
             padding: 4px 4px;
         }
-        .text-center {
-            text-align: center;
-        }
-        .text-right {
-            text-align: right;
-        }
-        .col4 {
-            width: 40%;
-            border: none;
-        }
-        th {
-            background-color: #f8f8f8;
-            font-weight: bold;
-        }
-        .row-header{;
-            margin-top: 30px;
-            margin-bottom: 20px;
-        }
-        /* .bg-box{
-            background: #554b4b;
-        } */
+        .text-center { text-align: center; }
+        .text-right  { text-align: right; }
+        th { background-color: #f8f8f8; font-weight: bold; }
+        .col4 { width: 40%; border: none; }
     </style>
 </head>
 <body>
@@ -119,41 +67,41 @@
                 </div>
             </td>
             <td class="td-title">
-                <h2 class="header-title">PAYMENT RECEIPT</h2>
+                <h2 class="header-title">បង្កាន់ដៃបង់ប្រាក់</h2>
             </td>
         </tr>
         <tr>
             <td colspan="2">
-                <span style="margin-right: 40px">Date: {{ $invoice->billing_date->format('d') }}</span>
-                <span style="margin-right: 40px">Month:  {{ $invoice->billing_date->format('m') }}</span>
-                <span>Year: {{ $invoice->billing_date->format('Y') }}</span>
+                <span style="margin-right:40px">កាលបរិច្ឆេទ: {{ $invoice->billing_date->format('d') }}</span>
+                <span style="margin-right:40px">ខែ: {{ $invoice->billing_date->format('m') }}</span>
+                <span>ឆ្នាំ: {{ $invoice->billing_date->format('Y') }}</span>
             </td>
         </tr>
         <tr border="0">
             <td colspan="2">
-                <span style="margin-right: 60px;">Name: {{ $invoice->rental->tenant->name ?? '' }}</span>
-                <span style="margin-right: 60px;">Phone Number: {{ $invoice->rental->tenant->phone ?? '' }}</span>
-                <span >Room Number: {{ $invoice->rental->room->room_number ?? '' }}</span>
+                <span style="margin-right:60px;">ឈ្មោះអតិថិជន: {{ $invoice->rental->tenant->name ?? '' }}</span>
+                <span style="margin-right:60px;">លេខទូរស័ព្ទ: {{ $invoice->rental->tenant->phone ?? '' }}</span>
+                <span>លេខបន្ទប់: {{ $invoice->rental->room->room_number ?? '' }}</span>
             </td>
         </tr>
     </table>
 
     <table>
         <thead>
-            <tr class="text-center ">
-                <th class="th">No.</th>
-                <th class="th">Description</th>
-                <th class="th">Previous</th>
-                <th class="th">Current</th>
-                <th class="th">Usage (KWh/m3)</th>
-                <th class="th">Unit Price</th>
-                <th class="th">Total</th>
+            <tr class="text-center">
+                <th class="th">ល.រ</th>
+                <th class="th">បរិយាយ</th>
+                <th class="th">មុន</th>
+                <th class="th">បច្ចុប្បន្ន</th>
+                <th class="th">បរិមាណប្រើ (KWh/m³)</th>
+                <th class="th">តម្លៃឯកតា</th>
+                <th class="th">សរុប</th>
             </tr>
         </thead>
         <tbody>
             <tr>
                 <td class="text-center td">1</td>
-                <td class="td">Room rents</td>
+                <td class="td">ថ្លៃជួលបន្ទប់</td>
                 <td class="text-center td">-</td>
                 <td class="text-center td">-</td>
                 <td class="text-center td">-</td>
@@ -164,7 +112,7 @@
             @if($invoice->utilityUsage)
             <tr>
                 <td class="text-center td">2</td>
-                <td class="td">Water Fee</td>
+                <td class="td">ថ្លៃទឹក</td>
                 <td class="text-center td">{{ $previousUsage ? number_format($previousUsage->water_usage, 2) : '0.00' }}</td>
                 <td class="text-center td">{{ number_format($invoice->utilityUsage->water_usage, 2) }}</td>
                 <td class="text-center td">{{ number_format($invoice->utilityUsage->water_usage - ($previousUsage ? $previousUsage->water_usage : 0), 2) }}</td>
@@ -173,7 +121,7 @@
             </tr>
             <tr>
                 <td class="text-center td">3</td>
-                <td class="td">Electric Fee</td>
+                <td class="td">ថ្លៃអគ្គិសនី</td>
                 <td class="text-center td">{{ $previousUsage ? number_format($previousUsage->electric_usage, 2) : '0.00' }}</td>
                 <td class="text-center td">{{ number_format($invoice->utilityUsage->electric_usage, 2) }}</td>
                 <td class="text-center td">{{ number_format($invoice->utilityUsage->electric_usage - ($previousUsage ? $previousUsage->electric_usage : 0), 2) }}</td>
@@ -182,43 +130,30 @@
             </tr>
             <tr>
                 <td colspan="4" class="col4 td"></td>
-                <td class="text-right td" colspan="2" style="text-align: center;"><strong>Total for bill</strong></td>
+                <td class="text-right td" colspan="2" style="text-align:center;"><strong>សរុបបង់</strong></td>
                 <td class="text-right td"><strong>៛{{ number_format($invoice->total_amount, 2) }}</strong></td>
             </tr>
             @endif
         </tbody>
     </table>
 
-    <table style="margin-top: 20px;">
+    <table style="margin-top:20px;">
         <tr>
-            <td class="bg-box" align="left" width="200px">
-                <div>
-                    {{-- <img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('images/qr-example.png'))) }}" width="200px"> --}}
-                </div>
+            <td align="left" width="200px">
+                {{-- <img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('images/qr-example.png'))) }}" width="200px"> --}}
             </td>
-            <td class="bg-box" align="left" width="200px">
-                <div>
-                    {{-- <img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('images/qr-example.png'))) }}" width="200px"> --}}
-                </div>
+            <td align="left" width="200px">
+                {{-- <img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('images/qr-example.png'))) }}" width="200px"> --}}
             </td>
-            <td class="bg-box" align="right">
-                <div>
-                    <span>Customer's Signature</span>
-                </div>
-                <div style="margin-top: 100px;"> 
-                    <span>- - - - - - - - - - - -</span>
-                </div>
+            <td align="right">
+                <div>ហត្ថលេខាអតិថិជន</div>
+                <div style="margin-top:100px;">- - - - - - - - - - - -</div>
             </td>
-            <td class="bg-box" align="right" width="25%">
-                <div>
-                    <span>Cashier's Signature</span>
-                </div>
-                <div style="margin-top: 100px;">
-                    <span>- - - - - - - - - - - -</span>
-                </div>
+            <td align="right" width="25%">
+                <div>ហត្ថលេខាបេឡាករ</div>
+                <div style="margin-top:100px;">- - - - - - - - - - - -</div>
             </td>
         </tr>
     </table>
-
 </body>
 </html>
