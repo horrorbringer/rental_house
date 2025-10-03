@@ -4,14 +4,14 @@
     <div class="space-y-6">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-                <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Rentals</h2>
-                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Manage tenant rentals and contracts.</p>
+                <h2 class="text-2xl font-bold text-gray-900 dark:text-white">បញ្ជីអ្នកដែលបានជួល</h2>
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">គ្រប់គ្រងការជួល និងកិច្ចសន្យាអ្នកជួល។</p>
             </div>
             <a href="{{ route('rentals.create') }}" class="flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                 <svg class="w-5 h-5 mr-2 -ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                 </svg>
-                Create New Rental
+                បង្កើតការជួលថ្មី
             </a>
         </div>
 
