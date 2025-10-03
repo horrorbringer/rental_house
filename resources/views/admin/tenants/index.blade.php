@@ -6,10 +6,10 @@
 <div class="space-y-6">
     <!-- Header -->
     <div class="flex justify-between items-center">
-        <h2 class="text-2xl font-bold leading-7 text-gray-900 dark:text-gray-100 sm:truncate sm:text-3xl sm:tracking-tight">Tenants</h2>
+        <h2 class="text-2xl font-bold leading-7 text-gray-900 dark:text-gray-100 sm:truncate sm:text-3xl sm:tracking-tight">បញ្ជីអ្នកជួល</h2>
         <a href="{{ route('tenants.create') }}"
            class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-            Add New Tenant
+            បន្ថែមអ្នកជួលថ្មី
         </a>
     </div>
 
@@ -57,7 +57,7 @@
                     </dl>
                 </div>
                 
-                <div class="border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 px-4 py-3 sm:px-6">
+                <div class="border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-4 py-3 sm:px-6">
                     <div class="flex justify-end gap-3">
                         <a href="{{ route('tenants.show', $tenant) }}"
                            class="inline-flex items-center px-2.5 py-1.5 text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300 focus:outline-none focus:text-indigo-700 dark:focus:text-indigo-200">
